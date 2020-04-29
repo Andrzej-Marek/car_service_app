@@ -1,0 +1,17 @@
+{
+    "name": "Imię",
+    "lastname": "Nazwisko",
+    "companyName": "Firma",
+    "street": "Ulica",
+    "postcode": "Kod pocztowy",
+    "adress": "Miejscowość",
+    "phone": "Numer telefonu",
+    "mail": "Adres e-mail",
+    "vatNumber": "Numer NIP",
+    "comment": "Komentarz",
+    "discount": "Zniżka",
+    "mailSendAgreement": "Zgoda na wiadomości mailowe",
+    "smsSendAgreement": "Zgoda na wiadomości sms",
+    "marketingSendAgreement": "Zgoda na wiadomości marketingowe",
+    "save": "Zapisz"
+}

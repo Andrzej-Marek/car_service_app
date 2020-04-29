@@ -1,0 +1,8 @@
+{
+    "notFound": {
+        "account": "Nie poprawny login lub hasło"
+    },
+    "serverError": "Problem z serwerem, spróbuj ponownie",
+    "generalError": "Ups. powstał jakiś problem :( ",
+    "user": "Użytkownika"
+}

@@ -1,0 +1,7 @@
+{
+    "mail": "Adres e-mail",
+    "password": "Hasło",
+    "saveSuccess": "Pomyślnie zapisano {{who}}",
+    "save": "Zapisz",
+    "cancel": "Anuluj"
+}
