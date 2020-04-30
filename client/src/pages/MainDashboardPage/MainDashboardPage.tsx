@@ -8,23 +8,23 @@ import { useTranslation } from 'react-i18next';
 import ClassicButton from '@/components/Buttons/ClassicButton';
 import AddCustomerModal from '@/components/Modals/AddCustomerModal';
 import { UserContext } from '@/context/UserContext';
+import FastRaportModal from '@/components/Modals/FastRaportModal';
 
 const MainDashboardPage = () => {
-    const { user } = useContext(UserContext);
     const [addCustomerModal, toggleAddCustomerModal] = useState(false);
+    const [fastRaportModal, toggleFastRaportModal] = useState(false);
+    const { user } = useContext(UserContext);
     const { t } = useTranslation('mainDashboard');
 
     const toggleAddCustomerModalHandler = () => {
         toggleAddCustomerModal(!addCustomerModal);
     };
+
     console.log(user);
     return (
         <Wrapper>
-            <AddCustomerModal
-                visible={addCustomerModal}
-                onCancel={toggleAddCustomerModalHandler}
-                toggle={toggleAddCustomerModalHandler}
-            />
+            <AddCustomerModal visible={addCustomerModal} toggle={toggleAddCustomerModalHandler} />
+            <FastRaportModal visible={fastRaportModal} toggle={() => toggleFastRaportModal(!fastRaportModal)} />
             <Row
                 gutter={[
                     { xs: 8, sm: 16, md: 16, lg: 16 },
@@ -65,7 +65,11 @@ const MainDashboardPage = () => {
                     <ClassicButton text="Przyjęcie do warsztatu" width="100%" />
                 </Col>
                 <Col xs={24} md={12} lg={6}>
-                    <ClassicButton text="Szybki raport" width="100%" />
+                    <ClassicButton
+                        text="Szybki raport"
+                        width="100%"
+                        onClick={() => toggleFastRaportModal(!fastRaportModal)}
+                    />
                 </Col>
             </Row>
         </Wrapper>

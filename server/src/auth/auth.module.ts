@@ -8,5 +8,6 @@ import { CompanyRepository } from './company.repository';
 @Module({
   imports: [TypeOrmModule.forFeature([UserRepositiory, CompanyRepository])],
   providers: [AuthResolver, AuthService],
+  exports: [],
 })
 export class AuthModule {}

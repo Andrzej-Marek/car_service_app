@@ -4,6 +4,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { ObjectType, Field, Float } from '@nestjs/graphql';
 import { Company } from 'src/auth/company.entity';
@@ -82,4 +84,10 @@ export class Customer extends BaseEntity {
   @Field()
   @Column()
   companyId: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 }

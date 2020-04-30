@@ -36,6 +36,10 @@ export class Company extends BaseEntity {
   @Column({ default: FREE })
   plan: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  phone: string;
+
   @Field()
   @Column()
   companyName: string;

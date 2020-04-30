@@ -20,10 +20,6 @@ import { join } from 'path';
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
-    // ServeStaticModule.forRoot({
-    //   rootPath: path.join(__dirname, '/../../pdfs/'),
-    //   exclude: ['/api*'],
-    // }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       context: ({ req, res }) => ({ req, res }),

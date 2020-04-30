@@ -6,14 +6,13 @@ import { styled, media } from '@/utils';
 interface OwnProps {
     visible: boolean;
     toggle: () => void;
-    onCancel: ((e: React.MouseEvent<HTMLElement, MouseEvent>) => void) | undefined;
 }
 
 type Props = OwnProps;
 
-const AddCustomerModal: FC<Props> = ({ visible, toggle, onCancel }) => {
+const AddCustomerModal: FC<Props> = ({ visible, toggle }) => {
     return (
-        <CustomModal title="Add customer" visible={visible} footer={null} onCancel={onCancel}>
+        <CustomModal title="Add customer" visible={visible} footer={null} onCancel={toggle}>
             <AddCustomerForm toggle={toggle} />
         </CustomModal>
     );

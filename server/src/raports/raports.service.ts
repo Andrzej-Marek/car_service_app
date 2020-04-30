@@ -1,33 +1,74 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import * as pdf from 'html-pdf';
+import * as moment from 'moment';
 import * as fs from 'fs';
-import * as path from 'path';
 import * as ejs from 'ejs';
+import { FastRaportInput } from './dto/fast-raport.input';
+import { CompanyRepository } from 'src/auth/company.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class RaportsService {
-  generateFastRaport() {
-    const pathHere = path.join(__dirname, '/../templates/raports/test.ejs');
-    const html = fs.readFileSync(pathHere, 'utf8');
+  constructor(
+    @InjectRepository(CompanyRepository)
+    private companyRepository: CompanyRepository,
+  ) {}
 
-    const renderedHtml = ejs.render(html, { user: { name: 'Andrzej' } });
+  async generateFastRaport(
+    fastRaportInput: FastRaportInput,
+    companyId: string,
+  ): Promise<string> {
+    const company = await this.companyRepository.findOne({ id: companyId });
+
+    let summaryCosts = {
+      amount: 0,
+      cost: 0,
+      totalCost: 0,
+    };
+
+    fastRaportInput.estimate.map(({ amount, cost, totalCost }) => {
+      summaryCosts.amount = summaryCosts.amount + amount;
+      summaryCosts.cost = summaryCosts.cost + cost;
+      summaryCosts.totalCost = summaryCosts.totalCost + totalCost;
+    });
+
+    const ejsTemplate = fs.readFileSync('./templates/index.ejs', 'utf8');
+
+    const renderedHtml = ejs.render(ejsTemplate, {
+      data: {
+        ...fastRaportInput,
+        date: moment().format('DD-MM-YYYY'),
+      },
+      summaryCosts,
+      company,
+    });
 
     const options: pdf.CreateOptions = {
       format: 'A4',
       footer: {
-        height: '100px',
-        contents: { first: "Hello what's app <h1>HELLO</h1>" },
+        height: '40px',
+        contents: {
+          default:
+            "<p style='font-weight: 700 !important;'>EXELO CMM dla serwisów samochodowych</p>",
+        },
       },
     };
 
-    const fileName = 'test';
+    const randomFileName = uuidv4();
+
     pdf
       .create(renderedHtml, options)
-      .toFile(`./assets/pdf/${fileName}.pdf`, function(err, res) {
-        if (err) return console.log(err);
-        // console.log(res);
-        console.log(process.env.PDFS_BASE_URL + fileName + '.pdf');
+      .toFile(`./assets/pdf/${randomFileName}.pdf`, err => {
+        if (err) {
+          Logger.error(
+            `Error with create fast Raport on name: ${randomFileName} `,
+          );
+          throw new BadRequestException();
+        }
       });
-    return 'Hello';
+
+    console.log(process.env.PDFS_BASE_URL + randomFileName + '.pdf');
+    return process.env.PDFS_BASE_URL + randomFileName + '.pdf';
   }
 }

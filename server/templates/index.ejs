@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap" rel="stylesheet">
+    <title>Hello, world!</title>
+    <style>
+        * {
+            font-size: 12px;
+            font-family: 'Lato', sans-serif;
+        }
+
+        body {
+            margin: 10px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .bold {
+            font-weight: 700 !important;
+        }
+
+        h5 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 10px;
+        }
+
+        .list-ul {
+            display: inline-block;
+            padding: 10px 0;
+            width: 40%;
+        }
+
+        .list-element {
+            padding: 2px 5px;
+            border-left: 1px solid #d1d1d1;
+            list-style: none;
+            margin: 2px;
+        }
+
+        .list-element span {
+            margin-right: 10px;
+            font-weight: 700 !important;
+
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 4px;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 4px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="width: 570px; position: relative;">
+        <div>
+            <div style="padding-bottom: 15px; ">
+                <img src="http://localhost:5000/image/logo.png" alt=""
+                    style="width: 100px; height: auto; max-height: 100px; margin-bottom: 10px;">
+                <div style="font-size: 10px; font-weight: 700 !important;"><%= company.companyName %>
+                </div>
+                <div style="font-size: 9px;"><%= company.street %></div>
+                <div style="font-size: 9px;"><%= company.postcode %> <%= company.adress %></div>
+                <% if (company.phone) { %>
+                <div style="font-size: 9px;">tel: <%= company.phone %></div>
+                <% } %>
+                <div style="font-size: 9px;"><%= company.mail %></div>
+            </div>
+            <div style="position: absolute; right: 10px; top: 0;">
+                <div>Data: <%= data.date %></div>
+            </div>
+        </div>
+        <h1 style="text-align: center; font-size: 22px;">Raport serwisowy</h1>
+        <ul class="list-ul">
+            <% if (data.brand) { %>
+            <li class="list-element"><span>Marka:</span><%= data.brand %> </li>
+            <% } %>
+            <% if (data.productionYear) { %>
+            <li class="list-element"><span>Rok produkcji:</span><%= data.productionYear %> </li>
+            <% } %>
+            <% if (data.vinNumber) { %>
+            <li class="list-element"><span>Numer VIN:</span><%= data.vinNumber %> </li>
+            <% } %>
+        </ul>
+        <ul class="list-ul">
+            <% if (data.model) { %>
+            <li class="list-element"><span>Model:</span><%= data.model %> </li>
+            <% } %>
+            <% if (data.mileage) { %>
+            <li class="list-element"><span>Przebieg:</span><%= data.mileage %> </li>
+            <% } %>
+            <% if (data.color) { %>
+            <li class="list-element"><span>Kolor:</span><%= data.color %> </li>
+            <% } %>
+        </ul>
+
+        <% if (data.description) { %>
+        <h5>Opis usterki</h5>
+        <p><%= data.description %></p>
+        <% } %>
+
+        <% if (data.diagnosis) { %>
+        <h5>Diagnoza</h5>
+        <p><%= data.diagnosis %></p>
+        <% } %>
+
+        <h5>Kosztorys</h5>
+        <table>
+            <tr>
+                <th>Nazwa</th>
+                <th class="center" style="min-width: 60px;">Koszt</th>
+                <th class="center" style="min-width: 40px;">Ilość</th>
+                <th class="center" style="min-width: 60px;">Razem</th>
+            </tr>
+            <% data.estimate.forEach(function(item){ %>
+            <tr>
+                <td><%= item.item %></td>
+                <td class="center"><%= item.cost %> <%= data.currency %></td>
+                <td class="center"><%= item.amount %></td>
+                <td class="center"><%= item.totalCost %> <%= data.currency %></td>
+            </tr>
+            <% }); %>
+
+            <tr>
+                <td class="bold">Podsumowanie:</td>
+                <td class="center bold"><%= summaryCosts.cost %> <%= data.currency %> </td>
+                <td class="center bold"><%= summaryCosts.amount %></td>
+                <td class="center bold"><%= summaryCosts.totalCost %> <%= data.currency %> </td>
+            </tr>
+        </table>
+        <% if (data.comment) { %>
+        <h5>Uwagi</h5>
+        <p><%= data.comment %></p>
+        <% } %>
+
+    </div>
+</body>
+
+</html>
