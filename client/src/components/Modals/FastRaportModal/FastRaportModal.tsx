@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { styled, media } from '@/utils';
 import { Modal, Tabs } from 'antd';
 import FastRaportForm from '@/components/Forms/FastRaportForm';
+import { useTranslation } from 'react-i18next';
 
 interface OwnProps {
     visible: boolean;
@@ -12,13 +13,15 @@ type Props = OwnProps;
 
 const { TabPane } = Tabs;
 const FastRaportModal: FC<Props> = ({ visible, toggle }) => {
+    const { t } = useTranslation(['fields']);
+
     return (
-        <CustomModal title="Szybki raport" visible={visible} footer={null} onCancel={toggle}>
+        <CustomModal title={t('fastRaport')} visible={visible} footer={null} onCancel={toggle}>
             <Tabs type="card">
-                <TabPane tab="Dane do raportu" key="1">
+                <TabPane tab={t('raportData')} key="1">
                     <FastRaportForm />
                 </TabPane>
-                <TabPane tab="Dane o firmie" key="2">
+                <TabPane tab={t('companyData')} key="2">
                     Content of Tab Pane 2
                 </TabPane>
             </Tabs>

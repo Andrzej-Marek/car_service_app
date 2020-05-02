@@ -1,4 +1,9 @@
 {
+    "raportGenerated": "Wygenerowano raport",
+    "raportLink": "Adres raportu",
+    "fastRaport": "Szybki raport",
+    "raportData": "Dane do raportu",
+    "companyData": "Dane o firmie",
     "name": "Imię",
     "lastname": "Nazwisko",
     "companyName": "Firma",
@@ -13,5 +18,20 @@
     "mailSendAgreement": "Zgoda na wiadomości mailowe",
     "smsSendAgreement": "Zgoda na wiadomości sms",
     "marketingSendAgreement": "Zgoda na wiadomości marketingowe",
-    "save": "Zapisz"
+    "save": "Zapisz",
+    "clear": "Wyczyść",
+    "brand": "Marka",
+    "model": "Model",
+    "vinNumber": "Numer VIN",
+    "productionYear": "Rok produkcji",
+    "mileage": "Przebieg",
+    "color": "Kolor",
+    "description": "Opis",
+    "diagnosis": "Diagnoza",
+    "product / service": "Produkt / Usługa",
+    "cost": "Cena",
+    "amount": "Ilość",
+    "totalCost": "Koszt",
+    "addNextRaport": "Dodaj kolejny raport",
+    "estimate": "Kosztorys"
 }

@@ -40,6 +40,7 @@ export type Company = {
   id: Scalars['ID'];
   mail: Scalars['String'];
   plan: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
   companyName: Scalars['String'];
   vatNumber: Scalars['String'];
   adress: Scalars['String'];
@@ -62,12 +63,22 @@ export type User = {
   companyId: Scalars['String'];
 };
 
+export type AuthInfoSchema = {
+   __typename?: 'AuthInfoSchema';
+  companyId: Scalars['String'];
+  companyName: Scalars['String'];
+  loginType: Scalars['String'];
+  plan: Scalars['String'];
+  userName?: Maybe<Scalars['String']>;
+};
+
 export type Query = {
    __typename?: 'Query';
-  test: Scalars['Boolean'];
+  me: AuthInfoSchema;
   getUser: User;
   getCompany: Company;
   getAllCustomers: Array<Customer>;
+  fastRaport: Scalars['String'];
 };
 
 
@@ -78,6 +89,32 @@ export type QueryGetUserArgs = {
 
 export type QueryGetCompanyArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryFastRaportArgs = {
+  fastRaportInput: FastRaportInput;
+};
+
+export type FastRaportInput = {
+  brand: Scalars['String'];
+  model: Scalars['String'];
+  vinNumber?: Maybe<Scalars['String']>;
+  productionYear?: Maybe<Scalars['String']>;
+  mileage?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
+  diagnosis: Scalars['String'];
+  estimate?: Maybe<Array<Estimate>>;
+  comment?: Maybe<Scalars['String']>;
+  currency?: Maybe<Scalars['String']>;
+};
+
+export type Estimate = {
+  item: Scalars['String'];
+  cost: Scalars['Float'];
+  amount: Scalars['Float'];
+  totalCost: Scalars['Float'];
 };
 
 export type Mutation = {
@@ -183,6 +220,26 @@ export type CreateNewCustomerMutation = (
   ) }
 );
 
+export type FastRaportQueryVariables = {
+  brand: Scalars['String'];
+  model: Scalars['String'];
+  vinNumber?: Maybe<Scalars['String']>;
+  productionYear?: Maybe<Scalars['String']>;
+  mileage?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
+  diagnosis: Scalars['String'];
+  estimate?: Maybe<Array<Estimate>>;
+  comment?: Maybe<Scalars['String']>;
+  currency?: Maybe<Scalars['String']>;
+};
+
+
+export type FastRaportQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'fastRaport'>
+);
+
 export type CompanyLoginMutationVariables = {
   login: Scalars['String'];
   password: Scalars['String'];
@@ -212,6 +269,17 @@ export type UserLoginMutation = (
       { __typename?: 'Company' }
       & Pick<Company, 'id' | 'plan' | 'companyName'>
     ) }
+  ) }
+);
+
+export type MeQueryVariables = {};
+
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me: (
+    { __typename?: 'AuthInfoSchema' }
+    & Pick<AuthInfoSchema, 'companyId' | 'companyName' | 'loginType' | 'plan' | 'userName'>
   ) }
 );
 
@@ -246,6 +314,31 @@ export function withCreateNewCustomer<TProps, TChildProps = {}, TDataName extend
 };
 export type CreateNewCustomerMutationResult = ApolloReactCommon.MutationResult<CreateNewCustomerMutation>;
 export type CreateNewCustomerMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>;
+export const FastRaportDocument = gql`
+    query fastRaport($brand: String!, $model: String!, $vinNumber: String, $productionYear: String, $mileage: String, $color: String, $description: String!, $diagnosis: String!, $estimate: [Estimate!], $comment: String, $currency: String) {
+  fastRaport(fastRaportInput: {brand: $brand, model: $model, vinNumber: $vinNumber, productionYear: $productionYear, mileage: $mileage, color: $color, description: $description, diagnosis: $diagnosis, currency: $currency, estimate: $estimate, comment: $comment})
+}
+    `;
+export type FastRaportComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<FastRaportQuery, FastRaportQueryVariables>, 'query'> & ({ variables: FastRaportQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const FastRaportComponent = (props: FastRaportComponentProps) => (
+      <ApolloReactComponents.Query<FastRaportQuery, FastRaportQueryVariables> query={FastRaportDocument} {...props} />
+    );
+    
+export type FastRaportProps<TChildProps = {}, TDataName extends string = 'data'> = {
+      [key in TDataName]: ApolloReactHoc.DataValue<FastRaportQuery, FastRaportQueryVariables>
+    } & TChildProps;
+export function withFastRaport<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  FastRaportQuery,
+  FastRaportQueryVariables,
+  FastRaportProps<TChildProps, TDataName>>) {
+    return ApolloReactHoc.withQuery<TProps, FastRaportQuery, FastRaportQueryVariables, FastRaportProps<TChildProps, TDataName>>(FastRaportDocument, {
+      alias: 'fastRaport',
+      ...operationOptions
+    });
+};
+export type FastRaportQueryResult = ApolloReactCommon.QueryResult<FastRaportQuery, FastRaportQueryVariables>;
 export const CompanyLoginDocument = gql`
     mutation CompanyLogin($login: String!, $password: String!) {
   companyLogin(credentials: {login: $login, password: $password}) {
@@ -312,3 +405,34 @@ export function withUserLogin<TProps, TChildProps = {}, TDataName extends string
 };
 export type UserLoginMutationResult = ApolloReactCommon.MutationResult<UserLoginMutation>;
 export type UserLoginMutationOptions = ApolloReactCommon.BaseMutationOptions<UserLoginMutation, UserLoginMutationVariables>;
+export const MeDocument = gql`
+    query me {
+  me {
+    companyId
+    companyName
+    loginType
+    plan
+    userName
+  }
+}
+    `;
+export type MeComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<MeQuery, MeQueryVariables>, 'query'>;
+
+    export const MeComponent = (props: MeComponentProps) => (
+      <ApolloReactComponents.Query<MeQuery, MeQueryVariables> query={MeDocument} {...props} />
+    );
+    
+export type MeProps<TChildProps = {}, TDataName extends string = 'data'> = {
+      [key in TDataName]: ApolloReactHoc.DataValue<MeQuery, MeQueryVariables>
+    } & TChildProps;
+export function withMe<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  MeQuery,
+  MeQueryVariables,
+  MeProps<TChildProps, TDataName>>) {
+    return ApolloReactHoc.withQuery<TProps, MeQuery, MeQueryVariables, MeProps<TChildProps, TDataName>>(MeDocument, {
+      alias: 'me',
+      ...operationOptions
+    });
+};
+export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;

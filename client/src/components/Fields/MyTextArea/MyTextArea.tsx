@@ -1,16 +1,16 @@
 import React, { FC } from 'react';
 import { useField } from 'formik';
-import { Input, Form } from 'antd';
+import { Input } from 'antd';
 import { styled } from '@/utils';
+import { TextAreaProps } from 'antd/lib/input';
 
 const { TextArea } = Input;
 
 interface OwnProps {
     label?: string;
-    [x: string]: any;
 }
 
-type Props = OwnProps;
+type Props = OwnProps & TextAreaProps;
 
 const MyTextArea: FC<Props> = ({ label, ...props }) => {
     const [field, meta] = useField(props as any);

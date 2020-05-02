@@ -14,10 +14,8 @@ const MyNumberInput: FC<Props> = ({ label, onChange, ...props }) => {
     const [field, meta] = useField(props as any);
     return (
         <Wrapper className="my-field-number-input">
-            <label>
-                {label && label}
-                <InputNumber {...field} {...props} onChange={onChange} />
-            </label>
+            <label>{label && label}</label>
+            <InputNumber {...field} {...props} onChange={onChange} />
             {meta.touched && meta.error && <div className="error">{meta.error}</div>}
         </Wrapper>
     );
@@ -30,7 +28,9 @@ const Wrapper = styled.div`
         display: flex;
         flex-direction: column;
     }
-
+    .ant-input-number {
+        width: 100%;
+    }
     svg {
         margin-right: 5px;
     }

@@ -8,16 +8,16 @@ export class FastRaportInput {
   @Field()
   model: string;
 
-  @Field()
+  @Field({ nullable: true })
   vinNumber: string;
 
-  @Field()
+  @Field({ nullable: true })
   productionYear: string;
 
-  @Field()
+  @Field({ nullable: true })
   mileage: string;
 
-  @Field()
+  @Field({ nullable: true })
   color: string;
 
   @Field()
@@ -26,13 +26,13 @@ export class FastRaportInput {
   @Field()
   diagnosis: string;
 
-  @Field(() => [Estimate])
+  @Field(() => [Estimate], { nullable: true })
   estimate: Estimate[];
 
-  @Field()
+  @Field({ nullable: true })
   comment: string;
 
-  @Field()
+  @Field({ nullable: true })
   currency: string;
 }
 

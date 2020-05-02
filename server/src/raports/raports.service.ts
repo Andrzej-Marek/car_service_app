@@ -67,8 +67,7 @@ export class RaportsService {
           throw new BadRequestException();
         }
       });
-
-    console.log(process.env.PDFS_BASE_URL + randomFileName + '.pdf');
+    Logger.log(`Fast raport generated`);
     return process.env.PDFS_BASE_URL + randomFileName + '.pdf';
   }
 }

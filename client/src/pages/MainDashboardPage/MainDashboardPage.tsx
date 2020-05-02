@@ -13,6 +13,7 @@ import FastRaportModal from '@/components/Modals/FastRaportModal';
 const MainDashboardPage = () => {
     const [addCustomerModal, toggleAddCustomerModal] = useState(false);
     const [fastRaportModal, toggleFastRaportModal] = useState(false);
+
     const { user } = useContext(UserContext);
     const { t } = useTranslation('mainDashboard');
 
@@ -20,7 +21,7 @@ const MainDashboardPage = () => {
         toggleAddCustomerModal(!addCustomerModal);
     };
 
-    console.log(user);
+    console.log('user', user);
     return (
         <Wrapper>
             <AddCustomerModal visible={addCustomerModal} toggle={toggleAddCustomerModalHandler} />

@@ -2,6 +2,7 @@ import React from 'react';
 import { createContext } from 'react';
 import { User } from '@/@types';
 import { LoginType } from '@/enums';
+import { MeQueryResult } from '@/generated/graphql';
 
 export interface UserContextInterface {
     user: User | null;

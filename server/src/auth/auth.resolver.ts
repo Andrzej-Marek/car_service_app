@@ -9,6 +9,9 @@ import { AuthGuard } from 'src/common/guards/auth.guard';
 import { MyContext } from 'src/@types/MyContext';
 import { LoginInput } from './dto/login.input';
 import { LoginType } from './@types/LoginType';
+import { GetCompanyId } from './get-company-id.decorator';
+import { GetUserId } from './utils/get-user-id.decoration';
+import { AuthInfoSchema } from './auth-info.schema';
 
 @Resolver()
 export class AuthResolver {
@@ -26,10 +29,15 @@ export class AuthResolver {
   //   return this.authService.getAllUser();
   // }
 
-  @Query(() => Boolean)
-  test(): boolean {
-    return true;
+  @UseGuards(AuthGuard)
+  @Query(() => AuthInfoSchema)
+  me(
+    @GetCompanyId() companyId: string,
+    @GetUserId() userId: string,
+  ): Promise<AuthInfoSchema> {
+    return this.authService.me(companyId, userId);
   }
+
   @UseGuards(AuthGuard)
   @Query(() => User)
   getUser(@Args('id') id: string): Promise<User> {
