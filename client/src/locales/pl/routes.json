@@ -2,5 +2,6 @@
     "Home": "/",
     "About": "/about",
     "CustomersPage": "/customers",
-    "CustomersPageName": "Clienci"
+    "CustomersPageName": "Clienci",
+    "AddNewCarPageName": "Dodaj nowy samochód"
 }

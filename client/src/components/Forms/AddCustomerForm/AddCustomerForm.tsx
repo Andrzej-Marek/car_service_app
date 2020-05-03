@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { styled } from '@/utils';
 import { useTranslation } from 'react-i18next';
-import { Formik } from 'formik';
+import { Formik, FormikHelpers, FormikValues } from 'formik';
 import { Col, Row, message, Modal } from 'antd';
 import MyInputField from '@/components/Fields/MyInputField';
 import MyCheckbox from '@/components/Fields/MyCheckbox';
@@ -14,40 +14,48 @@ import { CreateNewCustomerMutation, CreateNewCustomerMutationVariables } from '@
 import GeneralError from '@/components/Errors/GeneralError';
 import { createUserSchema } from '@/validations';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { AddCustomer } from './types';
 
 interface OwnProps {
-    toggle: () => void;
+    toggle?: () => void;
+    formRef?: React.RefObject<FormikValues>;
+    submitForm?: (values: AddCustomer, formikHelpers: FormikHelpers<AddCustomer>) => void;
+    defaultValues?: AddCustomer | { userId: string };
 }
 
 type Props = OwnProps;
 
 const { confirm } = Modal;
 
-const AddCustomerForm: FC<Props> = ({ toggle }) => {
+const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef }) => {
     const { t } = useTranslation(['fields', 'common', 'errors', 'validations']);
     const [createNewCustomer, { error }] = useMutation<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>(
         CREATE_NEW_CUSTOMER,
     );
 
-    const showConfirmModal = async (values: CreateNewCustomerMutationVariables, resetForm: any) => {
+    const showConfirmModal = async (values: AddCustomer, helpers: FormikHelpers<AddCustomer>) => {
         confirm({
             title: t('validations:createUserBooleansAccept'),
             content: t('validations:createUserBooleansAcceptExplain'),
             icon: <ExclamationCircleOutlined />,
             onOk() {
-                return submitHandler(values, resetForm);
+                if (submitForm) {
+                    submitForm(values, helpers);
+                } else {
+                    InComponentSubmitHandler(values, helpers);
+                }
             },
             okText: t('common:save'),
             cancelText: t('common:cancel'),
         });
     };
 
-    const submitHandler = async (values: CreateNewCustomerMutationVariables, resetForm: any) => {
+    const InComponentSubmitHandler = async (values: AddCustomer, helpers: FormikHelpers<AddCustomer>) => {
         try {
             await createNewCustomer({ variables: values });
-            toggle();
+            toggle && toggle();
             message.success(t('common:saveSuccess'));
-            resetForm();
+            helpers.resetForm();
         } catch (error) {
             console.log(error);
         }
@@ -55,30 +63,41 @@ const AddCustomerForm: FC<Props> = ({ toggle }) => {
 
     return (
         <Formik
-            initialValues={{
-                name: '',
-                lastname: '',
-                companyName: '',
-                vatNumber: '',
-                street: '',
-                postcode: '',
-                adress: '',
-                phone: '',
-                mail: '',
-                comment: '',
-                discount: 0,
-                mailSendAgreement: false,
-                smsSendAgreement: false,
-                marketingSendAgreement: false,
-            }}
+            innerRef={formRef as any}
+            initialValues={
+                defaultValues
+                    ? defaultValues
+                    : {
+                          firstname: '',
+                          lastname: '',
+                          companyName: '',
+                          vatNumber: '',
+                          street: '',
+                          postcode: '',
+                          adress: '',
+                          phone: '',
+                          mail: '',
+                          comment: '',
+                          discount: 0,
+                          mailSendAgreement: false,
+                          smsSendAgreement: false,
+                          marketingSendAgreement: false,
+                      }
+            }
             validationSchema={createUserSchema}
             validateOnBlur={true}
-            onSubmit={async (values, { resetForm }) => {
+            onSubmit={async (values, helpers) => {
                 const { marketingSendAgreement, mailSendAgreement, smsSendAgreement } = values;
+
                 if (!marketingSendAgreement && !mailSendAgreement && !smsSendAgreement) {
-                    return showConfirmModal(values, resetForm);
+                    return showConfirmModal(values, helpers);
                 }
-                await submitHandler(values, resetForm);
+
+                if (submitForm) {
+                    submitForm(values, helpers);
+                } else {
+                    await InComponentSubmitHandler(values, helpers);
+                }
             }}
         >
             {({ handleSubmit, setFieldValue }) => (
@@ -86,7 +105,7 @@ const AddCustomerForm: FC<Props> = ({ toggle }) => {
                     {error && <GeneralError message={t('errors:generalError')} />}
                     <Row>
                         <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyInputField name="name" label={t('name')} />
+                            <MyInputField name="firstname" label={t('firstname')} />
                         </Col>
                         <Col xs={24} sm={12} md={6} xxl={3}>
                             <MyInputField name="lastname" label={t('lastname')} />
@@ -138,9 +157,11 @@ const AddCustomerForm: FC<Props> = ({ toggle }) => {
                             <MyCheckbox name="marketingSendAgreement" label={t('marketingSendAgreement')} />
                         </Col>
                     </Row>
-                    <ButtonWrapper>
-                        <ClassicButton htmlType="submit" text={t('save')} width="100%" />
-                    </ButtonWrapper>
+                    {!submitForm && (
+                        <ButtonWrapper>
+                            <ClassicButton htmlType="submit" text={t('save')} width="100%" />
+                        </ButtonWrapper>
+                    )}
                 </form>
             )}
         </Formik>

@@ -3,5 +3,9 @@
     "password": "Hasło",
     "saveSuccess": "Pomyślnie zapisano {{who}}",
     "save": "Zapisz",
-    "cancel": "Anuluj"
+    "cancel": "Anuluj",
+    "clear": "Wyczyść",
+    "reset": "Reset",
+    "next": "Dalej",
+    "previous": "Cofnij"
 }

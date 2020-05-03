@@ -4,7 +4,7 @@
     "fastRaport": "Szybki raport",
     "raportData": "Dane do raportu",
     "companyData": "Dane o firmie",
-    "name": "Imię",
+    "firstname": "Imię",
     "lastname": "Nazwisko",
     "companyName": "Firma",
     "street": "Ulica",
@@ -19,6 +19,7 @@
     "smsSendAgreement": "Zgoda na wiadomości sms",
     "marketingSendAgreement": "Zgoda na wiadomości marketingowe",
     "save": "Zapisz",
+    "successfullySaved": "Zapisz pomyślnie",
     "clear": "Wyczyść",
     "brand": "Marka",
     "model": "Model",
@@ -33,5 +34,13 @@
     "amount": "Ilość",
     "totalCost": "Koszt",
     "addNextRaport": "Dodaj kolejny raport",
-    "estimate": "Kosztorys"
+    "estimate": "Kosztorys",
+    "vahicleType": "Rodzaj pojazdu",
+    "engineCapacity": "Pojemność skokowa",
+    "enginePower": "Moc silnika",
+    "registrationNumber": "Numer rejestracyjny",
+    "fuelType": "Rodzaj paliwa",
+    "insuranceDate": "Data ubezpieczenia",
+    "nextService": "Następny serwis",
+    "warranty": "Gwarancja"
 }

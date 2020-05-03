@@ -5,6 +5,9 @@ import loginAndRegister from './loginAndRegister.json';
 import errors from './errors.json';
 import validations from './validations.json';
 import fields from './fields.json';
+import addNewCarPage from './addNewCarPage.json';
+import vehicleTypes from './vehicleTypes.json';
+import fuelTypes from './fuelTypes.json';
 
 export default {
     common,
@@ -14,4 +17,7 @@ export default {
     errors,
     fields,
     validations,
+    addNewCarPage,
+    vehicleTypes,
+    fuelTypes,
 };

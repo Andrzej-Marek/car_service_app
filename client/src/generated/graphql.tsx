@@ -17,7 +17,7 @@ export type Scalars = {
 export type Customer = {
    __typename?: 'Customer';
   id: Scalars['String'];
-  name: Scalars['String'];
+  firstname: Scalars['String'];
   lastname?: Maybe<Scalars['String']>;
   companyName?: Maybe<Scalars['String']>;
   vatNumber?: Maybe<Scalars['String']>;
@@ -178,7 +178,7 @@ export type CreateCompanyInput = {
 };
 
 export type CreateCustomerInput = {
-  name: Scalars['String'];
+  firstname: Scalars['String'];
   lastname?: Maybe<Scalars['String']>;
   companyName?: Maybe<Scalars['String']>;
   vatNumber?: Maybe<Scalars['String']>;
@@ -195,7 +195,7 @@ export type CreateCustomerInput = {
 };
 
 export type CreateNewCustomerMutationVariables = {
-  name: Scalars['String'];
+  firstname: Scalars['String'];
   lastname?: Maybe<Scalars['String']>;
   companyName?: Maybe<Scalars['String']>;
   vatNumber?: Maybe<Scalars['String']>;
@@ -216,8 +216,19 @@ export type CreateNewCustomerMutation = (
   { __typename?: 'Mutation' }
   & { createNewCustomer: (
     { __typename?: 'Customer' }
-    & Pick<Customer, 'id' | 'name'>
+    & Pick<Customer, 'id' | 'firstname'>
   ) }
+);
+
+export type GetAllCustomersQueryVariables = {};
+
+
+export type GetAllCustomersQuery = (
+  { __typename?: 'Query' }
+  & { getAllCustomers: Array<(
+    { __typename?: 'Customer' }
+    & Pick<Customer, 'id' | 'firstname' | 'lastname' | 'companyName' | 'adress'>
+  )> }
 );
 
 export type FastRaportQueryVariables = {
@@ -285,10 +296,10 @@ export type MeQuery = (
 
 
 export const CreateNewCustomerDocument = gql`
-    mutation CreateNewCustomer($name: String!, $lastname: String, $companyName: String, $vatNumber: String, $street: String, $postcode: String, $adress: String, $phone: String, $mail: String, $comment: String, $discount: Int, $mailSendAgreement: Boolean!, $smsSendAgreement: Boolean!, $marketingSendAgreement: Boolean!) {
-  createNewCustomer(newCustomerInput: {name: $name, lastname: $lastname, companyName: $companyName, vatNumber: $vatNumber, street: $street, postcode: $postcode, adress: $adress, phone: $phone, mail: $mail, comment: $comment, discount: $discount, mailSendAgreement: $mailSendAgreement, smsSendAgreement: $smsSendAgreement, marketingSendAgreement: $marketingSendAgreement}) {
+    mutation CreateNewCustomer($firstname: String!, $lastname: String, $companyName: String, $vatNumber: String, $street: String, $postcode: String, $adress: String, $phone: String, $mail: String, $comment: String, $discount: Int, $mailSendAgreement: Boolean!, $smsSendAgreement: Boolean!, $marketingSendAgreement: Boolean!) {
+  createNewCustomer(newCustomerInput: {firstname: $firstname, lastname: $lastname, companyName: $companyName, vatNumber: $vatNumber, street: $street, postcode: $postcode, adress: $adress, phone: $phone, mail: $mail, comment: $comment, discount: $discount, mailSendAgreement: $mailSendAgreement, smsSendAgreement: $smsSendAgreement, marketingSendAgreement: $marketingSendAgreement}) {
     id
-    name
+    firstname
   }
 }
     `;
@@ -314,6 +325,37 @@ export function withCreateNewCustomer<TProps, TChildProps = {}, TDataName extend
 };
 export type CreateNewCustomerMutationResult = ApolloReactCommon.MutationResult<CreateNewCustomerMutation>;
 export type CreateNewCustomerMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>;
+export const GetAllCustomersDocument = gql`
+    query getAllCustomers {
+  getAllCustomers {
+    id
+    firstname
+    lastname
+    companyName
+    adress
+  }
+}
+    `;
+export type GetAllCustomersComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetAllCustomersQuery, GetAllCustomersQueryVariables>, 'query'>;
+
+    export const GetAllCustomersComponent = (props: GetAllCustomersComponentProps) => (
+      <ApolloReactComponents.Query<GetAllCustomersQuery, GetAllCustomersQueryVariables> query={GetAllCustomersDocument} {...props} />
+    );
+    
+export type GetAllCustomersProps<TChildProps = {}, TDataName extends string = 'data'> = {
+      [key in TDataName]: ApolloReactHoc.DataValue<GetAllCustomersQuery, GetAllCustomersQueryVariables>
+    } & TChildProps;
+export function withGetAllCustomers<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  GetAllCustomersQuery,
+  GetAllCustomersQueryVariables,
+  GetAllCustomersProps<TChildProps, TDataName>>) {
+    return ApolloReactHoc.withQuery<TProps, GetAllCustomersQuery, GetAllCustomersQueryVariables, GetAllCustomersProps<TChildProps, TDataName>>(GetAllCustomersDocument, {
+      alias: 'getAllCustomers',
+      ...operationOptions
+    });
+};
+export type GetAllCustomersQueryResult = ApolloReactCommon.QueryResult<GetAllCustomersQuery, GetAllCustomersQueryVariables>;
 export const FastRaportDocument = gql`
     query fastRaport($brand: String!, $model: String!, $vinNumber: String, $productionYear: String, $mileage: String, $color: String, $description: String!, $diagnosis: String!, $estimate: [Estimate!], $comment: String, $currency: String) {
   fastRaport(fastRaportInput: {brand: $brand, model: $model, vinNumber: $vinNumber, productionYear: $productionYear, mileage: $mileage, color: $color, description: $description, diagnosis: $diagnosis, currency: $currency, estimate: $estimate, comment: $comment})

@@ -19,7 +19,7 @@ export class Customer extends BaseEntity {
 
   @Field()
   @Column()
-  name: string;
+  firstname: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })

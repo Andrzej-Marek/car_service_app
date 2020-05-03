@@ -1,0 +1,11 @@
+{
+    "petrol": "Benzyna",
+    "diesel": "Diesel",
+    "biodiesel": "Bio Diesel",
+    "kerosene": "Nafta",
+    "naturalgas": "Gaz Ziemny",
+    "lpgas": "LPG",
+    "hydrogen": "Wodór",
+    "ethanol": "Etanol",
+    "racingfuel": "Paliwo wyścigowe"
+}

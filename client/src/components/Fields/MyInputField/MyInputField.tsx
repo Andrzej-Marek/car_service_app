@@ -8,7 +8,6 @@ import { CloseCircleOutlined } from '@ant-design/icons';
 interface OwnProps {
     label?: string;
     crossIconOnClick?: () => void;
-    // [x: string]: any;
 }
 
 type Props = OwnProps & InputProps;

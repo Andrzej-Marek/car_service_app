@@ -10,6 +10,7 @@ import { CreateCustomerInput } from './dto';
 @Resolver()
 export class CustomerResolver {
   constructor(private customerService: CustomerService) {}
+
   @Query(() => [Customer])
   async getAllCustomers(
     @GetCompanyId() companyId: string,

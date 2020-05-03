@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost';
 
 export const CREATE_NEW_CUSTOMER = gql`
     mutation CreateNewCustomer(
-        $name: String!
+        $firstname: String!
         $lastname: String
         $companyName: String
         $vatNumber: String
@@ -19,7 +19,7 @@ export const CREATE_NEW_CUSTOMER = gql`
     ) {
         createNewCustomer(
             newCustomerInput: {
-                name: $name
+                firstname: $firstname
                 lastname: $lastname
                 companyName: $companyName
                 vatNumber: $vatNumber
@@ -36,7 +36,7 @@ export const CREATE_NEW_CUSTOMER = gql`
             }
         ) {
             id
-            name
+            firstname
         }
     }
 `;
