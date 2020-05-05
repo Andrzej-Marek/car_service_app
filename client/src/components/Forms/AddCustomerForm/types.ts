@@ -1,4 +1,6 @@
 export interface AddCustomer {
+    createNewCustomer: boolean;
+    customerId: null | string;
     firstname: string;
     lastname?: string;
     companyName?: string;

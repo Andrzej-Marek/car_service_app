@@ -3,6 +3,12 @@ import { IsBoolean, MinLength } from 'class-validator';
 
 @InputType()
 export class CreateCustomerInput {
+  @Field({ nullable: true })
+  createNewCustomer: boolean;
+
+  @Field({ nullable: true })
+  customerId?: string;
+
   @Field()
   @MinLength(4)
   firstname: string;

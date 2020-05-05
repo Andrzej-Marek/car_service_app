@@ -5,7 +5,7 @@ import loginAndRegister from './loginAndRegister.json';
 import errors from './errors.json';
 import validations from './validations.json';
 import fields from './fields.json';
-import addNewCarPage from './addNewCarPage.json';
+import nav from './nav.json';
 import vehicleTypes from './vehicleTypes.json';
 import fuelTypes from './fuelTypes.json';
 
@@ -14,10 +14,10 @@ export default {
     routes,
     mainDashboard,
     loginAndRegister,
+    nav,
     errors,
     fields,
     validations,
-    addNewCarPage,
     vehicleTypes,
     fuelTypes,
 };

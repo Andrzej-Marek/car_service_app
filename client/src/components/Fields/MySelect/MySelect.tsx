@@ -11,7 +11,7 @@ interface OwnProps {
 
 type Props = OwnProps & SelectProps<any>;
 
-const MySelect: FC<Props> = ({ label, crossIconOnClick, children, onChange, ...props }) => {
+const MySelect: FC<Props> = ({ label, onChange, ...props }) => {
     const [field, meta] = useField(props as any);
 
     return (

@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from 'typeorm.config';
@@ -15,7 +14,7 @@ import {
 import { CustomerModule } from './customer/customer.module';
 import { RaportsModule } from './raports/raports.module';
 import * as path from 'path';
-import { join } from 'path';
+import { VehicleModule } from './vehicle/vehicle.module';
 
 @Module({
   imports: [
@@ -44,6 +43,7 @@ import { join } from 'path';
     AuthModule,
     CustomerModule,
     RaportsModule,
+    VehicleModule,
   ],
 })
 export class AppModule {}

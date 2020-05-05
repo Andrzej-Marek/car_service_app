@@ -2,10 +2,12 @@
     "mail": "Adres e-mail",
     "password": "Hasło",
     "saveSuccess": "Pomyślnie zapisano {{who}}",
+    "saveError": "Błąd podczas zapisywania",
     "save": "Zapisz",
     "cancel": "Anuluj",
     "clear": "Wyczyść",
     "reset": "Reset",
     "next": "Dalej",
-    "previous": "Cofnij"
+    "previous": "Cofnij",
+    "summary": "Podsumowanie"
 }

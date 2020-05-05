@@ -1,10 +1,7 @@
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
-import * as React from 'react';
-import * as ApolloReactComponents from '@apollo/react-components';
-import * as ApolloReactHoc from '@apollo/react-hoc';
+import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -12,11 +9,40 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
+  DateTime: any;
 };
+
+export type Vehicle = {
+   __typename?: 'Vehicle';
+  id: Scalars['ID'];
+  vahicleType: Scalars['String'];
+  brand: Scalars['String'];
+  model: Scalars['String'];
+  vinNumber?: Maybe<Scalars['String']>;
+  productionYear?: Maybe<Scalars['String']>;
+  engineCapacity?: Maybe<Scalars['String']>;
+  registrationNumber?: Maybe<Scalars['String']>;
+  enginePower?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
+  mileage?: Maybe<Scalars['String']>;
+  fuelType?: Maybe<Scalars['String']>;
+  insuranceDate?: Maybe<Scalars['String']>;
+  nextService?: Maybe<Scalars['String']>;
+  warranty?: Maybe<Scalars['String']>;
+  comment?: Maybe<Scalars['String']>;
+  company: Company;
+  companyId: Scalars['String'];
+  customer: Customer;
+  customerId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
 
 export type Customer = {
    __typename?: 'Customer';
-  id: Scalars['String'];
+  id: Scalars['ID'];
   firstname: Scalars['String'];
   lastname?: Maybe<Scalars['String']>;
   companyName?: Maybe<Scalars['String']>;
@@ -31,8 +57,9 @@ export type Customer = {
   mailSendAgreement: Scalars['Boolean'];
   smsSendAgreement: Scalars['Boolean'];
   marketingSendAgreement: Scalars['Boolean'];
-  company: Scalars['String'];
+  company: Company;
   companyId: Scalars['String'];
+  vehicles: Array<Vehicle>;
 };
 
 export type Company = {
@@ -50,6 +77,7 @@ export type Company = {
   marketingAgreement: Scalars['Boolean'];
   users: Array<User>;
   customers: Array<Customer>;
+  vehicles: Array<Vehicle>;
 };
 
 export type User = {
@@ -124,6 +152,7 @@ export type Mutation = {
   createUser: User;
   createNewCompany: Company;
   createNewCustomer: Customer;
+  createNewVehicleWithCustomer: Vehicle;
 };
 
 
@@ -149,6 +178,11 @@ export type MutationCreateNewCompanyArgs = {
 
 export type MutationCreateNewCustomerArgs = {
   newCustomerInput: CreateCustomerInput;
+};
+
+
+export type MutationCreateNewVehicleWithCustomerArgs = {
+  createNewVehicleAndCustomerInput: CreateNewVehicleAndCustomerInput;
 };
 
 export type LoginInput = {
@@ -178,6 +212,8 @@ export type CreateCompanyInput = {
 };
 
 export type CreateCustomerInput = {
+  createNewCustomer?: Maybe<Scalars['Boolean']>;
+  customerId?: Maybe<Scalars['String']>;
   firstname: Scalars['String'];
   lastname?: Maybe<Scalars['String']>;
   companyName?: Maybe<Scalars['String']>;
@@ -192,6 +228,29 @@ export type CreateCustomerInput = {
   mailSendAgreement: Scalars['Boolean'];
   smsSendAgreement: Scalars['Boolean'];
   marketingSendAgreement: Scalars['Boolean'];
+};
+
+export type CreateNewVehicleAndCustomerInput = {
+  addVehicle: CreateNewVehicleInput;
+  addCustomer: CreateCustomerInput;
+};
+
+export type CreateNewVehicleInput = {
+  vahicleType: Scalars['String'];
+  brand: Scalars['String'];
+  model: Scalars['String'];
+  vinNumber?: Maybe<Scalars['String']>;
+  productionYear?: Maybe<Scalars['String']>;
+  engineCapacity?: Maybe<Scalars['String']>;
+  registrationNumber?: Maybe<Scalars['String']>;
+  enginePower?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
+  mileage?: Maybe<Scalars['String']>;
+  fuelType?: Maybe<Scalars['String']>;
+  insuranceDate?: Maybe<Scalars['String']>;
+  nextService?: Maybe<Scalars['String']>;
+  warranty?: Maybe<Scalars['String']>;
+  comment?: Maybe<Scalars['String']>;
 };
 
 export type CreateNewCustomerMutationVariables = {
@@ -294,6 +353,20 @@ export type MeQuery = (
   ) }
 );
 
+export type CreateNewVehicleWithCustomerMutationVariables = {
+  addVehicle: CreateNewVehicleInput;
+  addCustomer: CreateCustomerInput;
+};
+
+
+export type CreateNewVehicleWithCustomerMutation = (
+  { __typename?: 'Mutation' }
+  & { createNewVehicleWithCustomer: (
+    { __typename?: 'Vehicle' }
+    & Pick<Vehicle, 'id'>
+  ) }
+);
+
 
 export const CreateNewCustomerDocument = gql`
     mutation CreateNewCustomer($firstname: String!, $lastname: String, $companyName: String, $vatNumber: String, $street: String, $postcode: String, $adress: String, $phone: String, $mail: String, $comment: String, $discount: Int, $mailSendAgreement: Boolean!, $smsSendAgreement: Boolean!, $marketingSendAgreement: Boolean!) {
@@ -304,25 +377,41 @@ export const CreateNewCustomerDocument = gql`
 }
     `;
 export type CreateNewCustomerMutationFn = ApolloReactCommon.MutationFunction<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>;
-export type CreateNewCustomerComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>, 'mutation'>;
 
-    export const CreateNewCustomerComponent = (props: CreateNewCustomerComponentProps) => (
-      <ApolloReactComponents.Mutation<CreateNewCustomerMutation, CreateNewCustomerMutationVariables> mutation={CreateNewCustomerDocument} {...props} />
-    );
-    
-export type CreateNewCustomerProps<TChildProps = {}, TDataName extends string = 'mutate'> = {
-      [key in TDataName]: ApolloReactCommon.MutationFunction<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>
-    } & TChildProps;
-export function withCreateNewCustomer<TProps, TChildProps = {}, TDataName extends string = 'mutate'>(operationOptions?: ApolloReactHoc.OperationOption<
-  TProps,
-  CreateNewCustomerMutation,
-  CreateNewCustomerMutationVariables,
-  CreateNewCustomerProps<TChildProps, TDataName>>) {
-    return ApolloReactHoc.withMutation<TProps, CreateNewCustomerMutation, CreateNewCustomerMutationVariables, CreateNewCustomerProps<TChildProps, TDataName>>(CreateNewCustomerDocument, {
-      alias: 'createNewCustomer',
-      ...operationOptions
-    });
-};
+/**
+ * __useCreateNewCustomerMutation__
+ *
+ * To run a mutation, you first call `useCreateNewCustomerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNewCustomerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNewCustomerMutation, { data, loading, error }] = useCreateNewCustomerMutation({
+ *   variables: {
+ *      firstname: // value for 'firstname'
+ *      lastname: // value for 'lastname'
+ *      companyName: // value for 'companyName'
+ *      vatNumber: // value for 'vatNumber'
+ *      street: // value for 'street'
+ *      postcode: // value for 'postcode'
+ *      adress: // value for 'adress'
+ *      phone: // value for 'phone'
+ *      mail: // value for 'mail'
+ *      comment: // value for 'comment'
+ *      discount: // value for 'discount'
+ *      mailSendAgreement: // value for 'mailSendAgreement'
+ *      smsSendAgreement: // value for 'smsSendAgreement'
+ *      marketingSendAgreement: // value for 'marketingSendAgreement'
+ *   },
+ * });
+ */
+export function useCreateNewCustomerMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>(CreateNewCustomerDocument, baseOptions);
+      }
+export type CreateNewCustomerMutationHookResult = ReturnType<typeof useCreateNewCustomerMutation>;
 export type CreateNewCustomerMutationResult = ApolloReactCommon.MutationResult<CreateNewCustomerMutation>;
 export type CreateNewCustomerMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>;
 export const GetAllCustomersDocument = gql`
@@ -336,50 +425,71 @@ export const GetAllCustomersDocument = gql`
   }
 }
     `;
-export type GetAllCustomersComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetAllCustomersQuery, GetAllCustomersQueryVariables>, 'query'>;
 
-    export const GetAllCustomersComponent = (props: GetAllCustomersComponentProps) => (
-      <ApolloReactComponents.Query<GetAllCustomersQuery, GetAllCustomersQueryVariables> query={GetAllCustomersDocument} {...props} />
-    );
-    
-export type GetAllCustomersProps<TChildProps = {}, TDataName extends string = 'data'> = {
-      [key in TDataName]: ApolloReactHoc.DataValue<GetAllCustomersQuery, GetAllCustomersQueryVariables>
-    } & TChildProps;
-export function withGetAllCustomers<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
-  TProps,
-  GetAllCustomersQuery,
-  GetAllCustomersQueryVariables,
-  GetAllCustomersProps<TChildProps, TDataName>>) {
-    return ApolloReactHoc.withQuery<TProps, GetAllCustomersQuery, GetAllCustomersQueryVariables, GetAllCustomersProps<TChildProps, TDataName>>(GetAllCustomersDocument, {
-      alias: 'getAllCustomers',
-      ...operationOptions
-    });
-};
+/**
+ * __useGetAllCustomersQuery__
+ *
+ * To run a query within a React component, call `useGetAllCustomersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllCustomersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllCustomersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllCustomersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetAllCustomersQuery, GetAllCustomersQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetAllCustomersQuery, GetAllCustomersQueryVariables>(GetAllCustomersDocument, baseOptions);
+      }
+export function useGetAllCustomersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetAllCustomersQuery, GetAllCustomersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetAllCustomersQuery, GetAllCustomersQueryVariables>(GetAllCustomersDocument, baseOptions);
+        }
+export type GetAllCustomersQueryHookResult = ReturnType<typeof useGetAllCustomersQuery>;
+export type GetAllCustomersLazyQueryHookResult = ReturnType<typeof useGetAllCustomersLazyQuery>;
 export type GetAllCustomersQueryResult = ApolloReactCommon.QueryResult<GetAllCustomersQuery, GetAllCustomersQueryVariables>;
 export const FastRaportDocument = gql`
     query fastRaport($brand: String!, $model: String!, $vinNumber: String, $productionYear: String, $mileage: String, $color: String, $description: String!, $diagnosis: String!, $estimate: [Estimate!], $comment: String, $currency: String) {
   fastRaport(fastRaportInput: {brand: $brand, model: $model, vinNumber: $vinNumber, productionYear: $productionYear, mileage: $mileage, color: $color, description: $description, diagnosis: $diagnosis, currency: $currency, estimate: $estimate, comment: $comment})
 }
     `;
-export type FastRaportComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<FastRaportQuery, FastRaportQueryVariables>, 'query'> & ({ variables: FastRaportQueryVariables; skip?: boolean; } | { skip: boolean; });
 
-    export const FastRaportComponent = (props: FastRaportComponentProps) => (
-      <ApolloReactComponents.Query<FastRaportQuery, FastRaportQueryVariables> query={FastRaportDocument} {...props} />
-    );
-    
-export type FastRaportProps<TChildProps = {}, TDataName extends string = 'data'> = {
-      [key in TDataName]: ApolloReactHoc.DataValue<FastRaportQuery, FastRaportQueryVariables>
-    } & TChildProps;
-export function withFastRaport<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
-  TProps,
-  FastRaportQuery,
-  FastRaportQueryVariables,
-  FastRaportProps<TChildProps, TDataName>>) {
-    return ApolloReactHoc.withQuery<TProps, FastRaportQuery, FastRaportQueryVariables, FastRaportProps<TChildProps, TDataName>>(FastRaportDocument, {
-      alias: 'fastRaport',
-      ...operationOptions
-    });
-};
+/**
+ * __useFastRaportQuery__
+ *
+ * To run a query within a React component, call `useFastRaportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFastRaportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFastRaportQuery({
+ *   variables: {
+ *      brand: // value for 'brand'
+ *      model: // value for 'model'
+ *      vinNumber: // value for 'vinNumber'
+ *      productionYear: // value for 'productionYear'
+ *      mileage: // value for 'mileage'
+ *      color: // value for 'color'
+ *      description: // value for 'description'
+ *      diagnosis: // value for 'diagnosis'
+ *      estimate: // value for 'estimate'
+ *      comment: // value for 'comment'
+ *      currency: // value for 'currency'
+ *   },
+ * });
+ */
+export function useFastRaportQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FastRaportQuery, FastRaportQueryVariables>) {
+        return ApolloReactHooks.useQuery<FastRaportQuery, FastRaportQueryVariables>(FastRaportDocument, baseOptions);
+      }
+export function useFastRaportLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FastRaportQuery, FastRaportQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<FastRaportQuery, FastRaportQueryVariables>(FastRaportDocument, baseOptions);
+        }
+export type FastRaportQueryHookResult = ReturnType<typeof useFastRaportQuery>;
+export type FastRaportLazyQueryHookResult = ReturnType<typeof useFastRaportLazyQuery>;
 export type FastRaportQueryResult = ApolloReactCommon.QueryResult<FastRaportQuery, FastRaportQueryVariables>;
 export const CompanyLoginDocument = gql`
     mutation CompanyLogin($login: String!, $password: String!) {
@@ -391,25 +501,29 @@ export const CompanyLoginDocument = gql`
 }
     `;
 export type CompanyLoginMutationFn = ApolloReactCommon.MutationFunction<CompanyLoginMutation, CompanyLoginMutationVariables>;
-export type CompanyLoginComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<CompanyLoginMutation, CompanyLoginMutationVariables>, 'mutation'>;
 
-    export const CompanyLoginComponent = (props: CompanyLoginComponentProps) => (
-      <ApolloReactComponents.Mutation<CompanyLoginMutation, CompanyLoginMutationVariables> mutation={CompanyLoginDocument} {...props} />
-    );
-    
-export type CompanyLoginProps<TChildProps = {}, TDataName extends string = 'mutate'> = {
-      [key in TDataName]: ApolloReactCommon.MutationFunction<CompanyLoginMutation, CompanyLoginMutationVariables>
-    } & TChildProps;
-export function withCompanyLogin<TProps, TChildProps = {}, TDataName extends string = 'mutate'>(operationOptions?: ApolloReactHoc.OperationOption<
-  TProps,
-  CompanyLoginMutation,
-  CompanyLoginMutationVariables,
-  CompanyLoginProps<TChildProps, TDataName>>) {
-    return ApolloReactHoc.withMutation<TProps, CompanyLoginMutation, CompanyLoginMutationVariables, CompanyLoginProps<TChildProps, TDataName>>(CompanyLoginDocument, {
-      alias: 'companyLogin',
-      ...operationOptions
-    });
-};
+/**
+ * __useCompanyLoginMutation__
+ *
+ * To run a mutation, you first call `useCompanyLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCompanyLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [companyLoginMutation, { data, loading, error }] = useCompanyLoginMutation({
+ *   variables: {
+ *      login: // value for 'login'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useCompanyLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CompanyLoginMutation, CompanyLoginMutationVariables>) {
+        return ApolloReactHooks.useMutation<CompanyLoginMutation, CompanyLoginMutationVariables>(CompanyLoginDocument, baseOptions);
+      }
+export type CompanyLoginMutationHookResult = ReturnType<typeof useCompanyLoginMutation>;
 export type CompanyLoginMutationResult = ApolloReactCommon.MutationResult<CompanyLoginMutation>;
 export type CompanyLoginMutationOptions = ApolloReactCommon.BaseMutationOptions<CompanyLoginMutation, CompanyLoginMutationVariables>;
 export const UserLoginDocument = gql`
@@ -426,25 +540,29 @@ export const UserLoginDocument = gql`
 }
     `;
 export type UserLoginMutationFn = ApolloReactCommon.MutationFunction<UserLoginMutation, UserLoginMutationVariables>;
-export type UserLoginComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UserLoginMutation, UserLoginMutationVariables>, 'mutation'>;
 
-    export const UserLoginComponent = (props: UserLoginComponentProps) => (
-      <ApolloReactComponents.Mutation<UserLoginMutation, UserLoginMutationVariables> mutation={UserLoginDocument} {...props} />
-    );
-    
-export type UserLoginProps<TChildProps = {}, TDataName extends string = 'mutate'> = {
-      [key in TDataName]: ApolloReactCommon.MutationFunction<UserLoginMutation, UserLoginMutationVariables>
-    } & TChildProps;
-export function withUserLogin<TProps, TChildProps = {}, TDataName extends string = 'mutate'>(operationOptions?: ApolloReactHoc.OperationOption<
-  TProps,
-  UserLoginMutation,
-  UserLoginMutationVariables,
-  UserLoginProps<TChildProps, TDataName>>) {
-    return ApolloReactHoc.withMutation<TProps, UserLoginMutation, UserLoginMutationVariables, UserLoginProps<TChildProps, TDataName>>(UserLoginDocument, {
-      alias: 'userLogin',
-      ...operationOptions
-    });
-};
+/**
+ * __useUserLoginMutation__
+ *
+ * To run a mutation, you first call `useUserLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userLoginMutation, { data, loading, error }] = useUserLoginMutation({
+ *   variables: {
+ *      login: // value for 'login'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useUserLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UserLoginMutation, UserLoginMutationVariables>) {
+        return ApolloReactHooks.useMutation<UserLoginMutation, UserLoginMutationVariables>(UserLoginDocument, baseOptions);
+      }
+export type UserLoginMutationHookResult = ReturnType<typeof useUserLoginMutation>;
 export type UserLoginMutationResult = ApolloReactCommon.MutationResult<UserLoginMutation>;
 export type UserLoginMutationOptions = ApolloReactCommon.BaseMutationOptions<UserLoginMutation, UserLoginMutationVariables>;
 export const MeDocument = gql`
@@ -458,23 +576,61 @@ export const MeDocument = gql`
   }
 }
     `;
-export type MeComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<MeQuery, MeQueryVariables>, 'query'>;
 
-    export const MeComponent = (props: MeComponentProps) => (
-      <ApolloReactComponents.Query<MeQuery, MeQueryVariables> query={MeDocument} {...props} />
-    );
-    
-export type MeProps<TChildProps = {}, TDataName extends string = 'data'> = {
-      [key in TDataName]: ApolloReactHoc.DataValue<MeQuery, MeQueryVariables>
-    } & TChildProps;
-export function withMe<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
-  TProps,
-  MeQuery,
-  MeQueryVariables,
-  MeProps<TChildProps, TDataName>>) {
-    return ApolloReactHoc.withQuery<TProps, MeQuery, MeQueryVariables, MeProps<TChildProps, TDataName>>(MeDocument, {
-      alias: 'me',
-      ...operationOptions
-    });
-};
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        return ApolloReactHooks.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+      }
+export function useMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;
+export const CreateNewVehicleWithCustomerDocument = gql`
+    mutation CreateNewVehicleWithCustomer($addVehicle: CreateNewVehicleInput!, $addCustomer: CreateCustomerInput!) {
+  createNewVehicleWithCustomer(createNewVehicleAndCustomerInput: {addVehicle: $addVehicle, addCustomer: $addCustomer}) {
+    id
+  }
+}
+    `;
+export type CreateNewVehicleWithCustomerMutationFn = ApolloReactCommon.MutationFunction<CreateNewVehicleWithCustomerMutation, CreateNewVehicleWithCustomerMutationVariables>;
+
+/**
+ * __useCreateNewVehicleWithCustomerMutation__
+ *
+ * To run a mutation, you first call `useCreateNewVehicleWithCustomerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNewVehicleWithCustomerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNewVehicleWithCustomerMutation, { data, loading, error }] = useCreateNewVehicleWithCustomerMutation({
+ *   variables: {
+ *      addVehicle: // value for 'addVehicle'
+ *      addCustomer: // value for 'addCustomer'
+ *   },
+ * });
+ */
+export function useCreateNewVehicleWithCustomerMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateNewVehicleWithCustomerMutation, CreateNewVehicleWithCustomerMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateNewVehicleWithCustomerMutation, CreateNewVehicleWithCustomerMutationVariables>(CreateNewVehicleWithCustomerDocument, baseOptions);
+      }
+export type CreateNewVehicleWithCustomerMutationHookResult = ReturnType<typeof useCreateNewVehicleWithCustomerMutation>;
+export type CreateNewVehicleWithCustomerMutationResult = ApolloReactCommon.MutationResult<CreateNewVehicleWithCustomerMutation>;
+export type CreateNewVehicleWithCustomerMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateNewVehicleWithCustomerMutation, CreateNewVehicleWithCustomerMutationVariables>;

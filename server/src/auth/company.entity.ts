@@ -11,6 +11,7 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcryptjs';
 import { Plans } from 'src/@types/Plans';
 import { Customer } from 'src/customer/customer.entity';
+import { Vehicle } from 'src/vehicle/vehicle.entity';
 
 const { FREE } = Plans;
 
@@ -83,6 +84,14 @@ export class Company extends BaseEntity {
   )
   @Field(() => [Customer])
   customers: Customer[];
+
+  @OneToMany(
+    () => Vehicle,
+    vehicle => vehicle.company,
+    { eager: true },
+  )
+  @Field(() => [Vehicle])
+  vehicles: Vehicle[];
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);

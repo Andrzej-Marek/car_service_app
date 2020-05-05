@@ -11,7 +11,9 @@ export class CustomerService {
     private customerRepository: CustomerRepository,
   ) {}
   async getAllCustomers(companyId: string): Promise<Customer[]> {
-    return await this.customerRepository.getAllCustomers(companyId);
+    return await this.customerRepository.find({
+      where: { companyId },
+    });
   }
 
   async createNewCustomer(

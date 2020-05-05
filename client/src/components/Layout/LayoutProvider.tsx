@@ -3,7 +3,7 @@ import { styled } from '@/utils';
 import { Layout, Menu } from 'antd';
 import Icon, { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import logo from '@/assets/images/logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { routes } from '@/Routes';
 import SubMenu from 'antd/lib/menu/SubMenu';
 
@@ -17,10 +17,12 @@ const LayoutProvider: FC<Props> = ({ children }) => {
     const [collapsed, toggleCollapsed] = useState(true);
     const [collapsedWidth, setCollapsedWidth] = useState(0);
 
+    const location = useLocation();
+
     const routeComponents = routes.map(({ path, name, routes, icon, key }) => {
         if (!routes.length) {
             return (
-                <Menu.Item key={key}>
+                <Menu.Item key={path}>
                     <Link to={path}>
                         <Icon component={icon as any} />
                         <span>{name}</span>
@@ -39,7 +41,7 @@ const LayoutProvider: FC<Props> = ({ children }) => {
                 }
             >
                 {routes.map(route => (
-                    <Menu.Item key={route.key}>
+                    <Menu.Item key={route.path}>
                         <Link to={route.path}>
                             <Icon component={route.icon as any} />
                             <span>{route.name}</span>
@@ -69,7 +71,7 @@ const LayoutProvider: FC<Props> = ({ children }) => {
                     <LogoWrapper>
                         <img className={`logo ${collapsed && 'collapsed'}`} src={logo} alt="EXELO" />
                     </LogoWrapper>
-                    <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+                    <Menu theme="dark" mode="inline" selectedKeys={[location.pathname]}>
                         {routeComponents}
                     </Menu>
                 </Sider>

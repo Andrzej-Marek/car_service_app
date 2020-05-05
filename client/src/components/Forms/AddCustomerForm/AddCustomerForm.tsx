@@ -15,19 +15,23 @@ import GeneralError from '@/components/Errors/GeneralError';
 import { createUserSchema } from '@/validations';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { AddCustomer } from './types';
+import SelectUser from './components/SelectUser';
+import ToggleContent from './components/ToggleContent';
+import { Error } from '@/assets/images/styles';
 
 interface OwnProps {
     toggle?: () => void;
     formRef?: React.RefObject<FormikValues>;
     submitForm?: (values: AddCustomer, formikHelpers: FormikHelpers<AddCustomer>) => void;
-    defaultValues?: AddCustomer | { userId: string };
+    defaultValues?: AddCustomer;
+    showSwitchForm?: boolean;
 }
 
 type Props = OwnProps;
 
 const { confirm } = Modal;
 
-const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef }) => {
+const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef, showSwitchForm = false }) => {
     const { t } = useTranslation(['fields', 'common', 'errors', 'validations']);
     const [createNewCustomer, { error }] = useMutation<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>(
         CREATE_NEW_CUSTOMER,
@@ -60,7 +64,6 @@ const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef
             console.log(error);
         }
     };
-
     return (
         <Formik
             innerRef={formRef as any}
@@ -68,6 +71,8 @@ const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef
                 defaultValues
                     ? defaultValues
                     : {
+                          createNewCustomer: !showSwitchForm,
+                          customerId: null,
                           firstname: '',
                           lastname: '',
                           companyName: '',
@@ -87,9 +92,19 @@ const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef
             validationSchema={createUserSchema}
             validateOnBlur={true}
             onSubmit={async (values, helpers) => {
-                const { marketingSendAgreement, mailSendAgreement, smsSendAgreement } = values;
+                const {
+                    marketingSendAgreement,
+                    mailSendAgreement,
+                    smsSendAgreement,
+                    createNewCustomer,
+                    customerId,
+                } = values;
 
-                if (!marketingSendAgreement && !mailSendAgreement && !smsSendAgreement) {
+                if (!customerId && !createNewCustomer) {
+                    return helpers.setFieldError('customerId', t('validations:required'));
+                }
+
+                if (!marketingSendAgreement && !mailSendAgreement && !smsSendAgreement && createNewCustomer) {
                     return showConfirmModal(values, helpers);
                 }
 
@@ -100,63 +115,82 @@ const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef
                 }
             }}
         >
-            {({ handleSubmit, setFieldValue }) => (
+            {({ handleSubmit, setFieldValue, values, errors }) => (
                 <form onSubmit={handleSubmit}>
                     {error && <GeneralError message={t('errors:generalError')} />}
-                    <Row>
-                        <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyInputField name="firstname" label={t('firstname')} />
-                        </Col>
-                        <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyInputField name="lastname" label={t('lastname')} />
-                        </Col>
-                        <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyInputField name="companyName" label={t('companyName')} />
-                        </Col>
-                        <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyInputField name="vatNumber" label={t('vatNumber')} />
-                        </Col>
-                        <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyInputField name="street" label={t('street')} />
-                        </Col>
-                        <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyInputField name="postcode" label={t('postcode')} />
-                        </Col>
-                        <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyInputField name="adress" label={t('adress')} />
-                        </Col>
-                        <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyInputField name="phone" label={t('phone')} />
-                        </Col>
-                        <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyInputField name="mail" label={t('mail')} />
-                        </Col>
-                        <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyTextArea name="comment" label={t('comment')} />
-                        </Col>
-                        <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyNumberInput
-                                label={t('discount')}
-                                name="discount"
-                                min={0}
-                                max={100}
-                                onChange={value => setFieldValue('discount', value)}
-                                formatter={value => `${value}%`}
-                                parser={value => value!.replace('%', '')}
-                            />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={24}>
-                            <MyCheckbox name="mailSendAgreement" label={t('mailSendAgreement')} />
-                        </Col>
-                        <Col xs={24}>
-                            <MyCheckbox name="smsSendAgreement" label={t('smsSendAgreement')} />
-                        </Col>
-                        <Col xs={24}>
-                            <MyCheckbox name="marketingSendAgreement" label={t('marketingSendAgreement')} />
-                        </Col>
-                    </Row>
+                    {showSwitchForm && (
+                        <ToggleContent
+                            addNewFormShow={values.createNewCustomer}
+                            addNewFormShowToggle={() => setFieldValue('createNewCustomer', !values.createNewCustomer)}
+                        />
+                    )}
+                    {!values.createNewCustomer && showSwitchForm ? (
+                        <Row>
+                            <Col xs={24}>
+                                <SelectUser setFieldValue={setFieldValue} defaultValue={values.customerId} />
+                                {errors.customerId && (
+                                    <Error style={{ textAlign: 'center' }}>{errors.customerId}</Error>
+                                )}
+                            </Col>
+                        </Row>
+                    ) : (
+                        <>
+                            <Row>
+                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                    <MyInputField name="firstname" label={t('firstname')} />
+                                </Col>
+                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                    <MyInputField name="lastname" label={t('lastname')} />
+                                </Col>
+                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                    <MyInputField name="companyName" label={t('companyName')} />
+                                </Col>
+                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                    <MyInputField name="vatNumber" label={t('vatNumber')} />
+                                </Col>
+                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                    <MyInputField name="street" label={t('street')} />
+                                </Col>
+                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                    <MyInputField name="postcode" label={t('postcode')} />
+                                </Col>
+                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                    <MyInputField name="adress" label={t('adress')} />
+                                </Col>
+                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                    <MyInputField name="phone" label={t('phone')} />
+                                </Col>
+                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                    <MyInputField name="mail" label={t('mail')} />
+                                </Col>
+                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                    <MyTextArea name="comment" label={t('comment')} />
+                                </Col>
+                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                    <MyNumberInput
+                                        label={t('discount')}
+                                        name="discount"
+                                        min={0}
+                                        max={100}
+                                        onChange={value => setFieldValue('discount', value)}
+                                        formatter={value => `${value}%`}
+                                        parser={value => value!.replace('%', '')}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={24}>
+                                    <MyCheckbox name="mailSendAgreement" label={t('mailSendAgreement')} />
+                                </Col>
+                                <Col xs={24}>
+                                    <MyCheckbox name="smsSendAgreement" label={t('smsSendAgreement')} />
+                                </Col>
+                                <Col xs={24}>
+                                    <MyCheckbox name="marketingSendAgreement" label={t('marketingSendAgreement')} />
+                                </Col>
+                            </Row>
+                        </>
+                    )}
                     {!submitForm && (
                         <ButtonWrapper>
                             <ClassicButton htmlType="submit" text={t('save')} width="100%" />

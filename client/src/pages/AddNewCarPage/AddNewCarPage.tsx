@@ -8,17 +8,32 @@ import { AddCustomer } from '@/components/Forms/AddCustomerForm/types';
 import { FormikValues, FormikHelpers } from 'formik';
 import AddCarForm from '@/components/Forms/AddCarForm';
 import { AddCar } from '@/components/Forms/AddCarForm/types';
-import AddCustomerStep from '@/components/Steps/AddCustomerStep';
+import AddNewCarSummary from './components/AddNewCarSummary';
+import {
+    CreateNewVehicleWithCustomerMutation,
+    CreateNewVehicleWithCustomerMutationVariables,
+} from '@/generated/graphql';
+import { CREATE_NEW_VEHICLE_AND_CUSTOMER } from '@/graphql/vehicle/mutations/createNewVehicleAndCustomer';
+import { useMutation } from '@apollo/react-hooks';
+import { useHistory } from 'react-router-dom';
+import { RoutesEnum } from '@/Routes';
 
 export interface FormsValues {
     addCar: undefined | AddCar;
-    addCustomer: undefined | AddCustomer | { userId: string };
+    addCustomer: undefined | AddCustomer;
 }
 
 const { Step } = Steps;
 
 const AddNewCarPage = () => {
-    const { t } = useTranslation(['common', 'addNewCarPage', 'errors']);
+    const { t } = useTranslation(['common', 'nav', 'errors']);
+    const [createNewVehileWithCustomer, { error }] = useMutation<
+        CreateNewVehicleWithCustomerMutation,
+        CreateNewVehicleWithCustomerMutationVariables
+    >(CREATE_NEW_VEHICLE_AND_CUSTOMER);
+
+    const history = useHistory();
+
     const [formsValues, setFormsValues] = useState<FormsValues>({
         addCar: undefined,
         addCustomer: undefined,
@@ -28,13 +43,13 @@ const AddNewCarPage = () => {
 
     const [steps] = useState([
         {
-            title: t('addNewCarPage:addCar'),
+            title: t('nav:addCar'),
         },
         {
-            title: t('addNewCarPage:addCustomer'),
+            title: t('nav:addCustomer'),
         },
         {
-            title: 'Last',
+            title: t('common:summary'),
         },
     ]);
 
@@ -44,12 +59,8 @@ const AddNewCarPage = () => {
     const nextStep = () => setCurrentStep(prevState => prevState + 1);
     const prevStep = () => setCurrentStep(prevState => prevState - 1);
 
-    const createUserSubmitForm = (values: AddCustomer, _: FormikHelpers<AddCustomer>, userId: string) => {
-        if (userId) {
-            setFormsValues(prevState => ({ ...prevState, addCustomer: { userId } }));
-        } else {
-            setFormsValues(prevState => ({ ...prevState, addCustomer: { ...values, userId } }));
-        }
+    const createUserSubmitForm = (values: AddCustomer, _: FormikHelpers<AddCustomer>) => {
+        setFormsValues(prevState => ({ ...prevState, addCustomer: values }));
 
         nextStep();
     };
@@ -71,24 +82,17 @@ const AddNewCarPage = () => {
                 );
             case 1:
                 return (
-                    <AddCustomerStep
+                    <AddCustomerForm
                         formRef={addCustomerFormRef}
                         submitForm={createUserSubmitForm}
                         defaultValues={formsValues.addCustomer}
+                        showSwitchForm={true}
                     />
                 );
-            // case 1:
-            //     return (
-            //         <AddCustomerForm
-            //             formRef={addCustomerFormRef}
-            //             submitForm={createUserSubmitForm}
-            //             defaultValues={formsValues.addCustomer}
-            //         />
-            //     );
             case 2:
-                return <p>END ONE</p>;
+                return <AddNewCarSummary summary={formsValues} />;
             default:
-                return <p>Default one</p>;
+                return <p>ERROR</p>;
         }
     };
 
@@ -109,7 +113,22 @@ const AddNewCarPage = () => {
         }
     };
 
-    console.log(formsValues);
+    const saveHandler = async () => {
+        const { addCar, addCustomer } = formsValues;
+
+        if (addCar && addCustomer) {
+            try {
+                await createNewVehileWithCustomer({ variables: { addCustomer, addVehicle: addCar } });
+                if (!error) {
+                    history.push(RoutesEnum.HOME_PAGE);
+                }
+                message.success(t('common:saveSuccess'));
+            } catch (error) {
+                message.error(t('common:saveError'));
+            }
+        }
+    };
+
     return (
         <Wrapper>
             <Steps current={currentStep}>
@@ -125,7 +144,7 @@ const AddNewCarPage = () => {
                     </Button>
                 )}
                 {currentStep === steps.length - 1 && (
-                    <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                    <Button type="primary" onClick={saveHandler}>
                         {t('save')}
                     </Button>
                 )}

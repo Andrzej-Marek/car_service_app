@@ -6,5 +6,7 @@
     "tooLong": "Zbyt długa wartość",
     "required": "Pole nie może być puste",
     "createUserBooleansAccept": "Czy na pewno nie chcesz wysyłać klientowi żadnych raportów?",
-    "createUserBooleansAcceptExplain": "Nie zaznaczenie żadnej z opcji, uniemożliwi wysyłanie sms lub wiadomości e-mail do tego clienta!"
+    "createUserBooleansAcceptExplain": "Nie zaznaczenie żadnej z opcji, uniemożliwi wysyłanie sms lub wiadomości e-mail do tego clienta!",
+    "invalidPhoneNumber": "Nie poprawny format numeru telefonu",
+    "isOnlyNumbers": "Nie poprawny format, wymagane cyfry!"
 }

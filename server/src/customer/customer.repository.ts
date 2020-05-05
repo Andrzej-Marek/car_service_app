@@ -1,10 +1,8 @@
 import { Repository, EntityRepository } from 'typeorm';
 import { Customer } from './customer.entity';
-import { InternalServerErrorException, UseGuards } from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
 import { CreateCustomerInput } from './dto';
-import { AuthGuard } from 'src/common/guards/auth.guard';
 
-@UseGuards(AuthGuard)
 @EntityRepository(Customer)
 export class CustomerRepository extends Repository<Customer> {
   async getAllCustomers(companyId: string): Promise<Customer[]> {

@@ -6,14 +6,16 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
-import { ObjectType, Field, Float } from '@nestjs/graphql';
+import { ObjectType, Field, Float, ID } from '@nestjs/graphql';
 import { Company } from 'src/auth/company.entity';
+import { Vehicle } from 'src/vehicle/vehicle.entity';
 
 @Entity()
 @ObjectType()
 export class Customer extends BaseEntity {
-  @Field()
+  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -73,17 +75,24 @@ export class Customer extends BaseEntity {
   @Column({ default: false })
   marketingSendAgreement: boolean;
 
-  @Field()
+  @Field(() => Company)
   @ManyToOne(
     () => Company,
     company => company.customers,
     { eager: false },
   )
-  company: string;
+  company: Company;
 
   @Field()
   @Column()
   companyId: string;
+
+  @Field(() => [Vehicle])
+  @OneToMany(
+    () => Vehicle,
+    vehicle => vehicle.customer,
+  )
+  vehicles: Vehicle[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
