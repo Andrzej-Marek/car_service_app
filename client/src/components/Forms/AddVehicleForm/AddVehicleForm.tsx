@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Formik, FormikHelpers, FormikValues } from 'formik';
-import GeneralError from '@/components/Errors/GeneralError';
 import { Row, Col, Select } from 'antd';
 import MyInputField from '@/components/Fields/MyInputField';
 import MyTextArea from '@/components/Fields/MyTextArea';
@@ -10,12 +9,12 @@ import MySelect from '@/components/Fields/MySelect';
 import { vehicleTypes, fuelTypes } from '@/constants/select';
 import MyDatePicker from '@/components/Fields/MyDatePicker';
 import { addNewCarSchema } from '@/validations';
-import { AddCar } from './types';
+import { AddVehicle } from './types';
 
 interface OwnProps {
     formRef?: React.RefObject<FormikValues>;
-    submitForm?: (values: AddCar, formikHelpers: FormikHelpers<AddCar>) => void;
-    defaultValues?: AddCar;
+    submitForm?: (values: AddVehicle, formikHelpers: FormikHelpers<AddVehicle>) => void;
+    defaultValues?: AddVehicle;
 }
 
 type Props = OwnProps;
@@ -28,7 +27,7 @@ const mileageSelectAfter = (
     </Select>
 );
 
-const AddCarForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
+const AddVehicleForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
     const { t } = useTranslation(['common', 'fields']);
 
     return (
@@ -66,7 +65,6 @@ const AddCarForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
         >
             {({ handleSubmit, resetForm, setFieldValue }) => (
                 <form onSubmit={handleSubmit}>
-                    {/* {error && <GeneralError message={t('errors:generalError')} />} */}
                     <Row>
                         <Col xs={24} sm={12} md={6} xxl={3}>
                             <MySelect
@@ -147,4 +145,4 @@ const AddCarForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
     );
 };
 
-export default AddCarForm;
+export default AddVehicleForm;

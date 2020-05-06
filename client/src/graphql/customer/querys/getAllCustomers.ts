@@ -8,6 +8,16 @@ export const GET_ALL_CUSTOMERS = gql`
             lastname
             companyName
             adress
+            companyName
+            vatNumber
+            street
+            postcode
+            phone
+            mailSendAgreement
+            smsSendAgreement
+            marketingSendAgreement
+            mail
+            discount
         }
     }
 `;

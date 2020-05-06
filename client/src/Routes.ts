@@ -2,7 +2,7 @@ import MainDashboardPage from './pages';
 import { HomeOutlined, TeamOutlined, CarOutlined } from '@ant-design/icons';
 import CustomersPage from './pages/CustomersPage';
 import i18n from '@/i18n';
-import AddNewCarPage from './pages/AddNewCarPage';
+import AddNewCarPage from './pages/AddNewVehicleWithCustomerPage';
 
 interface Routes {
     key: string;
