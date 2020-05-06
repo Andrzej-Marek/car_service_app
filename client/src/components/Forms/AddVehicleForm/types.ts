@@ -1,4 +1,4 @@
-export interface AddCar {
+export interface AddVehicle {
     vahicleType: string;
     brand: string;
     model: string;

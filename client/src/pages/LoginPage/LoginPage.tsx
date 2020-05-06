@@ -94,7 +94,7 @@ const LoginPage = () => {
                                 <ButtonWrapper>
                                     <ClassicButton
                                         text={t('loginButton')}
-                                        width="60%"
+                                        width="100%"
                                         htmlType="submit"
                                         type="primary"
                                     />

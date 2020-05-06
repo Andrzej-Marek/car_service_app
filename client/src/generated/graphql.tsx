@@ -286,7 +286,7 @@ export type GetAllCustomersQuery = (
   { __typename?: 'Query' }
   & { getAllCustomers: Array<(
     { __typename?: 'Customer' }
-    & Pick<Customer, 'id' | 'firstname' | 'lastname' | 'companyName' | 'adress'>
+    & Pick<Customer, 'id' | 'firstname' | 'lastname' | 'companyName' | 'adress' | 'vatNumber' | 'street' | 'postcode' | 'phone' | 'mailSendAgreement' | 'smsSendAgreement' | 'marketingSendAgreement' | 'mail' | 'discount'>
   )> }
 );
 
@@ -422,6 +422,16 @@ export const GetAllCustomersDocument = gql`
     lastname
     companyName
     adress
+    companyName
+    vatNumber
+    street
+    postcode
+    phone
+    mailSendAgreement
+    smsSendAgreement
+    marketingSendAgreement
+    mail
+    discount
   }
 }
     `;
