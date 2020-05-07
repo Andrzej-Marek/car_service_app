@@ -51,6 +51,7 @@ module.exports = (_, env) => {
                 '@/Routes': path.resolve(__dirname, 'src/Routes.ts'),
                 '@/i18n': path.resolve(__dirname, 'src/i18n.js'),
                 '@/components': srcPath('components'),
+                '@/hooks': srcPath('hooks'),
                 '@/validations': srcPath('validations'),
                 '@/graphql': srcPath('graphql'),
                 '@/utils': srcPath('utils'),
@@ -64,7 +65,7 @@ module.exports = (_, env) => {
                 '@/store': srcPath('store'),
                 '@/styles': srcPath('styles'),
                 '@/assets': srcPath('assets'),
-                '@/types': srcPath('types'),
+                '@/@types': srcPath('@types'),
                 '@/static': srcPath('static'),
             },
         },
@@ -110,6 +111,11 @@ module.exports = (_, env) => {
                 {
                     test: /\.(jpe?g|png|gif|mp3|svg$)$/i,
                     loader: 'file-loader',
+                },
+                {
+                    test: /\.graphql$/,
+                    exclude: /node_modules/,
+                    loader: 'graphql-tag/loader',
                 },
             ],
         },

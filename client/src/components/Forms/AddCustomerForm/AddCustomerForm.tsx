@@ -9,15 +9,24 @@ import MyNumberInput from '@/components/Fields/MyNumberInput';
 import MyTextArea from '@/components/Fields/MyTextArea';
 import ClassicButton from '@/components/Buttons/ClassicButton';
 import { useMutation } from '@apollo/react-hooks';
-import { CREATE_NEW_CUSTOMER } from '@/graphql/customer/mutations';
-import { CreateNewCustomerMutation, CreateNewCustomerMutationVariables } from '@/generated/graphql';
+import { CREATE_NEW_CUSTOMER, UPDATE_CUSTOMER } from '@/graphql/customer/mutations';
+import {
+    CreateNewCustomerMutation,
+    CreateNewCustomerMutationVariables,
+    GetAllCustomersQuery,
+    CustomerFragment,
+    UpdateCustomerMutation,
+    UpdateCustomerMutationVariables,
+} from '@/generated/graphql';
 import GeneralError from '@/components/Errors/GeneralError';
-import { createUserSchema } from '@/validations';
+import { createCustomerSchema } from '@/validations';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { AddCustomer } from './types';
 import SelectUser from './components/SelectUser';
 import ToggleContent from './components/ToggleContent';
 import { Error } from '@/assets/images/styles';
+import { GET_ALL_CUSTOMERS } from '@/graphql/customer/querys/getAllCustomers';
+import { ModalActionType } from '@/@types';
 
 interface OwnProps {
     toggle?: () => void;
@@ -25,17 +34,27 @@ interface OwnProps {
     submitForm?: (values: AddCustomer, formikHelpers: FormikHelpers<AddCustomer>) => void;
     defaultValues?: AddCustomer;
     showSwitchForm?: boolean;
+    actionType?: ModalActionType;
 }
 
 type Props = OwnProps;
 
 const { confirm } = Modal;
+const { CREATE, CUSTOM, UPDATE } = ModalActionType;
 
-const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef, showSwitchForm = false }) => {
+const AddCustomerForm: FC<Props> = ({
+    toggle,
+    defaultValues,
+    submitForm,
+    formRef,
+    showSwitchForm = false,
+    actionType = CUSTOM,
+}) => {
     const { t } = useTranslation(['fields', 'common', 'errors', 'validations']);
     const [createNewCustomer, { error }] = useMutation<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>(
         CREATE_NEW_CUSTOMER,
     );
+    const [updateCustomer] = useMutation<UpdateCustomerMutation, UpdateCustomerMutationVariables>(UPDATE_CUSTOMER);
 
     const showConfirmModal = async (values: AddCustomer, helpers: FormikHelpers<AddCustomer>) => {
         confirm({
@@ -56,7 +75,23 @@ const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef
 
     const InComponentSubmitHandler = async (values: AddCustomer, helpers: FormikHelpers<AddCustomer>) => {
         try {
-            await createNewCustomer({ variables: values });
+            await createNewCustomer({
+                variables: values,
+                update: (store, { data }) => {
+                    const customersData = store.readQuery<GetAllCustomersQuery>({
+                        query: GET_ALL_CUSTOMERS,
+                    });
+
+                    console.log(customersData);
+
+                    store.writeQuery<GetAllCustomersQuery>({
+                        query: GET_ALL_CUSTOMERS,
+                        data: {
+                            getAllCustomers: [...customersData!.getAllCustomers, data!.createNewCustomer],
+                        },
+                    });
+                },
+            });
             toggle && toggle();
             message.success(t('common:saveSuccess'));
             helpers.resetForm();
@@ -64,6 +99,15 @@ const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef
             console.log(error);
         }
     };
+
+    const updateCustomerHandler = async (values: CustomerFragment) => {
+        updateCustomer({ variables: values });
+        if (toggle) {
+            toggle();
+        }
+        message.success(t('common:saveSuccess'));
+    };
+
     return (
         <Formik
             innerRef={formRef as any}
@@ -89,7 +133,7 @@ const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef
                           marketingSendAgreement: false,
                       }
             }
-            validationSchema={createUserSchema}
+            validationSchema={createCustomerSchema}
             validateOnBlur={true}
             onSubmit={async (values, helpers) => {
                 const {
@@ -99,19 +143,22 @@ const AddCustomerForm: FC<Props> = ({ toggle, defaultValues, submitForm, formRef
                     createNewCustomer,
                     customerId,
                 } = values;
-
-                if (!customerId && !createNewCustomer) {
+                if (!customerId && !createNewCustomer && actionType !== UPDATE) {
                     return helpers.setFieldError('customerId', t('validations:required'));
                 }
 
                 if (!marketingSendAgreement && !mailSendAgreement && !smsSendAgreement && createNewCustomer) {
                     return showConfirmModal(values, helpers);
                 }
-
                 if (submitForm) {
                     submitForm(values, helpers);
-                } else {
+                    return;
+                }
+                if (actionType === CREATE) {
                     await InComponentSubmitHandler(values, helpers);
+                }
+                if (actionType === UPDATE) {
+                    await updateCustomerHandler(values as any);
                 }
             }}
         >

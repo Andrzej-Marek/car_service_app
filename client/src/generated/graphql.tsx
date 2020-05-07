@@ -151,6 +151,8 @@ export type Mutation = {
   userLogin: User;
   createUser: User;
   createNewCompany: Company;
+  updateCustomer: Customer;
+  deleteCustomer: Scalars['Boolean'];
   createNewCustomer: Customer;
   createNewVehicleWithCustomer: Vehicle;
 };
@@ -173,6 +175,16 @@ export type MutationCreateUserArgs = {
 
 export type MutationCreateNewCompanyArgs = {
   newCompanyInput: CreateCompanyInput;
+};
+
+
+export type MutationUpdateCustomerArgs = {
+  updateCustomerInput: UpdateCustomerInput;
+};
+
+
+export type MutationDeleteCustomerArgs = {
+  customerId: Scalars['String'];
 };
 
 
@@ -209,6 +221,26 @@ export type CreateCompanyInput = {
   postcode: Scalars['String'];
   rulesAgreement: Scalars['Boolean'];
   marketingAgreement: Scalars['Boolean'];
+};
+
+export type UpdateCustomerInput = {
+  id: Scalars['String'];
+  createNewCustomer?: Maybe<Scalars['Boolean']>;
+  customerId?: Maybe<Scalars['String']>;
+  firstname: Scalars['String'];
+  lastname?: Maybe<Scalars['String']>;
+  companyName?: Maybe<Scalars['String']>;
+  vatNumber?: Maybe<Scalars['String']>;
+  street?: Maybe<Scalars['String']>;
+  postcode?: Maybe<Scalars['String']>;
+  adress?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  mail?: Maybe<Scalars['String']>;
+  comment?: Maybe<Scalars['String']>;
+  discount?: Maybe<Scalars['Int']>;
+  mailSendAgreement: Scalars['Boolean'];
+  smsSendAgreement: Scalars['Boolean'];
+  marketingSendAgreement: Scalars['Boolean'];
 };
 
 export type CreateCustomerInput = {
@@ -253,6 +285,11 @@ export type CreateNewVehicleInput = {
   comment?: Maybe<Scalars['String']>;
 };
 
+export type CustomerFragment = (
+  { __typename?: 'Customer' }
+  & Pick<Customer, 'id' | 'firstname' | 'lastname' | 'companyName' | 'adress' | 'vatNumber' | 'street' | 'postcode' | 'phone' | 'mailSendAgreement' | 'smsSendAgreement' | 'marketingSendAgreement' | 'mail' | 'discount' | 'comment'>
+);
+
 export type CreateNewCustomerMutationVariables = {
   firstname: Scalars['String'];
   lastname?: Maybe<Scalars['String']>;
@@ -275,7 +312,44 @@ export type CreateNewCustomerMutation = (
   { __typename?: 'Mutation' }
   & { createNewCustomer: (
     { __typename?: 'Customer' }
-    & Pick<Customer, 'id' | 'firstname'>
+    & CustomerFragment
+  ) }
+);
+
+export type DeleteCustomerMutationVariables = {
+  customerId: Scalars['String'];
+};
+
+
+export type DeleteCustomerMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteCustomer'>
+);
+
+export type UpdateCustomerMutationVariables = {
+  id: Scalars['String'];
+  firstname: Scalars['String'];
+  lastname?: Maybe<Scalars['String']>;
+  companyName?: Maybe<Scalars['String']>;
+  vatNumber?: Maybe<Scalars['String']>;
+  street?: Maybe<Scalars['String']>;
+  postcode?: Maybe<Scalars['String']>;
+  adress?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  mail?: Maybe<Scalars['String']>;
+  comment?: Maybe<Scalars['String']>;
+  discount?: Maybe<Scalars['Int']>;
+  mailSendAgreement: Scalars['Boolean'];
+  smsSendAgreement: Scalars['Boolean'];
+  marketingSendAgreement: Scalars['Boolean'];
+};
+
+
+export type UpdateCustomerMutation = (
+  { __typename?: 'Mutation' }
+  & { updateCustomer: (
+    { __typename?: 'Customer' }
+    & CustomerFragment
   ) }
 );
 
@@ -286,7 +360,7 @@ export type GetAllCustomersQuery = (
   { __typename?: 'Query' }
   & { getAllCustomers: Array<(
     { __typename?: 'Customer' }
-    & Pick<Customer, 'id' | 'firstname' | 'lastname' | 'companyName' | 'adress' | 'vatNumber' | 'street' | 'postcode' | 'phone' | 'mailSendAgreement' | 'smsSendAgreement' | 'marketingSendAgreement' | 'mail' | 'discount'>
+    & CustomerFragment
   )> }
 );
 
@@ -367,15 +441,33 @@ export type CreateNewVehicleWithCustomerMutation = (
   ) }
 );
 
-
+export const CustomerFragmentDoc = gql`
+    fragment Customer on Customer {
+  id
+  firstname
+  lastname
+  companyName
+  adress
+  companyName
+  vatNumber
+  street
+  postcode
+  phone
+  mailSendAgreement
+  smsSendAgreement
+  marketingSendAgreement
+  mail
+  discount
+  comment
+}
+    `;
 export const CreateNewCustomerDocument = gql`
     mutation CreateNewCustomer($firstname: String!, $lastname: String, $companyName: String, $vatNumber: String, $street: String, $postcode: String, $adress: String, $phone: String, $mail: String, $comment: String, $discount: Int, $mailSendAgreement: Boolean!, $smsSendAgreement: Boolean!, $marketingSendAgreement: Boolean!) {
   createNewCustomer(newCustomerInput: {firstname: $firstname, lastname: $lastname, companyName: $companyName, vatNumber: $vatNumber, street: $street, postcode: $postcode, adress: $adress, phone: $phone, mail: $mail, comment: $comment, discount: $discount, mailSendAgreement: $mailSendAgreement, smsSendAgreement: $smsSendAgreement, marketingSendAgreement: $marketingSendAgreement}) {
-    id
-    firstname
+    ...Customer
   }
 }
-    `;
+    ${CustomerFragmentDoc}`;
 export type CreateNewCustomerMutationFn = ApolloReactCommon.MutationFunction<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>;
 
 /**
@@ -414,27 +506,89 @@ export function useCreateNewCustomerMutation(baseOptions?: ApolloReactHooks.Muta
 export type CreateNewCustomerMutationHookResult = ReturnType<typeof useCreateNewCustomerMutation>;
 export type CreateNewCustomerMutationResult = ApolloReactCommon.MutationResult<CreateNewCustomerMutation>;
 export type CreateNewCustomerMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateNewCustomerMutation, CreateNewCustomerMutationVariables>;
+export const DeleteCustomerDocument = gql`
+    mutation deleteCustomer($customerId: String!) {
+  deleteCustomer(customerId: $customerId)
+}
+    `;
+export type DeleteCustomerMutationFn = ApolloReactCommon.MutationFunction<DeleteCustomerMutation, DeleteCustomerMutationVariables>;
+
+/**
+ * __useDeleteCustomerMutation__
+ *
+ * To run a mutation, you first call `useDeleteCustomerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCustomerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCustomerMutation, { data, loading, error }] = useDeleteCustomerMutation({
+ *   variables: {
+ *      customerId: // value for 'customerId'
+ *   },
+ * });
+ */
+export function useDeleteCustomerMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCustomerMutation, DeleteCustomerMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteCustomerMutation, DeleteCustomerMutationVariables>(DeleteCustomerDocument, baseOptions);
+      }
+export type DeleteCustomerMutationHookResult = ReturnType<typeof useDeleteCustomerMutation>;
+export type DeleteCustomerMutationResult = ApolloReactCommon.MutationResult<DeleteCustomerMutation>;
+export type DeleteCustomerMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCustomerMutation, DeleteCustomerMutationVariables>;
+export const UpdateCustomerDocument = gql`
+    mutation updateCustomer($id: String!, $firstname: String!, $lastname: String, $companyName: String, $vatNumber: String, $street: String, $postcode: String, $adress: String, $phone: String, $mail: String, $comment: String, $discount: Int, $mailSendAgreement: Boolean!, $smsSendAgreement: Boolean!, $marketingSendAgreement: Boolean!) {
+  updateCustomer(updateCustomerInput: {id: $id, firstname: $firstname, lastname: $lastname, companyName: $companyName, vatNumber: $vatNumber, street: $street, postcode: $postcode, adress: $adress, phone: $phone, mail: $mail, comment: $comment, discount: $discount, mailSendAgreement: $mailSendAgreement, smsSendAgreement: $smsSendAgreement, marketingSendAgreement: $marketingSendAgreement}) {
+    ...Customer
+  }
+}
+    ${CustomerFragmentDoc}`;
+export type UpdateCustomerMutationFn = ApolloReactCommon.MutationFunction<UpdateCustomerMutation, UpdateCustomerMutationVariables>;
+
+/**
+ * __useUpdateCustomerMutation__
+ *
+ * To run a mutation, you first call `useUpdateCustomerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCustomerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCustomerMutation, { data, loading, error }] = useUpdateCustomerMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      firstname: // value for 'firstname'
+ *      lastname: // value for 'lastname'
+ *      companyName: // value for 'companyName'
+ *      vatNumber: // value for 'vatNumber'
+ *      street: // value for 'street'
+ *      postcode: // value for 'postcode'
+ *      adress: // value for 'adress'
+ *      phone: // value for 'phone'
+ *      mail: // value for 'mail'
+ *      comment: // value for 'comment'
+ *      discount: // value for 'discount'
+ *      mailSendAgreement: // value for 'mailSendAgreement'
+ *      smsSendAgreement: // value for 'smsSendAgreement'
+ *      marketingSendAgreement: // value for 'marketingSendAgreement'
+ *   },
+ * });
+ */
+export function useUpdateCustomerMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateCustomerMutation, UpdateCustomerMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateCustomerMutation, UpdateCustomerMutationVariables>(UpdateCustomerDocument, baseOptions);
+      }
+export type UpdateCustomerMutationHookResult = ReturnType<typeof useUpdateCustomerMutation>;
+export type UpdateCustomerMutationResult = ApolloReactCommon.MutationResult<UpdateCustomerMutation>;
+export type UpdateCustomerMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateCustomerMutation, UpdateCustomerMutationVariables>;
 export const GetAllCustomersDocument = gql`
     query getAllCustomers {
   getAllCustomers {
-    id
-    firstname
-    lastname
-    companyName
-    adress
-    companyName
-    vatNumber
-    street
-    postcode
-    phone
-    mailSendAgreement
-    smsSendAgreement
-    marketingSendAgreement
-    mail
-    discount
+    ...Customer
   }
 }
-    `;
+    ${CustomerFragmentDoc}`;
 
 /**
  * __useGetAllCustomersQuery__

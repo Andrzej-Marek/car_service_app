@@ -9,6 +9,7 @@ import ClassicButton from '@/components/Buttons/ClassicButton';
 import AddCustomerModal from '@/components/Modals/AddCustomerModal';
 import { UserContext } from '@/context/UserContext';
 import FastRaportModal from '@/components/Modals/FastRaportModal';
+import { ModalActionType } from '@/@types';
 
 const MainDashboardPage = () => {
     const [addCustomerModal, toggleAddCustomerModal] = useState(false);
@@ -24,7 +25,11 @@ const MainDashboardPage = () => {
     console.log('user', user);
     return (
         <Wrapper>
-            <AddCustomerModal visible={addCustomerModal} toggle={toggleAddCustomerModalHandler} />
+            <AddCustomerModal
+                visible={addCustomerModal}
+                toggle={toggleAddCustomerModalHandler}
+                actionType={ModalActionType.CREATE}
+            />
             <FastRaportModal visible={fastRaportModal} toggle={() => toggleFastRaportModal(!fastRaportModal)} />
             <Row
                 gutter={[

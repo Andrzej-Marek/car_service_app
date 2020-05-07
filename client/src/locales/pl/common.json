@@ -4,10 +4,19 @@
     "saveSuccess": "Pomyślnie zapisano {{who}}",
     "saveError": "Błąd podczas zapisywania",
     "save": "Zapisz",
+    "delete": "Usuń",
+    "edit": "Edytuj",
     "cancel": "Anuluj",
     "clear": "Wyczyść",
     "reset": "Reset",
     "next": "Dalej",
     "previous": "Cofnij",
-    "summary": "Podsumowanie"
+    "summary": "Podsumowanie",
+    "search": {
+        "search": "Szukaj",
+        "searchIn": "Szukaj w {{ where }}"
+    },
+    "loading": {
+        "loading": "Ładowanie..."
+    }
 }

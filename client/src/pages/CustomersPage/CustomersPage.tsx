@@ -1,15 +1,16 @@
 import React from 'react';
-import { styled } from '@/utils';
 import CustomersTable from './components/CustomersTable';
+import { useQuery } from '@apollo/react-hooks';
+import { GetAllCustomersQuery } from '@/generated/graphql';
+import { GET_ALL_CUSTOMERS } from '@/graphql/customer/querys/getAllCustomers';
+import LoadingSpinner from '@/components/Loaders/LoadingSpinner';
 
 const CustomersPage = () => {
-    return (
-        <Wrapper>
-            <CustomersTable />
-        </Wrapper>
-    );
-};
+    const { data, loading, error } = useQuery<GetAllCustomersQuery>(GET_ALL_CUSTOMERS);
 
-const Wrapper = styled.div``;
+    if (error) return <div>error</div>;
+    if (loading) return <LoadingSpinner loading={loading} />;
+    return <CustomersTable loading={loading} customers={data!.getAllCustomers} />;
+};
 
 export default CustomersPage;

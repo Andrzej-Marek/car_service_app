@@ -8,7 +8,7 @@ import FormButtons from '@/components/Buttons/FormButtons';
 import MySelect from '@/components/Fields/MySelect';
 import { vehicleTypes, fuelTypes } from '@/constants/select';
 import MyDatePicker from '@/components/Fields/MyDatePicker';
-import { addNewCarSchema } from '@/validations';
+import { addNewVehicleSchema } from '@/validations';
 import { AddVehicle } from './types';
 
 interface OwnProps {
@@ -54,7 +54,7 @@ const AddVehicleForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
                           comment: '',
                       }
             }
-            validationSchema={addNewCarSchema}
+            validationSchema={addNewVehicleSchema}
             validateOnBlur={true}
             onSubmit={async (values, helpers) => {
                 console.log(values);

@@ -1,8 +1,9 @@
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
 import { CUSTOMER_FRAGMENT } from '../fragments';
 
-export const CREATE_NEW_CUSTOMER = gql`
-    mutation CreateNewCustomer(
+export const UPDATE_CUSTOMER = gql`
+    mutation updateCustomer(
+        $id: String!
         $firstname: String!
         $lastname: String
         $companyName: String
@@ -18,8 +19,9 @@ export const CREATE_NEW_CUSTOMER = gql`
         $smsSendAgreement: Boolean!
         $marketingSendAgreement: Boolean!
     ) {
-        createNewCustomer(
-            newCustomerInput: {
+        updateCustomer(
+            updateCustomerInput: {
+                id: $id
                 firstname: $firstname
                 lastname: $lastname
                 companyName: $companyName

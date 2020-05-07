@@ -1,4 +1,6 @@
 {
+    "addCustomer": "Dodaj klienta",
+    "updateCustomer": "Edytuj klienta",
     "raportGenerated": "Wygenerowano raport",
     "raportLink": "Adres raportu",
     "fastRaport": "Szybki raport",
@@ -15,9 +17,13 @@
     "vatNumber": "Numer NIP",
     "comment": "Komentarz",
     "discount": "Zniżka",
+    "agreements": "Zgody",
     "mailSendAgreement": "Zgoda na wiadomości mailowe",
     "smsSendAgreement": "Zgoda na wiadomości sms",
     "marketingSendAgreement": "Zgoda na wiadomości marketingowe",
+    "mailSendAgreementShort": "Mail",
+    "smsSendAgreementShort": "SMS",
+    "marketingSendAgreementShort": "Marketing",
     "save": "Zapisz",
     "successfullySaved": "Zapisz pomyślnie",
     "clear": "Wyczyść",
@@ -42,5 +48,6 @@
     "fuelType": "Rodzaj paliwa",
     "insuranceDate": "Data ubezpieczenia",
     "nextService": "Następny serwis",
-    "warranty": "Gwarancja"
+    "warranty": "Gwarancja",
+    "actions": "Akcje"
 }

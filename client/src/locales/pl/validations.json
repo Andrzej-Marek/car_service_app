@@ -8,5 +8,6 @@
     "createUserBooleansAccept": "Czy na pewno nie chcesz wysyłać klientowi żadnych raportów?",
     "createUserBooleansAcceptExplain": "Nie zaznaczenie żadnej z opcji, uniemożliwi wysyłanie sms lub wiadomości e-mail do tego clienta!",
     "invalidPhoneNumber": "Nie poprawny format numeru telefonu",
-    "isOnlyNumbers": "Nie poprawny format, wymagane cyfry!"
+    "isOnlyNumbers": "Nie poprawny format, wymagane cyfry!",
+    "valueOfRange": "Wartość musi być z przedziału {{from}}-{{to}}"
 }

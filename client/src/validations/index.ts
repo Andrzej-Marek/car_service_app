@@ -1,3 +1,3 @@
-export * from './createUserSchema';
+export * from './createCustomerSchema';
 
-export * from './addNewCarSchema';
+export * from './addNewVehicleSchema';

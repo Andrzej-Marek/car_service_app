@@ -35,7 +35,7 @@ export const routes: Routes[] = [
     {
         key: '1',
         path: HOME_PAGE,
-        name: 'Main page',
+        name: i18n.t('routes:HomePageName'),
         component: MainDashboardPage,
         icon: HomeOutlined,
         routes: [],

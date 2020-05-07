@@ -7,7 +7,7 @@ const lengthValidation = (min = 4, max = 50) =>
         .min(min, i18n.t('validations:isLength', { length: min }))
         .max(max, i18n.t('validations:tooLong', { length: max }));
 
-export const addNewCarSchema = Yup.object().shape({
+export const addNewVehicleSchema = Yup.object().shape({
     vahicleType: lengthValidation(1).required(i18n.t('validations:required')),
     brand: lengthValidation().required(i18n.t('validations:required')),
     model: lengthValidation().required(i18n.t('validations:required')),

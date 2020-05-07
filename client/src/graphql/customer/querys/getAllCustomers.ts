@@ -1,23 +1,11 @@
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
+import { CUSTOMER_FRAGMENT } from '../fragments';
 
 export const GET_ALL_CUSTOMERS = gql`
     query getAllCustomers {
         getAllCustomers {
-            id
-            firstname
-            lastname
-            companyName
-            adress
-            companyName
-            vatNumber
-            street
-            postcode
-            phone
-            mailSendAgreement
-            smsSendAgreement
-            marketingSendAgreement
-            mail
-            discount
+            ...Customer
         }
     }
+    ${CUSTOMER_FRAGMENT}
 `;
