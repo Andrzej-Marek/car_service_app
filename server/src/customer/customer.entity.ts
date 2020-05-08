@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  AfterLoad,
 } from 'typeorm';
 import { ObjectType, Field, Float, ID } from '@nestjs/graphql';
 import { Company } from 'src/auth/company.entity';
@@ -94,9 +95,11 @@ export class Customer extends BaseEntity {
   )
   vehicles: Vehicle[];
 
+  @Field()
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
+  @Field()
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 }

@@ -19,9 +19,7 @@ type Props = OwnProps;
 
 const CustomersTable: FC<Props> = ({ customers }) => {
     const { t } = useTranslation(['fields']);
-    const [deleteCustomer, { loading, error }] = useMutation<DeleteCustomerMutation, DeleteCustomerMutationVariables>(
-        DELETE_CUSTOMER,
-    );
+    const [deleteCustomer] = useMutation<DeleteCustomerMutation, DeleteCustomerMutationVariables>(DELETE_CUSTOMER);
 
     const columns: ColumnProps<CustomerFragment>[] = [
         {

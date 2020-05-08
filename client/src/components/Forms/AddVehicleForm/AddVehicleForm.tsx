@@ -37,7 +37,7 @@ const AddVehicleForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
                 defaultValues
                     ? defaultValues
                     : {
-                          vahicleType: '',
+                          vehicleType: '',
                           brand: '',
                           model: '',
                           vinNumber: '',
@@ -59,7 +59,7 @@ const AddVehicleForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
             onSubmit={async (values, helpers) => {
                 console.log(values);
                 if (submitForm) {
-                    submitForm(values, helpers);
+                    submitForm(values as any, helpers as any);
                 }
             }}
         >
@@ -68,9 +68,9 @@ const AddVehicleForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
                     <Row>
                         <Col xs={24} sm={12} md={6} xxl={3}>
                             <MySelect
-                                name="vahicleType"
-                                label={t('fields:vahicleType')}
-                                onChange={(value: string) => setFieldValue('vahicleType', value)}
+                                name="vehicleType"
+                                label={t('fields:vehicleType')}
+                                onChange={(value: string) => setFieldValue('vehicleType', value)}
                                 options={vehicleTypes}
                             />
                         </Col>

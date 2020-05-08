@@ -3,18 +3,17 @@ import { Input, Space, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { FilterDropdownProps } from 'antd/lib/table/interface';
-import { GetAllCustomersFieldsFragment } from '@/generated/graphql';
 import { useTranslation } from 'react-i18next';
 
-export const getColumnSearchPropsHook = (dataIndex: string) => {
+export const getColumnSearchPropsHook = (dataIndex: string, findInTranslate: false | string = false) => {
     const [search, setSearch] = useState({
         searchText: '',
         searchedColumn: '',
     });
 
-    const { t } = useTranslation(['common', 'fields']);
+    const { t } = useTranslation(['common', 'fields', findInTranslate + '']);
     let searchInput: Input | null;
-
+    console.log(search);
     const getColumnSearchProps = {
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: FilterDropdownProps) => (
             <div style={{ padding: 8 }}>
@@ -45,8 +44,12 @@ export const getColumnSearchPropsHook = (dataIndex: string) => {
             </div>
         ),
         filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value: string | number | boolean, record: GetAllCustomersFieldsFragment) => {
-            return !!RegExp(value + '', 'gi').exec(record[dataIndex] || '');
+        onFilter: (value: string | number | boolean, record: any) => {
+            if (findInTranslate) {
+                return !!RegExp(value + '', 'gi').exec(t(`${findInTranslate}:${record[dataIndex]}`) || '');
+            } else {
+                return !!RegExp(value + '', 'gi').exec(record[dataIndex] || '');
+            }
         },
         onFilterDropdownVisibleChange: (visible: boolean) => {
             if (visible) {
@@ -59,7 +62,7 @@ export const getColumnSearchPropsHook = (dataIndex: string) => {
                     highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
                     searchWords={[search.searchText]}
                     autoEscape
-                    textToHighlight={text ? text.toString() : ''}
+                    textToHighlight={text ? (findInTranslate ? t(`${findInTranslate}:${text}`) : text.toString()) : ''}
                 />
             ) : (
                 text

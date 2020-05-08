@@ -16,10 +16,11 @@ import {
 import { Radio } from 'antd';
 import MyRadioGroup from '@/components/Fields/MyRadioGroup';
 import StatusError from '@/components/Errors/StatusError';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import { UserContext } from '@/context/UserContext';
 import { USER_LOGIN_MUTATION, COMPANY_LOGIN_MUTATION } from '@/graphql/user/mutations';
 import { LoginType } from '@/enums';
+import { RoutesEnum } from '@/Routes';
 
 interface FormValues {
     login: string;
@@ -27,14 +28,11 @@ interface FormValues {
     loginType: LoginType;
 }
 
-const { company, user } = LoginType;
-const REDIRECT_AFTER_LOGIN = '/';
+const { company, user: userLoginType } = LoginType;
 
 const LoginPage = () => {
     const { t } = useTranslation(['loginAndRegister', 'common']);
-    const { setUser } = useContext(UserContext);
-
-    const history = useHistory();
+    const { setUser, user } = useContext(UserContext);
 
     const [userLoginHandler, { error: userError }] = useMutation<UserLoginMutation, UserLoginMutationVariables>(
         USER_LOGIN_MUTATION,
@@ -51,20 +49,18 @@ const LoginPage = () => {
             if (response.data && setUser) {
                 const { companyName, plan, id } = response.data.companyLogin;
                 setUser({ companyId: id, loginType: company, plan, companyName });
-                history.push(REDIRECT_AFTER_LOGIN);
             }
         } else {
             const response = await userLoginHandler({ variables: { login, password } });
             if (response.data && setUser) {
                 const { company, name } = response.data.userLogin;
                 const { companyName, plan, id } = company;
-                setUser({ companyId: id, loginType: user, plan, companyName, userName: name });
-                history.push(REDIRECT_AFTER_LOGIN);
+                setUser({ companyId: id, loginType: userLoginType, plan, companyName, userName: name });
             }
         }
     };
 
-    // console.log(data);
+    if (user) return <Redirect to={RoutesEnum.HOME_PAGE} />;
     return (
         <Wrapper>
             <ContentWrapper>
@@ -81,7 +77,7 @@ const LoginPage = () => {
                                 <RadiosWrapper>
                                     <MyRadioGroup name="loginType">
                                         <Radio.Button value={company}>{t('company')}</Radio.Button>
-                                        <Radio.Button value={user}>{t('user')}</Radio.Button>
+                                        <Radio.Button value={userLoginType}>{t('user')}</Radio.Button>
                                     </MyRadioGroup>
                                 </RadiosWrapper>
                                 <MyInputField name="login" placeholder={t('common:mail')} prefix={<UserOutlined />} />

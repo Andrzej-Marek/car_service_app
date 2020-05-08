@@ -11,12 +11,14 @@ export type Scalars = {
   Float: number;
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: any;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type Vehicle = {
    __typename?: 'Vehicle';
   id: Scalars['ID'];
-  vahicleType: Scalars['String'];
+  vehicleType: Scalars['String'];
   brand: Scalars['String'];
   model: Scalars['String'];
   vinNumber?: Maybe<Scalars['String']>;
@@ -60,6 +62,8 @@ export type Customer = {
   company: Company;
   companyId: Scalars['String'];
   vehicles: Array<Vehicle>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Company = {
@@ -107,6 +111,7 @@ export type Query = {
   getCompany: Company;
   getAllCustomers: Array<Customer>;
   fastRaport: Scalars['String'];
+  getAllVehicles: Array<Vehicle>;
 };
 
 
@@ -154,6 +159,7 @@ export type Mutation = {
   updateCustomer: Customer;
   deleteCustomer: Scalars['Boolean'];
   createNewCustomer: Customer;
+  uploadFile: Scalars['Boolean'];
   createNewVehicleWithCustomer: Vehicle;
 };
 
@@ -190,6 +196,11 @@ export type MutationDeleteCustomerArgs = {
 
 export type MutationCreateNewCustomerArgs = {
   newCustomerInput: CreateCustomerInput;
+};
+
+
+export type MutationUploadFileArgs = {
+  file: Scalars['Upload'];
 };
 
 
@@ -262,13 +273,14 @@ export type CreateCustomerInput = {
   marketingSendAgreement: Scalars['Boolean'];
 };
 
+
 export type CreateNewVehicleAndCustomerInput = {
   addVehicle: CreateNewVehicleInput;
   addCustomer: CreateCustomerInput;
 };
 
 export type CreateNewVehicleInput = {
-  vahicleType: Scalars['String'];
+  vehicleType: Scalars['String'];
   brand: Scalars['String'];
   model: Scalars['String'];
   vinNumber?: Maybe<Scalars['String']>;
@@ -427,6 +439,11 @@ export type MeQuery = (
   ) }
 );
 
+export type VehicleFragment = (
+  { __typename?: 'Vehicle' }
+  & Pick<Vehicle, 'id' | 'vehicleType' | 'brand' | 'model' | 'vinNumber' | 'productionYear' | 'engineCapacity' | 'registrationNumber' | 'enginePower' | 'color' | 'mileage' | 'fuelType' | 'insuranceDate' | 'nextService' | 'warranty' | 'comment'>
+);
+
 export type CreateNewVehicleWithCustomerMutationVariables = {
   addVehicle: CreateNewVehicleInput;
   addCustomer: CreateCustomerInput;
@@ -439,6 +456,31 @@ export type CreateNewVehicleWithCustomerMutation = (
     { __typename?: 'Vehicle' }
     & Pick<Vehicle, 'id'>
   ) }
+);
+
+export type UploadFileMutationVariables = {
+  file: Scalars['Upload'];
+};
+
+
+export type UploadFileMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'uploadFile'>
+);
+
+export type GetAllVehiclesQueryVariables = {};
+
+
+export type GetAllVehiclesQuery = (
+  { __typename?: 'Query' }
+  & { getAllVehicles: Array<(
+    { __typename?: 'Vehicle' }
+    & { customer: (
+      { __typename?: 'Customer' }
+      & CustomerFragment
+    ) }
+    & VehicleFragment
+  )> }
 );
 
 export const CustomerFragmentDoc = gql`
@@ -458,6 +500,26 @@ export const CustomerFragmentDoc = gql`
   marketingSendAgreement
   mail
   discount
+  comment
+}
+    `;
+export const VehicleFragmentDoc = gql`
+    fragment Vehicle on Vehicle {
+  id
+  vehicleType
+  brand
+  model
+  vinNumber
+  productionYear
+  engineCapacity
+  registrationNumber
+  enginePower
+  color
+  mileage
+  fuelType
+  insuranceDate
+  nextService
+  warranty
   comment
 }
     `;
@@ -798,3 +860,69 @@ export function useCreateNewVehicleWithCustomerMutation(baseOptions?: ApolloReac
 export type CreateNewVehicleWithCustomerMutationHookResult = ReturnType<typeof useCreateNewVehicleWithCustomerMutation>;
 export type CreateNewVehicleWithCustomerMutationResult = ApolloReactCommon.MutationResult<CreateNewVehicleWithCustomerMutation>;
 export type CreateNewVehicleWithCustomerMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateNewVehicleWithCustomerMutation, CreateNewVehicleWithCustomerMutationVariables>;
+export const UploadFileDocument = gql`
+    mutation uploadFile($file: Upload!) {
+  uploadFile(file: $file)
+}
+    `;
+export type UploadFileMutationFn = ApolloReactCommon.MutationFunction<UploadFileMutation, UploadFileMutationVariables>;
+
+/**
+ * __useUploadFileMutation__
+ *
+ * To run a mutation, you first call `useUploadFileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadFileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadFileMutation, { data, loading, error }] = useUploadFileMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useUploadFileMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UploadFileMutation, UploadFileMutationVariables>) {
+        return ApolloReactHooks.useMutation<UploadFileMutation, UploadFileMutationVariables>(UploadFileDocument, baseOptions);
+      }
+export type UploadFileMutationHookResult = ReturnType<typeof useUploadFileMutation>;
+export type UploadFileMutationResult = ApolloReactCommon.MutationResult<UploadFileMutation>;
+export type UploadFileMutationOptions = ApolloReactCommon.BaseMutationOptions<UploadFileMutation, UploadFileMutationVariables>;
+export const GetAllVehiclesDocument = gql`
+    query getAllVehicles {
+  getAllVehicles {
+    ...Vehicle
+    customer {
+      ...Customer
+    }
+  }
+}
+    ${VehicleFragmentDoc}
+${CustomerFragmentDoc}`;
+
+/**
+ * __useGetAllVehiclesQuery__
+ *
+ * To run a query within a React component, call `useGetAllVehiclesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllVehiclesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllVehiclesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllVehiclesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetAllVehiclesQuery, GetAllVehiclesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetAllVehiclesQuery, GetAllVehiclesQueryVariables>(GetAllVehiclesDocument, baseOptions);
+      }
+export function useGetAllVehiclesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetAllVehiclesQuery, GetAllVehiclesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetAllVehiclesQuery, GetAllVehiclesQueryVariables>(GetAllVehiclesDocument, baseOptions);
+        }
+export type GetAllVehiclesQueryHookResult = ReturnType<typeof useGetAllVehiclesQuery>;
+export type GetAllVehiclesLazyQueryHookResult = ReturnType<typeof useGetAllVehiclesLazyQuery>;
+export type GetAllVehiclesQueryResult = ApolloReactCommon.QueryResult<GetAllVehiclesQuery, GetAllVehiclesQueryVariables>;

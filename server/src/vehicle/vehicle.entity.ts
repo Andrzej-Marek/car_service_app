@@ -11,8 +11,8 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Company } from 'src/auth/company.entity';
 import { Customer } from 'src/customer/customer.entity';
 
-@ObjectType()
 @Entity()
+@ObjectType()
 export class Vehicle extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
@@ -20,7 +20,7 @@ export class Vehicle extends BaseEntity {
 
   @Column()
   @Field()
-  vahicleType: string;
+  vehicleType: string;
 
   @Column()
   @Field()

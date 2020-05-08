@@ -1,3 +1,3 @@
 export * from './fuelTypes';
 
-export * from './vahicleTypes';
+export * from './vehicleTypes';

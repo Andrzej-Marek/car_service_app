@@ -17,12 +17,10 @@ const App: FunctionComponent = () => {
     const [user, setUser] = useState<User | null>(null);
     const { data, loading } = useQuery<MeQuery>(ME);
 
-    const history = useHistory();
     useEffect(() => {
         if (data) {
             const { companyId, companyName, loginType, plan, userName } = data.me;
             setUser({ companyId, companyName, loginType, plan, userName } as User);
-            history.push('/');
         }
     }, [data]);
 
@@ -30,9 +28,9 @@ const App: FunctionComponent = () => {
 
     const routeComponents = routes.map(({ path, component, routes, key }) => (
         <Fragment key={key}>
-            <PrivateRoute exact path={path} component={component} key={key} auth={!!user} />
+            <PrivateRoute exact path={path} component={component} key={key} auth={!!user || !!data} />
             {routes.map(route => (
-                <PrivateRoute exact path={route.path} component={route.component} key={key} auth={!!user} />
+                <PrivateRoute exact path={route.path} component={route.component} key={key} auth={!!user || !!data} />
             ))}
         </Fragment>
     ));

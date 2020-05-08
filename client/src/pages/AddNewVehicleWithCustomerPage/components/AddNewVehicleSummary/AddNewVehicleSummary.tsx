@@ -15,9 +15,9 @@ const AddNewVehicleSummary: FC<Props> = ({ summary }) => {
     const { t } = useTranslation(['fields', 'vehicleTypes', 'fuelTypes']);
     const { addVehicle } = summary;
     return (
-        <Descriptions bordered size="small">
-            <Descriptions.Item label={t(`fields:vahicleType`)}>
-                {t(`vehicleTypes:${addVehicle?.vahicleType}`)}
+        <Descriptions bordered size="small" layout="vertical">
+            <Descriptions.Item label={t(`fields:vehicleType`)}>
+                {t(`vehicleTypes:${addVehicle?.vehicleType}`)}
             </Descriptions.Item>
             <Descriptions.Item label={t(`fields:brand`)}>{addVehicle?.brand}</Descriptions.Item>
             <Descriptions.Item label={t(`fields:model`)}>{addVehicle?.model}</Descriptions.Item>

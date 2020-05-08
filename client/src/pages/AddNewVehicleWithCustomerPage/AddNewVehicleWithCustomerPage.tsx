@@ -17,6 +17,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
 import { RoutesEnum } from '@/Routes';
 import { GET_ALL_CUSTOMERS } from '@/graphql/customer/querys/getAllCustomers';
+import { GET_ALL_VEHICLES } from '@/graphql/vehicle/querys';
 
 export interface FormsValues {
     addVehicle: undefined | AddVehicle;
@@ -119,10 +120,10 @@ const AddNewVehicleWithCustomerPage = () => {
             try {
                 await createNewVehileWithCustomer({
                     variables: { addCustomer, addVehicle: addVehicle },
-                    refetchQueries: [{ query: GET_ALL_CUSTOMERS }],
+                    refetchQueries: [{ query: GET_ALL_CUSTOMERS }, { query: GET_ALL_VEHICLES }],
                 });
                 if (!error) {
-                    history.push(RoutesEnum.HOME_PAGE);
+                    history.push(RoutesEnum.VEHICLES_PAGE);
                 }
                 message.success(t('common:saveSuccess'));
             } catch (error) {

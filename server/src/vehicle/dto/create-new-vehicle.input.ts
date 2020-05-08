@@ -3,7 +3,7 @@ import { InputType, Field } from '@nestjs/graphql';
 @InputType()
 export class CreateNewVehicleInput {
   @Field()
-  vahicleType: string;
+  vehicleType: string;
   @Field()
   brand: string;
   @Field()

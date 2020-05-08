@@ -1,5 +1,7 @@
 {
     "addCustomer": "Dodaj klienta",
+    "infoCustomer": "Informacje o kliencie",
+    "owner": "Właściciel",
     "updateCustomer": "Edytuj klienta",
     "raportGenerated": "Wygenerowano raport",
     "raportLink": "Adres raportu",
@@ -41,7 +43,7 @@
     "totalCost": "Koszt",
     "addNextRaport": "Dodaj kolejny raport",
     "estimate": "Kosztorys",
-    "vahicleType": "Rodzaj pojazdu",
+    "vehicleType": "Rodzaj pojazdu",
     "engineCapacity": "Pojemność skokowa",
     "enginePower": "Moc silnika",
     "registrationNumber": "Numer rejestracyjny",

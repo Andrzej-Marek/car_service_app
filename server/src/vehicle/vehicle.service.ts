@@ -16,6 +16,20 @@ export class VehicleService {
     private vehicleRepository: VehicleRepository,
     private customerService: CustomerService,
   ) {}
+
+  async getAllVehicles(companyId: string): Promise<Vehicle[]> {
+    try {
+      return await this.vehicleRepository.find({
+        where: { companyId },
+        relations: ['customer'],
+      });
+    } catch (error) {
+      Logger.error('Error: GetallVehicles');
+
+      throw new InternalServerErrorException();
+    }
+  }
+
   async createNewVehicleWithCustomer(
     createNewVehicleAndCustomerInput: CreateNewVehicleAndCustomerInput,
     companyId: string,

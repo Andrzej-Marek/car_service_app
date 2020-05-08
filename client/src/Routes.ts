@@ -1,8 +1,9 @@
+import i18n from '@/i18n';
 import MainDashboardPage from './pages';
 import { HomeOutlined, TeamOutlined, CarOutlined } from '@ant-design/icons';
 import CustomersPage from './pages/CustomersPage';
-import i18n from '@/i18n';
 import AddNewCarPage from './pages/AddNewVehicleWithCustomerPage';
+import VehiclesPage from './pages/VehiclesPage';
 
 interface Routes {
     key: string;
@@ -26,10 +27,11 @@ export enum RoutesEnum {
     LOGIN_PAGE = '/login',
     REGISTER_PAGE = '/register',
     CLIENTS_PAGE = '/clients',
+    VEHICLES_PAGE = '/vehicles',
     ADD_NEW_CAR_PAGE = '/new-car',
 }
 
-const { HOME_PAGE, CLIENTS_PAGE, ADD_NEW_CAR_PAGE } = RoutesEnum;
+const { HOME_PAGE, CLIENTS_PAGE, ADD_NEW_CAR_PAGE, VEHICLES_PAGE } = RoutesEnum;
 
 export const routes: Routes[] = [
     {
@@ -50,6 +52,14 @@ export const routes: Routes[] = [
     },
     {
         key: '3',
+        path: VEHICLES_PAGE,
+        name: i18n.t('routes:VehiclesPageName'),
+        component: VehiclesPage,
+        icon: CarOutlined,
+        routes: [],
+    },
+    {
+        key: '4',
         path: ADD_NEW_CAR_PAGE,
         name: i18n.t('routes:AddNewCarPageName'),
         component: AddNewCarPage,

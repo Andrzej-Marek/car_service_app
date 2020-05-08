@@ -4,5 +4,6 @@
     "CustomersPage": "/customers",
     "HomePageName": "Panel główny",
     "CustomersPageName": "Lista klientów",
-    "AddNewCarPageName": "Dodaj nowy samochód"
+    "AddNewCarPageName": "Dodaj nowy samochód",
+    "VehiclesPageName": "Lista pojazdów"
 }

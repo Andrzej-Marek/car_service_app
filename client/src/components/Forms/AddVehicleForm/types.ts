@@ -1,5 +1,5 @@
 export interface AddVehicle {
-    vahicleType: string;
+    vehicleType: string;
     brand: string;
     model: string;
     vinNumber: string;
