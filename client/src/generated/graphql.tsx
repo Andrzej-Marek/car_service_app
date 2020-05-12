@@ -33,6 +33,7 @@ export type Vehicle = {
   nextService?: Maybe<Scalars['String']>;
   warranty?: Maybe<Scalars['String']>;
   comment?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
   company: Company;
   companyId: Scalars['String'];
   customer: Customer;
@@ -159,7 +160,9 @@ export type Mutation = {
   updateCustomer: Customer;
   deleteCustomer: Scalars['Boolean'];
   createNewCustomer: Customer;
-  uploadFile: Scalars['Boolean'];
+  uploadFile?: Maybe<Scalars['Boolean']>;
+  updateVehicleInfo: Vehicle;
+  uploadVehicleImage: Scalars['String'];
   createNewVehicleWithCustomer: Vehicle;
 };
 
@@ -200,11 +203,24 @@ export type MutationCreateNewCustomerArgs = {
 
 
 export type MutationUploadFileArgs = {
+  files: Array<Scalars['Upload']>;
+};
+
+
+export type MutationUpdateVehicleInfoArgs = {
+  image?: Maybe<Scalars['Upload']>;
+  updateVehicle: UpdateVehicleInput;
+};
+
+
+export type MutationUploadVehicleImageArgs = {
+  vehicleId: Scalars['String'];
   file: Scalars['Upload'];
 };
 
 
 export type MutationCreateNewVehicleWithCustomerArgs = {
+  vehicleImage?: Maybe<Scalars['Upload']>;
   createNewVehicleAndCustomerInput: CreateNewVehicleAndCustomerInput;
 };
 
@@ -273,6 +289,25 @@ export type CreateCustomerInput = {
   marketingSendAgreement: Scalars['Boolean'];
 };
 
+
+export type UpdateVehicleInput = {
+  id: Scalars['String'];
+  vehicleType: Scalars['String'];
+  brand: Scalars['String'];
+  model: Scalars['String'];
+  vinNumber?: Maybe<Scalars['String']>;
+  productionYear?: Maybe<Scalars['String']>;
+  engineCapacity?: Maybe<Scalars['String']>;
+  registrationNumber?: Maybe<Scalars['String']>;
+  enginePower?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
+  mileage?: Maybe<Scalars['String']>;
+  fuelType?: Maybe<Scalars['String']>;
+  insuranceDate?: Maybe<Scalars['String']>;
+  nextService?: Maybe<Scalars['String']>;
+  warranty?: Maybe<Scalars['String']>;
+  comment?: Maybe<Scalars['String']>;
+};
 
 export type CreateNewVehicleAndCustomerInput = {
   addVehicle: CreateNewVehicleInput;
@@ -441,12 +476,13 @@ export type MeQuery = (
 
 export type VehicleFragment = (
   { __typename?: 'Vehicle' }
-  & Pick<Vehicle, 'id' | 'vehicleType' | 'brand' | 'model' | 'vinNumber' | 'productionYear' | 'engineCapacity' | 'registrationNumber' | 'enginePower' | 'color' | 'mileage' | 'fuelType' | 'insuranceDate' | 'nextService' | 'warranty' | 'comment'>
+  & Pick<Vehicle, 'id' | 'vehicleType' | 'brand' | 'model' | 'vinNumber' | 'productionYear' | 'engineCapacity' | 'registrationNumber' | 'enginePower' | 'color' | 'mileage' | 'fuelType' | 'insuranceDate' | 'nextService' | 'warranty' | 'comment' | 'imageUrl'>
 );
 
 export type CreateNewVehicleWithCustomerMutationVariables = {
   addVehicle: CreateNewVehicleInput;
   addCustomer: CreateCustomerInput;
+  vehicleImage?: Maybe<Scalars['Upload']>;
 };
 
 
@@ -458,14 +494,29 @@ export type CreateNewVehicleWithCustomerMutation = (
   ) }
 );
 
-export type UploadFileMutationVariables = {
-  file: Scalars['Upload'];
+export type UpdateVehicleInfoMutationVariables = {
+  updateVehicle: UpdateVehicleInput;
+  image?: Maybe<Scalars['Upload']>;
 };
 
 
-export type UploadFileMutation = (
+export type UpdateVehicleInfoMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'uploadFile'>
+  & { updateVehicleInfo: (
+    { __typename?: 'Vehicle' }
+    & VehicleFragment
+  ) }
+);
+
+export type UploadVehicleImageMutationVariables = {
+  file: Scalars['Upload'];
+  vehicleId: Scalars['String'];
+};
+
+
+export type UploadVehicleImageMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'uploadVehicleImage'>
 );
 
 export type GetAllVehiclesQueryVariables = {};
@@ -521,6 +572,7 @@ export const VehicleFragmentDoc = gql`
   nextService
   warranty
   comment
+  imageUrl
 }
     `;
 export const CreateNewCustomerDocument = gql`
@@ -828,8 +880,8 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;
 export const CreateNewVehicleWithCustomerDocument = gql`
-    mutation CreateNewVehicleWithCustomer($addVehicle: CreateNewVehicleInput!, $addCustomer: CreateCustomerInput!) {
-  createNewVehicleWithCustomer(createNewVehicleAndCustomerInput: {addVehicle: $addVehicle, addCustomer: $addCustomer}) {
+    mutation CreateNewVehicleWithCustomer($addVehicle: CreateNewVehicleInput!, $addCustomer: CreateCustomerInput!, $vehicleImage: Upload) {
+  createNewVehicleWithCustomer(createNewVehicleAndCustomerInput: {addVehicle: $addVehicle, addCustomer: $addCustomer}, vehicleImage: $vehicleImage) {
     id
   }
 }
@@ -851,6 +903,7 @@ export type CreateNewVehicleWithCustomerMutationFn = ApolloReactCommon.MutationF
  *   variables: {
  *      addVehicle: // value for 'addVehicle'
  *      addCustomer: // value for 'addCustomer'
+ *      vehicleImage: // value for 'vehicleImage'
  *   },
  * });
  */
@@ -860,36 +913,70 @@ export function useCreateNewVehicleWithCustomerMutation(baseOptions?: ApolloReac
 export type CreateNewVehicleWithCustomerMutationHookResult = ReturnType<typeof useCreateNewVehicleWithCustomerMutation>;
 export type CreateNewVehicleWithCustomerMutationResult = ApolloReactCommon.MutationResult<CreateNewVehicleWithCustomerMutation>;
 export type CreateNewVehicleWithCustomerMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateNewVehicleWithCustomerMutation, CreateNewVehicleWithCustomerMutationVariables>;
-export const UploadFileDocument = gql`
-    mutation uploadFile($file: Upload!) {
-  uploadFile(file: $file)
+export const UpdateVehicleInfoDocument = gql`
+    mutation UpdateVehicleInfo($updateVehicle: UpdateVehicleInput!, $image: Upload) {
+  updateVehicleInfo(updateVehicle: $updateVehicle, image: $image) {
+    ...Vehicle
+  }
 }
-    `;
-export type UploadFileMutationFn = ApolloReactCommon.MutationFunction<UploadFileMutation, UploadFileMutationVariables>;
+    ${VehicleFragmentDoc}`;
+export type UpdateVehicleInfoMutationFn = ApolloReactCommon.MutationFunction<UpdateVehicleInfoMutation, UpdateVehicleInfoMutationVariables>;
 
 /**
- * __useUploadFileMutation__
+ * __useUpdateVehicleInfoMutation__
  *
- * To run a mutation, you first call `useUploadFileMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUploadFileMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateVehicleInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateVehicleInfoMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [uploadFileMutation, { data, loading, error }] = useUploadFileMutation({
+ * const [updateVehicleInfoMutation, { data, loading, error }] = useUpdateVehicleInfoMutation({
  *   variables: {
- *      file: // value for 'file'
+ *      updateVehicle: // value for 'updateVehicle'
+ *      image: // value for 'image'
  *   },
  * });
  */
-export function useUploadFileMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UploadFileMutation, UploadFileMutationVariables>) {
-        return ApolloReactHooks.useMutation<UploadFileMutation, UploadFileMutationVariables>(UploadFileDocument, baseOptions);
+export function useUpdateVehicleInfoMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateVehicleInfoMutation, UpdateVehicleInfoMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateVehicleInfoMutation, UpdateVehicleInfoMutationVariables>(UpdateVehicleInfoDocument, baseOptions);
       }
-export type UploadFileMutationHookResult = ReturnType<typeof useUploadFileMutation>;
-export type UploadFileMutationResult = ApolloReactCommon.MutationResult<UploadFileMutation>;
-export type UploadFileMutationOptions = ApolloReactCommon.BaseMutationOptions<UploadFileMutation, UploadFileMutationVariables>;
+export type UpdateVehicleInfoMutationHookResult = ReturnType<typeof useUpdateVehicleInfoMutation>;
+export type UpdateVehicleInfoMutationResult = ApolloReactCommon.MutationResult<UpdateVehicleInfoMutation>;
+export type UpdateVehicleInfoMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateVehicleInfoMutation, UpdateVehicleInfoMutationVariables>;
+export const UploadVehicleImageDocument = gql`
+    mutation uploadVehicleImage($file: Upload!, $vehicleId: String!) {
+  uploadVehicleImage(file: $file, vehicleId: $vehicleId)
+}
+    `;
+export type UploadVehicleImageMutationFn = ApolloReactCommon.MutationFunction<UploadVehicleImageMutation, UploadVehicleImageMutationVariables>;
+
+/**
+ * __useUploadVehicleImageMutation__
+ *
+ * To run a mutation, you first call `useUploadVehicleImageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadVehicleImageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadVehicleImageMutation, { data, loading, error }] = useUploadVehicleImageMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *      vehicleId: // value for 'vehicleId'
+ *   },
+ * });
+ */
+export function useUploadVehicleImageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UploadVehicleImageMutation, UploadVehicleImageMutationVariables>) {
+        return ApolloReactHooks.useMutation<UploadVehicleImageMutation, UploadVehicleImageMutationVariables>(UploadVehicleImageDocument, baseOptions);
+      }
+export type UploadVehicleImageMutationHookResult = ReturnType<typeof useUploadVehicleImageMutation>;
+export type UploadVehicleImageMutationResult = ApolloReactCommon.MutationResult<UploadVehicleImageMutation>;
+export type UploadVehicleImageMutationOptions = ApolloReactCommon.BaseMutationOptions<UploadVehicleImageMutation, UploadVehicleImageMutationVariables>;
 export const GetAllVehiclesDocument = gql`
     query getAllVehicles {
   getAllVehicles {

@@ -1,8 +1,9 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { GraphQLUpload, FileUpload } from 'graphql-upload';
 
 @InputType()
-export class CreateNewVehicleInput {
+export class UpdateVehicleInput {
+  @Field()
+  id: string;
   @Field()
   vehicleType: string;
   @Field()
@@ -33,4 +34,6 @@ export class CreateNewVehicleInput {
   warranty: string;
   @Field({ nullable: true })
   comment: string;
+  @Field({ nullable: true })
+  imageUrl: string;
 }

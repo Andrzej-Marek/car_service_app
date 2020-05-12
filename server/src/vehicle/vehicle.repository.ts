@@ -1,11 +1,9 @@
 import { Repository, EntityRepository } from 'typeorm';
 import { Vehicle } from './vehicle.entity';
-import {
-  InternalServerErrorException,
-  ConflictException,
-  Logger,
-} from '@nestjs/common';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { CreateNewVehicleInput } from './dto/create-new-vehicle.input';
+import { fileUpload } from 'src/utils/fileUpload';
+import { FileUpload } from 'graphql-upload';
 
 @EntityRepository(Vehicle)
 export class VehicleRepository extends Repository<Vehicle> {
@@ -22,6 +20,7 @@ export class VehicleRepository extends Repository<Vehicle> {
 
   async createNewVehicle(
     vehicle: CreateNewVehicleInput,
+    image: FileUpload,
     companyId: string,
     customerId: string,
   ): Promise<Vehicle> {
@@ -34,15 +33,15 @@ export class VehicleRepository extends Repository<Vehicle> {
     );
 
     const queryResults = await query.getCount();
-    console.log(queryResults);
-    // if (queryResults) {
-    //   throw new ConflictException();
-    // }
 
     try {
       const newVehicle = this.create({ ...vehicle, companyId, customerId });
-      await newVehicle.save();
+      if (image) {
+        const imageUrl = await fileUpload(image);
+        newVehicle.imageUrl = imageUrl;
+      }
 
+      await newVehicle.save();
       return newVehicle;
     } catch (error) {
       Logger.error('Error with create new vehicle');

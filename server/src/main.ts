@@ -7,13 +7,15 @@ import * as session from 'express-session';
 import { redis } from './redis';
 import * as dotenv from 'dotenv';
 import * as cors from 'cors';
-import { join } from 'path';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 async function bootstrap() {
   dotenv.config();
   const RedisStore = Store(session);
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
   app.setViewEngine('ejs');
 
@@ -43,7 +45,7 @@ async function bootstrap() {
     }),
   );
 
-  app.useStaticAssets(join(__dirname, '/../../assets'));
+  app.useStaticAssets('./uploads');
 
   const PORT = process.env.PORT || 5000;
   await app.listen(PORT);

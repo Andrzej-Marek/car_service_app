@@ -22,6 +22,7 @@ import { GET_ALL_VEHICLES } from '@/graphql/vehicle/querys';
 export interface FormsValues {
     addVehicle: undefined | AddVehicle;
     addCustomer: undefined | AddCustomer;
+    vehicleImage: undefined | File;
 }
 
 const { Step } = Steps;
@@ -38,6 +39,7 @@ const AddNewVehicleWithCustomerPage = () => {
     const [formsValues, setFormsValues] = useState<FormsValues>({
         addVehicle: undefined,
         addCustomer: undefined,
+        vehicleImage: undefined,
     });
 
     const [currentStep, setCurrentStep] = useState(0);
@@ -78,6 +80,8 @@ const AddNewVehicleWithCustomerPage = () => {
                         formRef={addVehicleFormRef}
                         submitForm={addNewVehicleSubmitHandler}
                         defaultValues={formsValues.addVehicle}
+                        vehicleImage={formsValues.vehicleImage}
+                        setVehicleImage={vehicleImage => setFormsValues(prevState => ({ ...prevState, vehicleImage }))}
                     />
                 );
             case 1:
@@ -114,12 +118,12 @@ const AddNewVehicleWithCustomerPage = () => {
     };
 
     const saveHandler = async () => {
-        const { addVehicle, addCustomer } = formsValues;
+        const { addVehicle, addCustomer, vehicleImage } = formsValues;
 
         if (addVehicle && addCustomer) {
             try {
                 await createNewVehileWithCustomer({
-                    variables: { addCustomer, addVehicle: addVehicle },
+                    variables: { addCustomer, addVehicle: addVehicle, vehicleImage: vehicleImage },
                     refetchQueries: [{ query: GET_ALL_CUSTOMERS }, { query: GET_ALL_VEHICLES }],
                 });
                 if (!error) {

@@ -11,39 +11,20 @@ import { UserContext } from '@/context/UserContext';
 import FastRaportModal from '@/components/Modals/FastRaportModal';
 import { ModalActionType } from '@/@types';
 import { useDropzone } from 'react-dropzone';
-import { useMutation } from '@apollo/react-hooks';
-import { UPLOAD_FILE } from '@/graphql/vehicle/mutations/uploadFile';
-import { UploadFileMutation, UploadFileMutationVariables } from '@/generated/graphql';
-import gql from 'graphql-tag';
-
-const uploadFileMutation = gql`
-    mutation UploadFile($file: Upload!) {
-        uploadFile(file: $file)
-    }
-`;
+import MyUploader from '@/components/Fields/MyUploader';
 
 const MainDashboardPage = () => {
     const [addCustomerModal, toggleAddCustomerModal] = useState(false);
     const [fastRaportModal, toggleFastRaportModal] = useState(false);
+
     const { user } = useContext(UserContext);
     const { t } = useTranslation('mainDashboard');
-
-    // const [uploadFile] = useMutation<UploadFileMutation, UploadFileMutationVariables>(UPLOAD_FILE);
-    const [uploadFile, { error }] = useMutation(uploadFileMutation);
 
     const toggleAddCustomerModalHandler = () => {
         toggleAddCustomerModal(!addCustomerModal);
     };
 
-    const onDrop = useCallback(
-        ([file]) => {
-            uploadFile({ variables: { file } });
-        },
-        [uploadFile],
-    );
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-    console.log(error);
-    console.log('user', user);
+    console.log(user);
     return (
         <Wrapper>
             <AddCustomerModal
@@ -96,32 +77,6 @@ const MainDashboardPage = () => {
                         text="Szybki raport"
                         width="100%"
                         onClick={() => toggleFastRaportModal(!fastRaportModal)}
-                    />
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <div {...getRootProps()}>
-                        <input {...getInputProps()} />
-                        {isDragActive ? (
-                            <p>Drop the files here ...</p>
-                        ) : (
-                            <p>Drag 'n' drop some files here, or click to select files</p>
-                        )}
-                    </div>
-                </Col>
-                <Col>
-                    <input
-                        type="file"
-                        onChange={e => {
-                            const [file] = e.target.files;
-                            console.log(file);
-                            uploadFile({
-                                variables: {
-                                    file,
-                                },
-                            });
-                        }}
                     />
                 </Col>
             </Row>

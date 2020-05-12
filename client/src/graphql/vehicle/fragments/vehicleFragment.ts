@@ -18,5 +18,6 @@ export const VEHICLE_FRAGMENT = gql`
         nextService
         warranty
         comment
+        imageUrl
     }
 `;

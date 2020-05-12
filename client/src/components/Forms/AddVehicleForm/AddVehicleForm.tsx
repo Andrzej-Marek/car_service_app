@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Formik, FormikHelpers, FormikValues } from 'formik';
 import { Row, Col, Select } from 'antd';
 import MyInputField from '@/components/Fields/MyInputField';
@@ -10,11 +10,20 @@ import { vehicleTypes, fuelTypes } from '@/constants/select';
 import MyDatePicker from '@/components/Fields/MyDatePicker';
 import { addNewVehicleSchema } from '@/validations';
 import { AddVehicle } from './types';
+import MyUploader from '@/components/Fields/MyUploader';
+import { Vehicle, UpdateVehicleInfoMutation, UpdateVehicleInfoMutationVariables } from '@/generated/graphql';
+import { ModalActionType } from '@/@types';
+import { UPDATE_VEHICLE_INFO } from '@/graphql/vehicle/mutations';
+import { useMutation } from '@apollo/react-hooks';
 
 interface OwnProps {
     formRef?: React.RefObject<FormikValues>;
     submitForm?: (values: AddVehicle, formikHelpers: FormikHelpers<AddVehicle>) => void;
-    defaultValues?: AddVehicle;
+    defaultValues?: Vehicle;
+    setVehicleImage?: (vehicleImage: File) => void;
+    type: ModalActionType;
+    vehicleImage?: File;
+    toggle: () => void;
 }
 
 type Props = OwnProps;
@@ -26,9 +35,55 @@ const mileageSelectAfter = (
         <Option value="mileage">mil.</Option>
     </Select>
 );
-
-const AddVehicleForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
+const { CREATE, UPDATE } = ModalActionType;
+const AddVehicleForm: FC<Props> = ({
+    formRef,
+    submitForm,
+    setVehicleImage,
+    defaultValues,
+    type = ModalActionType.CREATE,
+    toggle,
+    vehicleImage,
+}) => {
+    const [image, setImage] = useState<File | null>(null);
     const { t } = useTranslation(['common', 'fields']);
+
+    const [updateVehicleInfo] = useMutation<UpdateVehicleInfoMutation, UpdateVehicleInfoMutationVariables>(
+        UPDATE_VEHICLE_INFO,
+    );
+
+    const uploadImageHandler = (files: FileList) => {
+        switch (type) {
+            case CREATE:
+                if (setVehicleImage) {
+                    setVehicleImage(files[0]);
+                }
+                break;
+            case UPDATE:
+                setImage(files[0]);
+                break;
+            default:
+                break;
+        }
+    };
+
+    const submitFormHandler = async (values: Vehicle, helpers: FormikHelpers<Vehicle>) => {
+        switch (type) {
+            case CREATE:
+                if (submitForm) {
+                    submitForm(values as any, helpers as any);
+                }
+                break;
+            case UPDATE:
+                updateVehicleInfo({ variables: { image, updateVehicle: values } });
+                if (toggle) {
+                    toggle();
+                }
+                break;
+            default:
+                break;
+        }
+    };
 
     return (
         <Formik
@@ -36,7 +91,7 @@ const AddVehicleForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
             initialValues={
                 defaultValues
                     ? defaultValues
-                    : {
+                    : ({
                           vehicleType: '',
                           brand: '',
                           model: '',
@@ -52,16 +107,11 @@ const AddVehicleForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
                           nextService: '',
                           warranty: '',
                           comment: '',
-                      }
+                      } as Vehicle)
             }
             validationSchema={addNewVehicleSchema}
             validateOnBlur={true}
-            onSubmit={async (values, helpers) => {
-                console.log(values);
-                if (submitForm) {
-                    submitForm(values as any, helpers as any);
-                }
-            }}
+            onSubmit={submitFormHandler}
         >
             {({ handleSubmit, resetForm, setFieldValue }) => (
                 <form onSubmit={handleSubmit}>
@@ -129,6 +179,9 @@ const AddVehicleForm: FC<Props> = ({ formRef, submitForm, defaultValues }) => {
                                 label={t('fields:warranty')}
                                 onChange={date => setFieldValue('warranty', date?.toISOString())}
                             />
+                        </Col>
+                        <Col xs={24} sm={12} md={6} xxl={3}>
+                            <MyUploader onChange={uploadImageHandler} defaultValues={vehicleImage && [vehicleImage]} />
                         </Col>
                         <Col xs={24} sm={12} md={6} xxl={3}>
                             <MyTextArea

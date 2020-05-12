@@ -1,5 +1,5 @@
 {
-    "addCustomer": "Dodaj klienta",
+    "updateVehicle": "Dodaj klienta",
     "infoCustomer": "Informacje o kliencie",
     "owner": "Właściciel",
     "updateCustomer": "Edytuj klienta",
@@ -51,5 +51,7 @@
     "insuranceDate": "Data ubezpieczenia",
     "nextService": "Następny serwis",
     "warranty": "Gwarancja",
-    "actions": "Akcje"
+    "actions": "Akcje",
+    "dragOrClick": "Przeciągnij plik, lub naciśnij aby dodać",
+    "dropFileHere": "Upuś plik tutaj"
 }

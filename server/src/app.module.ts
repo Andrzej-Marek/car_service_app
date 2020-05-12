@@ -26,6 +26,7 @@ import { VehicleModule } from './vehicle/vehicle.module';
         credentials: true,
         origin: true,
       },
+      uploads: false,
     }),
     I18nModule.forRoot({
       fallbackLanguage: 'en',

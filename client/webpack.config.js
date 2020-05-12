@@ -51,6 +51,7 @@ module.exports = (_, env) => {
                 '@/Routes': path.resolve(__dirname, 'src/Routes.ts'),
                 '@/i18n': path.resolve(__dirname, 'src/i18n.js'),
                 '@/components': srcPath('components'),
+                '@/config': srcPath('config'),
                 '@/hooks': srcPath('hooks'),
                 '@/validations': srcPath('validations'),
                 '@/graphql': srcPath('graphql'),

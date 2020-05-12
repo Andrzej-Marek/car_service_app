@@ -78,6 +78,10 @@ export class Vehicle extends BaseEntity {
   @Field({ nullable: true })
   comment: string;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  imageUrl: string;
+
   @Field(() => Company)
   @ManyToOne(
     () => Company,

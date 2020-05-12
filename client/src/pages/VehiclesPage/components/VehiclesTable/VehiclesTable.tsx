@@ -5,12 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { getColumnSearchPropsHook } from '@/hooks/getColumnSearchPropsHook';
 import Actions from './components/Actions';
 import { vehicleTypes, fuelTypes } from '@/constants/select';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, CameraOutlined } from '@ant-design/icons';
 import CustomerDescriptionModal from '@/components/Modals/CustomerDescriptionModal';
 import OwnerCell from './components/OwnerCell';
 import moment from 'moment';
 import { FULL_DATE_FORMAT } from '@/constants/dateFormat';
 import ExpiresDate from '@/components/TableElements/ExpiresDate';
+import { SERVER_URL } from '@/config';
+import ImagePreview from '@/components/TableElements/ImagePreview';
 
 interface OwnProps {
     vehicles: Vehicle[];
@@ -127,9 +129,16 @@ const VehiclesTable: FC<Props> = ({ vehicles }) => {
             align: 'center',
         },
         {
+            title: t('fields:image'),
+            dataIndex: 'imageUrl',
+            key: 'imageUrl',
+            render: url => url && <ImagePreview url={url} />,
+            align: 'center',
+        },
+        {
             title: t('fields:actions'),
             key: 'actions',
-            render: () => <Actions />,
+            render: (_, record) => <Actions record={record} />,
         },
     ];
     return (

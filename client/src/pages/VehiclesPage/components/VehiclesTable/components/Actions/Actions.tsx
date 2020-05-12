@@ -1,18 +1,76 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { styled } from '@/utils';
+import { Vehicle } from '@/generated/graphql';
+import { EditOutlined } from '@ant-design/icons';
+import VehicleModal from '@/components/Modals/VehicleModal';
+import { ModalActionType } from '@/@types';
 
-interface OwnProps {}
+interface OwnProps {
+    record: Vehicle;
+}
 
 type Props = OwnProps;
 
-const Actions: FC<Props> = () => {
+const Actions: FC<Props> = ({ record }) => {
+    const [editModal, toggleEditModal] = useState(false);
+
+    const {
+        brand,
+        id,
+        model,
+        vehicleType,
+        color,
+        comment,
+        engineCapacity,
+        enginePower,
+        fuelType,
+        insuranceDate,
+        mileage,
+        nextService,
+        productionYear,
+        registrationNumber,
+        imageUrl,
+        vinNumber,
+        warranty,
+    } = record;
+
+    const defaultValues = {
+        brand,
+        id,
+        model,
+        vehicleType,
+        color,
+        comment,
+        engineCapacity,
+        enginePower,
+        fuelType,
+        insuranceDate,
+        mileage,
+        nextService,
+        productionYear,
+        registrationNumber,
+        vinNumber,
+        warranty,
+        imageUrl,
+    };
     return (
-        <Wrapper>
-            <div>Akcje</div>
-        </Wrapper>
+        <>
+            <VehicleModal
+                defaultValues={defaultValues as Vehicle}
+                visible={editModal}
+                type={ModalActionType.UPDATE}
+                toggle={() => toggleEditModal(!editModal)}
+            />
+            <Wrapper>
+                <EditOutlined onClick={() => toggleEditModal(!editModal)} />
+            </Wrapper>
+        </>
     );
 };
 
 const Wrapper = styled.div``;
 
 export default Actions;
+
+//TODO:
+// Ive created a updateVehicle and have to create frontend for it with image update
