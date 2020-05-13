@@ -164,6 +164,8 @@ export type Mutation = {
   updateVehicleInfo: Vehicle;
   uploadVehicleImage: Scalars['String'];
   createNewVehicleWithCustomer: Vehicle;
+  uploadSingleImage: Scalars['String'];
+  removeSingleImage: Scalars['Boolean'];
 };
 
 
@@ -222,6 +224,16 @@ export type MutationUploadVehicleImageArgs = {
 export type MutationCreateNewVehicleWithCustomerArgs = {
   vehicleImage?: Maybe<Scalars['Upload']>;
   createNewVehicleAndCustomerInput: CreateNewVehicleAndCustomerInput;
+};
+
+
+export type MutationUploadSingleImageArgs = {
+  image: Scalars['Upload'];
+};
+
+
+export type MutationRemoveSingleImageArgs = {
+  imageUrl: Scalars['String'];
 };
 
 export type LoginInput = {
@@ -307,6 +319,7 @@ export type UpdateVehicleInput = {
   nextService?: Maybe<Scalars['String']>;
   warranty?: Maybe<Scalars['String']>;
   comment?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
 };
 
 export type CreateNewVehicleAndCustomerInput = {
@@ -429,6 +442,26 @@ export type FastRaportQueryVariables = {
 export type FastRaportQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'fastRaport'>
+);
+
+export type RemoveSingleImageMutationVariables = {
+  imageUrl: Scalars['String'];
+};
+
+
+export type RemoveSingleImageMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeSingleImage'>
+);
+
+export type UploadSingleImageMutationVariables = {
+  image: Scalars['Upload'];
+};
+
+
+export type UploadSingleImageMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'uploadSingleImage'>
 );
 
 export type CompanyLoginMutationVariables = {
@@ -769,6 +802,66 @@ export function useFastRaportLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryH
 export type FastRaportQueryHookResult = ReturnType<typeof useFastRaportQuery>;
 export type FastRaportLazyQueryHookResult = ReturnType<typeof useFastRaportLazyQuery>;
 export type FastRaportQueryResult = ApolloReactCommon.QueryResult<FastRaportQuery, FastRaportQueryVariables>;
+export const RemoveSingleImageDocument = gql`
+    mutation RemoveSingleImage($imageUrl: String!) {
+  removeSingleImage(imageUrl: $imageUrl)
+}
+    `;
+export type RemoveSingleImageMutationFn = ApolloReactCommon.MutationFunction<RemoveSingleImageMutation, RemoveSingleImageMutationVariables>;
+
+/**
+ * __useRemoveSingleImageMutation__
+ *
+ * To run a mutation, you first call `useRemoveSingleImageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveSingleImageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeSingleImageMutation, { data, loading, error }] = useRemoveSingleImageMutation({
+ *   variables: {
+ *      imageUrl: // value for 'imageUrl'
+ *   },
+ * });
+ */
+export function useRemoveSingleImageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveSingleImageMutation, RemoveSingleImageMutationVariables>) {
+        return ApolloReactHooks.useMutation<RemoveSingleImageMutation, RemoveSingleImageMutationVariables>(RemoveSingleImageDocument, baseOptions);
+      }
+export type RemoveSingleImageMutationHookResult = ReturnType<typeof useRemoveSingleImageMutation>;
+export type RemoveSingleImageMutationResult = ApolloReactCommon.MutationResult<RemoveSingleImageMutation>;
+export type RemoveSingleImageMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveSingleImageMutation, RemoveSingleImageMutationVariables>;
+export const UploadSingleImageDocument = gql`
+    mutation UploadSingleImage($image: Upload!) {
+  uploadSingleImage(image: $image)
+}
+    `;
+export type UploadSingleImageMutationFn = ApolloReactCommon.MutationFunction<UploadSingleImageMutation, UploadSingleImageMutationVariables>;
+
+/**
+ * __useUploadSingleImageMutation__
+ *
+ * To run a mutation, you first call `useUploadSingleImageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadSingleImageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadSingleImageMutation, { data, loading, error }] = useUploadSingleImageMutation({
+ *   variables: {
+ *      image: // value for 'image'
+ *   },
+ * });
+ */
+export function useUploadSingleImageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UploadSingleImageMutation, UploadSingleImageMutationVariables>) {
+        return ApolloReactHooks.useMutation<UploadSingleImageMutation, UploadSingleImageMutationVariables>(UploadSingleImageDocument, baseOptions);
+      }
+export type UploadSingleImageMutationHookResult = ReturnType<typeof useUploadSingleImageMutation>;
+export type UploadSingleImageMutationResult = ApolloReactCommon.MutationResult<UploadSingleImageMutation>;
+export type UploadSingleImageMutationOptions = ApolloReactCommon.BaseMutationOptions<UploadSingleImageMutation, UploadSingleImageMutationVariables>;
 export const CompanyLoginDocument = gql`
     mutation CompanyLogin($login: String!, $password: String!) {
   companyLogin(credentials: {login: $login, password: $password}) {

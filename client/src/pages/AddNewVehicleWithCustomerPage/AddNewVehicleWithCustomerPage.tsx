@@ -18,11 +18,12 @@ import { useHistory } from 'react-router-dom';
 import { RoutesEnum } from '@/Routes';
 import { GET_ALL_CUSTOMERS } from '@/graphql/customer/querys/getAllCustomers';
 import { GET_ALL_VEHICLES } from '@/graphql/vehicle/querys';
+import { UploadFile } from 'antd/lib/upload/interface';
 
 export interface FormsValues {
     addVehicle: undefined | AddVehicle;
     addCustomer: undefined | AddCustomer;
-    vehicleImage: undefined | File;
+    vehicleImage: undefined | UploadFile;
 }
 
 const { Step } = Steps;
@@ -123,7 +124,7 @@ const AddNewVehicleWithCustomerPage = () => {
         if (addVehicle && addCustomer) {
             try {
                 await createNewVehileWithCustomer({
-                    variables: { addCustomer, addVehicle: addVehicle, vehicleImage: vehicleImage },
+                    variables: { addCustomer, addVehicle: addVehicle, vehicleImage: vehicleImage?.originFileObj },
                     refetchQueries: [{ query: GET_ALL_CUSTOMERS }, { query: GET_ALL_VEHICLES }],
                 });
                 if (!error) {

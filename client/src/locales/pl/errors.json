@@ -4,5 +4,8 @@
     },
     "serverError": "Problem z serwerem, spróbuj ponownie",
     "generalError": "Ups. powstał jakiś problem :( ",
-    "user": "Użytkownika"
+    "user": "Użytkownika",
+    "uploads": {
+        "maxSize": "Maksymalny rozmiar pliku to {{limit}}"
+    }
 }

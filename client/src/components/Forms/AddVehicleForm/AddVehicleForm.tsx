@@ -10,19 +10,20 @@ import { vehicleTypes, fuelTypes } from '@/constants/select';
 import MyDatePicker from '@/components/Fields/MyDatePicker';
 import { addNewVehicleSchema } from '@/validations';
 import { AddVehicle } from './types';
-import MyUploader from '@/components/Fields/MyUploader';
 import { Vehicle, UpdateVehicleInfoMutation, UpdateVehicleInfoMutationVariables } from '@/generated/graphql';
 import { ModalActionType } from '@/@types';
 import { UPDATE_VEHICLE_INFO } from '@/graphql/vehicle/mutations';
 import { useMutation } from '@apollo/react-hooks';
+import SingleImageUploader from '@/components/Uploaders/SingleImageUploader';
+import { UploadFile } from 'antd/lib/upload/interface';
 
 interface OwnProps {
     formRef?: React.RefObject<FormikValues>;
     submitForm?: (values: AddVehicle, formikHelpers: FormikHelpers<AddVehicle>) => void;
     defaultValues?: Vehicle;
-    setVehicleImage?: (vehicleImage: File) => void;
+    setVehicleImage?: (vehicleImage: UploadFile) => void;
     type: ModalActionType;
-    vehicleImage?: File;
+    vehicleImage?: UploadFile;
     toggle: () => void;
 }
 
@@ -35,6 +36,7 @@ const mileageSelectAfter = (
         <Option value="mileage">mil.</Option>
     </Select>
 );
+
 const { CREATE, UPDATE } = ModalActionType;
 const AddVehicleForm: FC<Props> = ({
     formRef,
@@ -45,22 +47,22 @@ const AddVehicleForm: FC<Props> = ({
     toggle,
     vehicleImage,
 }) => {
-    const [image, setImage] = useState<File | null>(null);
+    const [image, setImage] = useState<UploadFile | null>(null);
     const { t } = useTranslation(['common', 'fields']);
 
     const [updateVehicleInfo] = useMutation<UpdateVehicleInfoMutation, UpdateVehicleInfoMutationVariables>(
         UPDATE_VEHICLE_INFO,
     );
 
-    const uploadImageHandler = (files: FileList) => {
+    const uploadImageHandler = (file: UploadFile) => {
         switch (type) {
             case CREATE:
                 if (setVehicleImage) {
-                    setVehicleImage(files[0]);
+                    setVehicleImage(file);
                 }
                 break;
             case UPDATE:
-                setImage(files[0]);
+                setImage(file);
                 break;
             default:
                 break;
@@ -181,7 +183,10 @@ const AddVehicleForm: FC<Props> = ({
                             />
                         </Col>
                         <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyUploader onChange={uploadImageHandler} defaultValues={vehicleImage && [vehicleImage]} />
+                            <SingleImageUploader
+                                uploadImage={uploadImageHandler}
+                                defaultValue={vehicleImage && vehicleImage}
+                            />
                         </Col>
                         <Col xs={24} sm={12} md={6} xxl={3}>
                             <MyTextArea

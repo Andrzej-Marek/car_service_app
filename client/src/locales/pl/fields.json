@@ -53,5 +53,7 @@
     "warranty": "Gwarancja",
     "actions": "Akcje",
     "dragOrClick": "Przeciągnij plik, lub naciśnij aby dodać",
-    "dropFileHere": "Upuś plik tutaj"
+    "dropFileHere": "Upuś plik tutaj",
+    "addImage": "Dodaj zdjęcie",
+    "imagePreview": "Podgląd zdjęcia"
 }

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'antd';
 import MoneyCard from '@/components/Cards/MoneyCard';
@@ -10,8 +10,8 @@ import AddCustomerModal from '@/components/Modals/AddCustomerModal';
 import { UserContext } from '@/context/UserContext';
 import FastRaportModal from '@/components/Modals/FastRaportModal';
 import { ModalActionType } from '@/@types';
-import { useDropzone } from 'react-dropzone';
-import MyUploader from '@/components/Fields/MyUploader';
+import LoadingSpinner from '@/components/Loaders/LoadingSpinner';
+import SingleImageUploader from '@/components/Uploaders/SingleImageUploader';
 
 const MainDashboardPage = () => {
     const [addCustomerModal, toggleAddCustomerModal] = useState(false);
@@ -25,6 +25,7 @@ const MainDashboardPage = () => {
     };
 
     console.log(user);
+    if (!user) return <LoadingSpinner loading={true} />;
     return (
         <Wrapper>
             <AddCustomerModal

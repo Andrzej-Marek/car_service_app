@@ -15,6 +15,7 @@ import { CustomerModule } from './customer/customer.module';
 import { RaportsModule } from './raports/raports.module';
 import * as path from 'path';
 import { VehicleModule } from './vehicle/vehicle.module';
+import { UploaderModule } from './uploader/uploader.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { VehicleModule } from './vehicle/vehicle.module';
     CustomerModule,
     RaportsModule,
     VehicleModule,
+    UploaderModule,
   ],
 })
 export class AppModule {}

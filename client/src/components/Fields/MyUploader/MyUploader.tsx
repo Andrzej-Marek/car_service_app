@@ -25,8 +25,6 @@ const MyUploader: FC<Props> = ({ onChange, defaultValues, multiple = false }) =>
         maxSize: 2,
     });
 
-    console.log(isDragReject);
-    console.log('fileRejections', fileRejections);
     const displayImageInfo = (defaultValues: File[] | undefined, acceptedFiles: File[]) => {
         if (defaultValues?.length) {
             return (

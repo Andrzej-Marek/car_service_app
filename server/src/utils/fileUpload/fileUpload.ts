@@ -2,19 +2,26 @@ import { v4 as uuidv4 } from 'uuid';
 import { FileUpload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
 import { Logger, BadRequestException } from '@nestjs/common';
+import { UploadFolders } from 'src/enums';
 
-export const fileUpload = async (file: FileUpload) => {
+export const fileUpload = async (
+  file: FileUpload,
+  subFolder = UploadFolders.IMAGES,
+) => {
   const { createReadStream, filename } = file;
   const randomName = await uuidv4();
   const fileName = `${randomName}${filename}`;
   const uploadFileStatus: Promise<boolean> = new Promise(
     async (resolve, reject) =>
       createReadStream()
-        .pipe(createWriteStream(`./uploads/images/${fileName}`))
+        .pipe(createWriteStream(`./uploads/${subFolder}/${fileName}`))
         .on('finish', () => resolve(true))
         .on('error', () => {
-          Logger.error(`Error with uploadfile filename: ${filename}`);
+          Logger.error(
+            `fileUpload: Error with upload file filename: ${filename}`,
+          );
           reject(false);
+          throw new BadRequestException();
         }),
   );
 
@@ -23,5 +30,5 @@ export const fileUpload = async (file: FileUpload) => {
     throw new BadRequestException();
   }
 
-  return `/images/${fileName}`;
+  return `/${subFolder}/${fileName}`;
 };
