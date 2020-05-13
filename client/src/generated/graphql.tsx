@@ -28,6 +28,7 @@ export type Vehicle = {
   enginePower?: Maybe<Scalars['String']>;
   color?: Maybe<Scalars['String']>;
   mileage?: Maybe<Scalars['String']>;
+  lengthUnit: Scalars['String'];
   fuelType?: Maybe<Scalars['String']>;
   insuranceDate?: Maybe<Scalars['String']>;
   nextService?: Maybe<Scalars['String']>;
@@ -338,6 +339,7 @@ export type CreateNewVehicleInput = {
   enginePower?: Maybe<Scalars['String']>;
   color?: Maybe<Scalars['String']>;
   mileage?: Maybe<Scalars['String']>;
+  lengthUnit: Scalars['String'];
   fuelType?: Maybe<Scalars['String']>;
   insuranceDate?: Maybe<Scalars['String']>;
   nextService?: Maybe<Scalars['String']>;
@@ -509,7 +511,7 @@ export type MeQuery = (
 
 export type VehicleFragment = (
   { __typename?: 'Vehicle' }
-  & Pick<Vehicle, 'id' | 'vehicleType' | 'brand' | 'model' | 'vinNumber' | 'productionYear' | 'engineCapacity' | 'registrationNumber' | 'enginePower' | 'color' | 'mileage' | 'fuelType' | 'insuranceDate' | 'nextService' | 'warranty' | 'comment' | 'imageUrl'>
+  & Pick<Vehicle, 'id' | 'vehicleType' | 'brand' | 'model' | 'vinNumber' | 'productionYear' | 'engineCapacity' | 'registrationNumber' | 'enginePower' | 'color' | 'mileage' | 'fuelType' | 'insuranceDate' | 'nextService' | 'warranty' | 'comment' | 'imageUrl' | 'lengthUnit'>
 );
 
 export type CreateNewVehicleWithCustomerMutationVariables = {
@@ -606,6 +608,7 @@ export const VehicleFragmentDoc = gql`
   warranty
   comment
   imageUrl
+  lengthUnit
 }
     `;
 export const CreateNewCustomerDocument = gql`

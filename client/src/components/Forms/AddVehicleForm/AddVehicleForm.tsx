@@ -30,10 +30,14 @@ interface OwnProps {
 type Props = OwnProps;
 
 const { Option } = Select;
+
 const mileageSelectAfter = (
-    <Select defaultValue="km" className="select-after">
-        <Option value="km">km</Option>
-        <Option value="mileage">mil.</Option>
+    defaultValue: string,
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void,
+) => (
+    <Select defaultValue={defaultValue} className="select-after" onChange={value => setFieldValue('lengthUnit', value)}>
+        <Option value="kilometre">km</Option>
+        <Option value="mile">mile</Option>
     </Select>
 );
 
@@ -77,7 +81,7 @@ const AddVehicleForm: FC<Props> = ({
                 }
                 break;
             case UPDATE:
-                updateVehicleInfo({ variables: { image, updateVehicle: values } });
+                updateVehicleInfo({ variables: { image: image?.originFileObj, updateVehicle: values } });
                 if (toggle) {
                     toggle();
                 }
@@ -86,7 +90,7 @@ const AddVehicleForm: FC<Props> = ({
                 break;
         }
     };
-
+    console.log(defaultValues);
     return (
         <Formik
             innerRef={formRef as any}
@@ -101,6 +105,7 @@ const AddVehicleForm: FC<Props> = ({
                           productionYear: '',
                           engineCapacity: '',
                           registrationNumber: '',
+                          lengthUnit: 'kilometre',
                           enginePower: '',
                           color: '',
                           mileage: '',
@@ -115,7 +120,7 @@ const AddVehicleForm: FC<Props> = ({
             validateOnBlur={true}
             onSubmit={submitFormHandler}
         >
-            {({ handleSubmit, resetForm, setFieldValue }) => (
+            {({ handleSubmit, resetForm, setFieldValue, values }) => (
                 <form onSubmit={handleSubmit}>
                     <Row>
                         <Col xs={24} sm={12} md={6} xxl={3}>
@@ -151,7 +156,11 @@ const AddVehicleForm: FC<Props> = ({
                             <MyInputField name="color" label={t('fields:color')} />
                         </Col>
                         <Col xs={24} sm={12} md={6} xxl={3}>
-                            <MyInputField name="mileage" label={t('fields:mileage')} addonAfter={mileageSelectAfter} />
+                            <MyInputField
+                                name="mileage"
+                                label={t('fields:mileage')}
+                                addonAfter={mileageSelectAfter(values.lengthUnit, setFieldValue)}
+                            />
                         </Col>
                         <Col xs={24} sm={12} md={6} xxl={3}>
                             <MySelect

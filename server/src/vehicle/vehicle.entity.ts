@@ -10,6 +10,7 @@ import {
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Company } from 'src/auth/company.entity';
 import { Customer } from 'src/customer/customer.entity';
+import { MileageEnum } from 'src/enums';
 
 @Entity()
 @ObjectType()
@@ -57,6 +58,10 @@ export class Vehicle extends BaseEntity {
   @Column({ nullable: true })
   @Field({ nullable: true })
   mileage: string;
+
+  @Column()
+  @Field()
+  lengthUnit: MileageEnum;
 
   @Column({ nullable: true })
   @Field({ nullable: true })

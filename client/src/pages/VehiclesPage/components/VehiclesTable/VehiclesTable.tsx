@@ -5,13 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { getColumnSearchPropsHook } from '@/hooks/getColumnSearchPropsHook';
 import Actions from './components/Actions';
 import { vehicleTypes, fuelTypes } from '@/constants/select';
-import { InfoCircleOutlined, CameraOutlined } from '@ant-design/icons';
-import CustomerDescriptionModal from '@/components/Modals/CustomerDescriptionModal';
 import OwnerCell from './components/OwnerCell';
 import moment from 'moment';
 import { FULL_DATE_FORMAT } from '@/constants/dateFormat';
 import ExpiresDate from '@/components/TableElements/ExpiresDate';
-import { SERVER_URL } from '@/config';
 import ImagePreview from '@/components/TableElements/ImagePreview';
 
 interface OwnProps {
@@ -72,7 +69,11 @@ const VehiclesTable: FC<Props> = ({ vehicles }) => {
             title: t('fields:mileage'),
             dataIndex: 'mileage',
             key: 'mileage',
-            align: 'center',
+            render: (value: string, record) => (
+                <div>
+                    {value} {t(`fields:${record.lengthUnit}`)}
+                </div>
+            ),
         },
         {
             title: t('fields:fuelType'),

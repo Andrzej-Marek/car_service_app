@@ -1,5 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { GraphQLUpload, FileUpload } from 'graphql-upload';
+import { MileageEnum } from 'src/enums';
+import { IsEnum } from 'class-validator';
 
 @InputType()
 export class CreateNewVehicleInput {
@@ -23,6 +24,9 @@ export class CreateNewVehicleInput {
   color: string;
   @Field({ nullable: true })
   mileage: string;
+  @IsEnum(MileageEnum)
+  @Field()
+  lengthUnit: MileageEnum;
   @Field({ nullable: true })
   fuelType: string;
   @Field({ nullable: true })

@@ -13,6 +13,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@/utils';
 import { ApolloLink } from 'apollo-boost';
+import { notification } from 'antd';
 
 dotenv.config();
 
@@ -23,6 +24,12 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         );
 
     if (networkError) console.log(`[Network error]: ${networkError}`);
+    if (networkError && networkError.message.includes('400')) {
+        notification.error({
+            message: 'Error 400',
+            description: networkError.message,
+        });
+    }
 });
 
 const uploadLink = createUploadLink({

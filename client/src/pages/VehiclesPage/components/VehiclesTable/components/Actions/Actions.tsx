@@ -32,6 +32,7 @@ const Actions: FC<Props> = ({ record }) => {
         imageUrl,
         vinNumber,
         warranty,
+        lengthUnit,
     } = record;
 
     const defaultValues = {
@@ -52,6 +53,7 @@ const Actions: FC<Props> = ({ record }) => {
         vinNumber,
         warranty,
         imageUrl,
+        lengthUnit,
     };
     return (
         <>
@@ -71,6 +73,3 @@ const Actions: FC<Props> = ({ record }) => {
 const Wrapper = styled.div``;
 
 export default Actions;
-
-//TODO:
-// Ive created a updateVehicle and have to create frontend for it with image update

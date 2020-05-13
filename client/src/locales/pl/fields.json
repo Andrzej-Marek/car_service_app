@@ -32,6 +32,8 @@
     "clear": "Wyczyść",
     "brand": "Marka",
     "model": "Model",
+    "kilometre": "km",
+    "mile": "mile",
     "vinNumber": "Numer VIN",
     "productionYear": "Rok produkcji",
     "mileage": "Przebieg",
