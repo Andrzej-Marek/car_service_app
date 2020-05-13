@@ -9,14 +9,14 @@ const lengthValidation = (min = 4, max = 20) =>
 
 export const addNewVehicleSchema = Yup.object().shape({
     vehicleType: lengthValidation(1, 20).required(i18n.t('validations:required')),
-    brand: lengthValidation().required(i18n.t('validations:required')),
-    model: lengthValidation().required(i18n.t('validations:required')),
+    brand: lengthValidation(2).required(i18n.t('validations:required')),
+    model: lengthValidation(2).required(i18n.t('validations:required')),
     vinNumber: lengthValidation(7, 18).matches(NUMBER_REGEX, i18n.t('validations:isOnlyNumbers')),
     productionYear: lengthValidation(4, 4).matches(NUMBER_REGEX, i18n.t('validations:isOnlyNumbers')),
     engineCapacity: lengthValidation(2, 8).matches(NUMBER_REGEX, i18n.t('validations:isOnlyNumbers')),
-    registrationNumber: lengthValidation(4, 8),
+    registrationNumber: lengthValidation(4, 10),
     enginePower: lengthValidation(1, 5).matches(NUMBER_REGEX, i18n.t('validations:isOnlyNumbers')),
     color: lengthValidation(1, 12),
-    mileage: lengthValidation().matches(NUMBER_REGEX, i18n.t('validations:isOnlyNumbers')),
+    mileage: lengthValidation(1, 6).matches(NUMBER_REGEX, i18n.t('validations:isOnlyNumbers')),
     comment: lengthValidation(4, 400),
 });

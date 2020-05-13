@@ -7,5 +7,6 @@
     "lpgas": "LPG",
     "hydrogen": "Wodór",
     "ethanol": "Etanol",
-    "racingfuel": "Paliwo wyścigowe"
+    "racingfuel": "Paliwo wyścigowe",
+    "electric": "Elektryczne"
 }

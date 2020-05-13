@@ -46,4 +46,9 @@ export const fuelTypes = [
         label: i18.t('fuelTypes:racingfuel'),
         text: i18.t('fuelTypes:racingfuel'),
     },
+    {
+        value: 'electric',
+        label: i18.t('fuelTypes:electric'),
+        text: i18.t('fuelTypes:electric'),
+    },
 ];
