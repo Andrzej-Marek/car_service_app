@@ -183,37 +183,37 @@ const AddCustomerForm: FC<Props> = ({
                     ) : (
                         <>
                             <Row>
-                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                <Col xs={24} sm={12} md={6} xxl={4}>
                                     <MyInputField name="firstname" label={t('firstname')} />
                                 </Col>
-                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                <Col xs={24} sm={12} md={6} xxl={4}>
                                     <MyInputField name="lastname" label={t('lastname')} />
                                 </Col>
-                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                <Col xs={24} sm={12} md={6} xxl={4}>
                                     <MyInputField name="companyName" label={t('companyName')} />
                                 </Col>
-                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                <Col xs={24} sm={12} md={6} xxl={4}>
                                     <MyInputField name="vatNumber" label={t('vatNumber')} />
                                 </Col>
-                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                <Col xs={24} sm={12} md={6} xxl={4}>
                                     <MyInputField name="street" label={t('street')} />
                                 </Col>
-                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                <Col xs={24} sm={12} md={6} xxl={4}>
                                     <MyInputField name="postcode" label={t('postcode')} />
                                 </Col>
-                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                <Col xs={24} sm={12} md={6} xxl={4}>
                                     <MyInputField name="adress" label={t('adress')} />
                                 </Col>
-                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                <Col xs={24} sm={12} md={6} xxl={4}>
                                     <MyInputField name="phone" label={t('phone')} />
                                 </Col>
-                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                <Col xs={24} sm={12} md={6} xxl={4}>
                                     <MyInputField name="mail" label={t('mail')} />
                                 </Col>
-                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                <Col xs={24} sm={12} md={6} xxl={4}>
                                     <MyTextArea name="comment" label={t('comment')} />
                                 </Col>
-                                <Col xs={24} sm={12} md={6} xxl={3}>
+                                <Col xs={24} sm={12} md={6} xxl={4}>
                                     <MyNumberInput
                                         label={t('discount')}
                                         name="discount"

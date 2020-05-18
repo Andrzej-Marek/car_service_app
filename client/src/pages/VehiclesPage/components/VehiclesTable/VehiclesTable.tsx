@@ -7,7 +7,7 @@ import Actions from './components/Actions';
 import { vehicleTypes, fuelTypes } from '@/constants/select';
 import OwnerCell from './components/OwnerCell';
 import moment from 'moment';
-import { FULL_DATE_FORMAT } from '@/constants/dateFormat';
+import { FULL_DATE_FORMAT, FULL_DATE_FORMAT_WITH_TIME } from '@/constants/dateFormat';
 import ExpiresDate from '@/components/TableElements/ExpiresDate';
 import ImagePreview from '@/components/TableElements/ImagePreview';
 
@@ -19,7 +19,6 @@ type Props = OwnProps;
 
 const VehiclesTable: FC<Props> = ({ vehicles }) => {
     const { t } = useTranslation(['fields', 'vehicleTypes', 'fuelType']);
-    const todayDay = moment();
 
     const columns: ColumnProps<Vehicle>[] = [
         {
@@ -69,9 +68,10 @@ const VehiclesTable: FC<Props> = ({ vehicles }) => {
             title: t('fields:mileage'),
             dataIndex: 'mileage',
             key: 'mileage',
+            width: '150px',
             render: (value: string, record) => (
                 <div>
-                    {value} {t(`fields:${record.lengthUnit}`)}
+                    {value} {value && t(`fields:${record.lengthUnit}`)}
                 </div>
             ),
         },
@@ -137,6 +137,13 @@ const VehiclesTable: FC<Props> = ({ vehicles }) => {
             align: 'center',
         },
         {
+            title: t('fields:createdAt'),
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            render: (value: string) => moment(value).format(FULL_DATE_FORMAT),
+            width: '120px',
+        },
+        {
             title: t('fields:actions'),
             key: 'actions',
             render: (_, record) => <Actions record={record} />,
@@ -150,7 +157,7 @@ const VehiclesTable: FC<Props> = ({ vehicles }) => {
                 rowKey={record => record.id}
                 size="small"
                 bordered
-                scroll={{ x: 2000 }}
+                scroll={{ x: 2200 }}
                 pagination={{ defaultPageSize: 20 }}
                 expandable={{
                     expandedRowRender: record => <p style={{ margin: 0 }}>{record.comment}</p>,

@@ -5,6 +5,7 @@ import { Button, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import AddCustomerModal from '@/components/Modals/AddCustomerModal';
 import { ModalActionType } from '@/@types';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 interface OwnProps {
     context: CustomerFragment;
@@ -25,19 +26,10 @@ const ActionsRow: FC<Props> = ({ context }) => {
             />
             <Wrapper>
                 <Tooltip title={t('edit')}>
-                    <Button
-                        type="primary"
-                        shape="circle"
-                        size="small"
-                        onClick={() => toggleUpdateCustomerModal(!updateCustomerModal)}
-                    >
-                        U
-                    </Button>
+                    <EditOutlined onClick={() => toggleUpdateCustomerModal(!updateCustomerModal)} className="edit" />
                 </Tooltip>
                 <Tooltip title={t('delete')}>
-                    <Button type="danger" shape="circle" size="small">
-                        X
-                    </Button>
+                    <DeleteOutlined className="delete" />
                 </Tooltip>
             </Wrapper>
         </>
@@ -47,9 +39,19 @@ const ActionsRow: FC<Props> = ({ context }) => {
 const Wrapper = styled.div`
     display: flex;
     justify-content: center;
-    button {
-        font-size: ${({ theme }) => theme.fontSize.small};
+    align-items: center;
+
+    svg {
+        font-size: ${({ theme }) => theme.fontSize.icon};
         margin: 0 5px;
+    }
+
+    .delete {
+        color: ${({ theme }) => theme.color.red};
+    }
+
+    .edit {
+        color: ${({ theme }) => theme.color.lightBlue};
     }
 `;
 

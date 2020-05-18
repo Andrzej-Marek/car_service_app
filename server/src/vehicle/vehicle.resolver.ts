@@ -7,7 +7,6 @@ import { GetCompanyId } from 'src/auth/get-company-id.decorator';
 import { Vehicle } from './vehicle.entity';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
-import { CreateNewVehicleInput } from './dto/create-new-vehicle.input';
 import { UpdateVehicleInput } from './dto';
 
 @Resolver()

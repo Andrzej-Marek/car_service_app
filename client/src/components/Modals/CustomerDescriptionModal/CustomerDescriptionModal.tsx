@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Descriptions, Modal, Tag } from 'antd';
+import { Descriptions, Modal } from 'antd';
 import { styled } from '@/utils';
 import { CustomerFragment } from '@/generated/graphql';
 import { useTranslation } from 'react-i18next';

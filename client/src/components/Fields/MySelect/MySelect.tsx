@@ -15,7 +15,7 @@ const MySelect: FC<Props> = ({ label, onChange, ...props }) => {
     const [field, meta] = useField(props as any);
 
     return (
-        <Wrapper className="my-field-input">
+        <Wrapper className="my-select">
             <label>{label && label} </label>
             <Select
                 showSearch

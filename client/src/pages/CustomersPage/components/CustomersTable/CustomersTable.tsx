@@ -39,7 +39,7 @@ const CustomersTable: FC<Props> = ({ customers }) => {
             dataIndex: 'companyName',
             key: 'companyName',
             ...getColumnSearchPropsHook('companyName'),
-            width: 120,
+            width: 160,
         },
         {
             title: t('fields:mail'),

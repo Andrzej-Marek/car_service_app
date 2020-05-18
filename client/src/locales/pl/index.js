@@ -8,10 +8,12 @@ import fields from './fields.json';
 import nav from './nav.json';
 import vehicleTypes from './vehicleTypes.json';
 import fuelTypes from './fuelTypes.json';
+import service from './service.json';
+import info from './info.json';
 
 export default {
-    common,
     routes,
+    common,
     mainDashboard,
     loginAndRegister,
     nav,
@@ -20,4 +22,6 @@ export default {
     validations,
     vehicleTypes,
     fuelTypes,
+    service,
+    info,
 };

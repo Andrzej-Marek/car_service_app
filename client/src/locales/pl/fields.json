@@ -40,9 +40,11 @@
     "color": "Kolor",
     "description": "Opis",
     "diagnosis": "Diagnoza",
-    "product / service": "Produkt / Usługa",
+    "product/service": "Produkt / Usługa",
     "cost": "Cena",
+    "price": "Cena",
     "amount": "Ilość",
+    "summary": "Razem",
     "totalCost": "Koszt",
     "addNextRaport": "Dodaj kolejny raport",
     "estimate": "Kosztorys",
@@ -53,10 +55,13 @@
     "fuelType": "Rodzaj paliwa",
     "insuranceDate": "Data ubezpieczenia",
     "nextService": "Następny serwis",
+    "createdAt": "Dodano",
     "warranty": "Gwarancja",
     "actions": "Akcje",
     "dragOrClick": "Przeciągnij plik, lub naciśnij aby dodać",
     "dropFileHere": "Upuś plik tutaj",
     "addImage": "Dodaj zdjęcie",
-    "imagePreview": "Podgląd zdjęcia"
+    "imagePreview": "Podgląd zdjęcia",
+    "image": "Zdjęcie",
+    "selectVehicle": "Wybierz pojazd"
 }

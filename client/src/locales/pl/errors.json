@@ -5,7 +5,14 @@
     "serverError": "Problem z serwerem, spróbuj ponownie",
     "generalError": "Ups. powstał jakiś problem :( ",
     "user": "Użytkownika",
+    "block": "Nie możesz wykonać tej czynności",
     "uploads": {
-        "maxSize": "Maksymalny rozmiar pliku to {{limit}}"
+        "general": "Błąd podczas przesyłania plików",
+        "maxSize": "Maksymalny rozmiar pliku to {{limit}}",
+        "maxAmountForPlan": "Maksymalna ilość zdjęc w tym planie cenowym to {{limit}}"
+    },
+    "limits": {
+        "amountLimit": "Maksymalna ilość dla Twojego planu to {{limit}}",
+        "positionsLimit": "Maksymalna ilość dla Twojego planu to {{limit}} pozycje"
     }
 }

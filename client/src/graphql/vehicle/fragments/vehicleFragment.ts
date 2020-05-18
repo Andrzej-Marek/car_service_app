@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { CUSTOMER_FRAGMENT } from '@/graphql/customer/fragments';
 
 export const VEHICLE_FRAGMENT = gql`
     fragment Vehicle on Vehicle {
@@ -20,5 +21,10 @@ export const VEHICLE_FRAGMENT = gql`
         comment
         imageUrl
         lengthUnit
+        customer {
+            ...Customer
+        }
     }
+
+    ${CUSTOMER_FRAGMENT}
 `;

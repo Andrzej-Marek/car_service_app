@@ -11,3 +11,6 @@ generates:
             withComponent: false
             withHOC: false
             withHooks: true
+            noNamespaces: true
+
+            overwrite: true

@@ -315,6 +315,7 @@ export type UpdateVehicleInput = {
   enginePower?: Maybe<Scalars['String']>;
   color?: Maybe<Scalars['String']>;
   mileage?: Maybe<Scalars['String']>;
+  lengthUnit: Scalars['String'];
   fuelType?: Maybe<Scalars['String']>;
   insuranceDate?: Maybe<Scalars['String']>;
   nextService?: Maybe<Scalars['String']>;
@@ -512,6 +513,10 @@ export type MeQuery = (
 export type VehicleFragment = (
   { __typename?: 'Vehicle' }
   & Pick<Vehicle, 'id' | 'vehicleType' | 'brand' | 'model' | 'vinNumber' | 'productionYear' | 'engineCapacity' | 'registrationNumber' | 'enginePower' | 'color' | 'mileage' | 'fuelType' | 'insuranceDate' | 'nextService' | 'warranty' | 'comment' | 'imageUrl' | 'lengthUnit'>
+  & { customer: (
+    { __typename?: 'Customer' }
+    & CustomerFragment
+  ) }
 );
 
 export type CreateNewVehicleWithCustomerMutationVariables = {
@@ -561,10 +566,6 @@ export type GetAllVehiclesQuery = (
   { __typename?: 'Query' }
   & { getAllVehicles: Array<(
     { __typename?: 'Vehicle' }
-    & { customer: (
-      { __typename?: 'Customer' }
-      & CustomerFragment
-    ) }
     & VehicleFragment
   )> }
 );
@@ -609,8 +610,11 @@ export const VehicleFragmentDoc = gql`
   comment
   imageUrl
   lengthUnit
+  customer {
+    ...Customer
+  }
 }
-    `;
+    ${CustomerFragmentDoc}`;
 export const CreateNewCustomerDocument = gql`
     mutation CreateNewCustomer($firstname: String!, $lastname: String, $companyName: String, $vatNumber: String, $street: String, $postcode: String, $adress: String, $phone: String, $mail: String, $comment: String, $discount: Int, $mailSendAgreement: Boolean!, $smsSendAgreement: Boolean!, $marketingSendAgreement: Boolean!) {
   createNewCustomer(newCustomerInput: {firstname: $firstname, lastname: $lastname, companyName: $companyName, vatNumber: $vatNumber, street: $street, postcode: $postcode, adress: $adress, phone: $phone, mail: $mail, comment: $comment, discount: $discount, mailSendAgreement: $mailSendAgreement, smsSendAgreement: $smsSendAgreement, marketingSendAgreement: $marketingSendAgreement}) {
@@ -1077,13 +1081,9 @@ export const GetAllVehiclesDocument = gql`
     query getAllVehicles {
   getAllVehicles {
     ...Vehicle
-    customer {
-      ...Customer
-    }
   }
 }
-    ${VehicleFragmentDoc}
-${CustomerFragmentDoc}`;
+    ${VehicleFragmentDoc}`;
 
 /**
  * __useGetAllVehiclesQuery__

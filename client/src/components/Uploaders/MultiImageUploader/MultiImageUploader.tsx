@@ -1,12 +1,13 @@
 import React, { FC, useState, useContext } from 'react';
 import styled from 'styled-components';
-import { Upload, Modal, message } from 'antd';
+import { Upload, message, notification } from 'antd';
 import { RcCustomRequestOptions, UploadChangeParam, UploadFile, RcFile } from 'antd/lib/upload/interface';
 import { PlusOutlined } from '@ant-design/icons';
-import { maxFileAmount, MAX_IMAGE_SIZE } from '@/config';
+import { MAX_IMAGE_SIZE } from '@/config';
 import { UserContext } from '@/context/UserContext';
 import { useTranslation } from 'react-i18next';
 import PreviewModal from '../components/PreviewModal';
+import { maxFileAmount } from '@/config/plansConfig';
 
 interface OwnProps {
     uploadImages: (files: UploadFile[]) => void;
@@ -35,6 +36,13 @@ const MultiImageUploader: FC<Props> = ({ uploadImages, defaultValue }) => {
     };
 
     const handleChange = ({ fileList }: UploadChangeParam<UploadFile<any>>) => {
+        if (fileList.length > maxFileAmount(user!.plan)) {
+            notification.error({
+                message: t('errors:uploads.general'),
+                description: t('errors:uploads.maxAmountForPlan', { limit: maxFileAmount(user!.plan) }),
+            });
+            return false;
+        }
         uploadImages(fileList);
         setFileList(fileList);
     };
@@ -66,6 +74,7 @@ const MultiImageUploader: FC<Props> = ({ uploadImages, defaultValue }) => {
                 onPreview={handlePreview}
                 onChange={handleChange}
                 beforeUpload={beforeUploadHandler}
+                multiple
             >
                 {fileList.length >= maxFileAmount(user!.plan) ? null : uploadButton}
             </Upload>
