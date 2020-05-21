@@ -1,40 +1,56 @@
 import React, { FC } from 'react';
 import { Tabs } from 'antd';
 import MultiImageUploader from '@/components/Uploaders/MultiImageUploader';
-import ServisEstimate from '@/components/Estimates/ServisEstimate';
-import { SerivceEstimate } from '../../types';
+import ServiceEstimate from '@/components/Estimates/ServiceEstimate';
+import { ServiceEstimateFields } from '../../types';
+import ServiceDeposit from './components/ServiceDeposit';
+import { useTranslation } from 'react-i18next';
+import AdvancePayment from './components/AdvancePayment';
+import TimeTab from './components/TimeTab';
+import ServiceDescription from './components/ServiceDescription';
 
 interface OwnProps {
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
-    estimate: SerivceEstimate[];
+    estimate: ServiceEstimateFields[];
 }
 
 type Props = OwnProps;
 
 const { TabPane } = Tabs;
 const TabsContent: FC<Props> = ({ setFieldValue, estimate }) => {
+    const { t } = useTranslation(['fields']);
     return (
         <Tabs type="card">
-            <TabPane tab="Kosztorys" key="1">
-                <ServisEstimate setFieldValue={setFieldValue} estimate={estimate} />
+            <TabPane tab={t('fields:estimate')} key="1">
+                <ServiceEstimate setFieldValue={setFieldValue} estimate={estimate} />
             </TabPane>
-            <TabPane tab="Serwisant" key="2">
+            {/* <TabPane tab="Serwisant" key="2">
                 Content of Tab Pane 2
+            </TabPane> */}
+            <TabPane tab={t('fields:photos')} key="3">
+                <MultiImageUploader
+                    uploadImages={images =>
+                        setFieldValue(
+                            'images',
+                            images.map(el => el.originFileObj),
+                        )
+                    }
+                />
             </TabPane>
-            <TabPane tab="Zdjęcia" key="3">
-                <MultiImageUploader uploadImages={images => console.log(images)} />
+            <TabPane tab={t('fields:deposit')} key="4">
+                <ServiceDeposit setFieldValue={setFieldValue} />
             </TabPane>
-            <TabPane tab="Załączniki" key="4">
-                Content of Tab Pane 4
-            </TabPane>
-            <TabPane tab="Rezerwacje" key="5">
+            {/* <TabPane tab="Rezerwacje" key="5">
                 Content of Tab Pane 5
+            </TabPane> */}
+            <TabPane tab={t('fields:advancePayment')} key="6">
+                <AdvancePayment setFieldValue={setFieldValue} />
             </TabPane>
-            <TabPane tab="Zaliczki" key="6">
-                Content of Tab Pane 6
+            <TabPane tab={t('fields:time')} key="7">
+                <TimeTab setFieldValue={setFieldValue} />
             </TabPane>
-            <TabPane tab="Czas" key="7">
-                Content of Tab Pane 7
+            <TabPane tab={t('fields:description')} key="8">
+                <ServiceDescription />
             </TabPane>
         </Tabs>
     );

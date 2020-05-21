@@ -90,7 +90,7 @@ const AddVehicleForm: FC<Props> = ({
                 break;
         }
     };
-    console.log(defaultValues);
+
     return (
         <Formik
             innerRef={formRef as any}

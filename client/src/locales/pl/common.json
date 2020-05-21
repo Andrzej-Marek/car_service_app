@@ -12,6 +12,7 @@
     "next": "Dalej",
     "previous": "Cofnij",
     "summary": "Podsumowanie",
+    "accept": "Zatwierdź",
     "search": {
         "search": "Szukaj",
         "searchIn": "Szukaj w {{ where }}"

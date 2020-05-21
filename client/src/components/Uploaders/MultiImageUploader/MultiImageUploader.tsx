@@ -35,7 +35,7 @@ const MultiImageUploader: FC<Props> = ({ uploadImages, defaultValue }) => {
         togglePreviewModal(true);
     };
 
-    const handleChange = ({ fileList }: UploadChangeParam<UploadFile<any>>) => {
+    const handleChange = ({ fileList, file }: UploadChangeParam<UploadFile<any>>): void | false => {
         if (fileList.length > maxFileAmount(user!.plan)) {
             notification.error({
                 message: t('errors:uploads.general'),
@@ -43,17 +43,14 @@ const MultiImageUploader: FC<Props> = ({ uploadImages, defaultValue }) => {
             });
             return false;
         }
-        uploadImages(fileList);
-        setFileList(fileList);
-    };
 
-    const beforeUploadHandler = (file: RcFile) => {
         if (file.size > MAX_IMAGE_SIZE) {
-            message.error(t('errors:uploads.maxSize', { limit: `${MAX_IMAGE_SIZE}MB` }));
+            message.error(t('errors:uploads.maxSize', { limit: `${MAX_IMAGE_SIZE / 1000000}MB` }));
             return false;
         }
 
-        return true;
+        uploadImages(fileList);
+        setFileList(fileList);
     };
 
     const uploadButton = (
@@ -73,7 +70,6 @@ const MultiImageUploader: FC<Props> = ({ uploadImages, defaultValue }) => {
                 customRequest={uploadedImage}
                 onPreview={handlePreview}
                 onChange={handleChange}
-                beforeUpload={beforeUploadHandler}
                 multiple
             >
                 {fileList.length >= maxFileAmount(user!.plan) ? null : uploadButton}

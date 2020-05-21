@@ -14,6 +14,10 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from '@/utils';
 import { ApolloLink } from 'apollo-boost';
 import { notification } from 'antd';
+import moment from 'moment';
+import 'moment/locale/pl';
+
+moment.locale('pl');
 
 dotenv.config();
 

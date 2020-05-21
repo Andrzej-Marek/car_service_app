@@ -5,7 +5,7 @@ import Select, { SelectProps } from 'antd/lib/select';
 
 interface OwnProps {
     label?: string;
-    onChange: (value: string) => void;
+    // onChange: (value: string | string[]) => void;
     name: string;
 }
 

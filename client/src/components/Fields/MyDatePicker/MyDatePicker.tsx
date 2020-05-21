@@ -17,7 +17,7 @@ const MyDatePicker: FC<Props> = ({ label, ...props }) => {
     return (
         <Wrapper className="my-field-input">
             <label>{label && label}</label>
-            <DatePicker {...field} {...props} value={field.value ? moment(field.value) : null} format="DD-MM-YYYY" />
+            <DatePicker format="DD-MM-YYYY" {...field} {...props} value={field.value ? moment(field.value) : null} />
             {meta.touched && meta.error && <div className="error">{meta.error}</div>}
         </Wrapper>
     );

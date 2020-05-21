@@ -1,4 +1,4 @@
-export interface SerivceEstimate {
+export interface ServiceEstimateFields {
     name: string;
     price: string;
     amount: string;

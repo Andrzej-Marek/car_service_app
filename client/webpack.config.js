@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const tsImportPluginFactory = require('ts-import-plugin');
 const autoprefixer = require('autoprefixer');
 const fs = require('fs');
-
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const srcPath = subDir => path.join(__dirname, 'src', subDir);
 
 module.exports = (_, env) => {
@@ -121,6 +121,7 @@ module.exports = (_, env) => {
             ],
         },
         plugins: [
+            new MomentLocalesPlugin(),
             new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({
                 template: './src/static/index.html',

@@ -11,7 +11,6 @@ import { UserContext } from '@/context/UserContext';
 import FastRaportModal from '@/components/Modals/FastRaportModal';
 import { ModalActionType } from '@/@types';
 import LoadingSpinner from '@/components/Loaders/LoadingSpinner';
-import SingleImageUploader from '@/components/Uploaders/SingleImageUploader';
 
 const MainDashboardPage = () => {
     const [addCustomerModal, toggleAddCustomerModal] = useState(false);

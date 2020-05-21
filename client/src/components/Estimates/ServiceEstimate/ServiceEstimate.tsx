@@ -1,12 +1,13 @@
 import React, { FC, useState, useContext } from 'react';
 import { styled } from '@/utils';
 import MyInputField from '@/components/Fields/MyInputField';
-import { Tooltip, notification } from 'antd';
+import { Tooltip, notification, Row, Col } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { SerivceEstimate } from '@/pages/NewServicePage';
 import { UserContext } from '@/context/UserContext';
 import { maxListPositions } from '@/config/plansConfig';
+import MyCheckbox from '@/components/Fields/MyCheckbox';
 
 interface OwnProps {
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
@@ -15,7 +16,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-const ServisEstimate: FC<Props> = ({ setFieldValue, estimate }) => {
+const ServiceEstimate: FC<Props> = ({ setFieldValue, estimate }) => {
     const { user } = useContext(UserContext);
     const { t } = useTranslation(['info', 'fields']);
     const [itemsAmount, setItemsAmount] = useState(1);
@@ -142,13 +143,15 @@ const ServisEstimate: FC<Props> = ({ setFieldValue, estimate }) => {
                         readOnly
                     />{' '}
                 </td>
-                <td></td>
             </tr>
         );
     };
 
     return (
         <Wrapper>
+            <ConfigContent>
+                <MyCheckbox label={t('fields:netPrices')} name="netPrices" />
+            </ConfigContent>
             <table>
                 <thead>
                     <tr>
@@ -184,6 +187,8 @@ const ServisEstimate: FC<Props> = ({ setFieldValue, estimate }) => {
         </Wrapper>
     );
 };
+
+const ConfigContent = styled.div``;
 
 const Wrapper = styled.div`
     overflow-x: auto;
@@ -234,4 +239,4 @@ const RemoveIconWrapper = styled.div`
         }
     }
 `;
-export default ServisEstimate;
+export default ServiceEstimate;

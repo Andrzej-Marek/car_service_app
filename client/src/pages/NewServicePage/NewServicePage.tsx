@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@/utils';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Input } from 'antd';
 import { GET_ALL_VEHICLES } from '@/graphql/vehicle/querys';
 import { useQuery } from '@apollo/react-hooks';
 import { GetAllVehiclesQuery, VehicleFragment } from '@/generated/graphql';
@@ -9,12 +9,13 @@ import { useTranslation } from 'react-i18next';
 import { Formik } from 'formik';
 import ConfigPanel from './components/ConfigPanel';
 import TabsContent from './components/TabsContent';
-import { SerivceEstimate } from './types';
-import ClassicButton from '@/components/Buttons/ClassicButton';
+import { ServiceEstimateFields } from './types';
+import LoadingSpinner from '@/components/Loaders/LoadingSpinner';
 
 const NewServicePage = () => {
-    const { t } = useTranslation(['fields']);
-    const { data: vehicleList, loading, error } = useQuery<GetAllVehiclesQuery>(GET_ALL_VEHICLES);
+    const { t } = useTranslation(['fields', 'common']);
+
+    const { data: vehicleList, loading } = useQuery<GetAllVehiclesQuery>(GET_ALL_VEHICLES);
 
     const createSelectVehicleList = (vehicleList: VehicleFragment[]) => {
         const optionFormat = vehicleList.map(({ id, brand, model, registrationNumber, customer }) => ({
@@ -25,7 +26,8 @@ const NewServicePage = () => {
         }));
         return optionFormat;
     };
-    if (error) return <div>Error</div>;
+
+    if (loading) return <LoadingSpinner loading={loading} />;
     if (!vehicleList?.getAllVehicles) return <div>NO VEHICLE LIST</div>;
     const { getAllVehicles } = vehicleList;
     return (
@@ -35,6 +37,8 @@ const NewServicePage = () => {
                     date: new Date(),
                     vehicleId: '',
                     serviceNumber: '10/05/2020',
+                    estimateServiceDone: '10:42 08-05-2020',
+                    netPrices: false,
                     estimate: [
                         {
                             name: '',
@@ -42,11 +46,16 @@ const NewServicePage = () => {
                             amount: '',
                             summary: '',
                         },
-                    ] as SerivceEstimate[],
+                    ] as ServiceEstimateFields[],
+                    deposit: [] as string[],
+                    currency: 'zł',
+                    images: [],
+                    description: '',
+                    privateDescription: '',
                 }}
                 onSubmit={values => console.log(values)}
             >
-                {({ setFieldValue, handleSubmit, values }) => (
+                {({ setFieldValue, handleSubmit, values, handleChange }) => (
                     <form onSubmit={handleSubmit}>
                         <Row>
                             <Col xs={24} lg={12}>
@@ -54,6 +63,7 @@ const NewServicePage = () => {
                             </Col>
                             <Col xs={24} lg={12}>
                                 <MySelect
+                                    className="vehicle-select"
                                     name="vehicleId"
                                     label={t('fields:selectVehicle')}
                                     onChange={(value: string) => setFieldValue('vehicleId', value)}
@@ -62,11 +72,12 @@ const NewServicePage = () => {
                             </Col>
                         </Row>
                         <br />
-                        <br />
                         <TabsContent setFieldValue={setFieldValue} estimate={values.estimate} />
-                        <Button type="primary" htmlType="submit">
-                            Submit
-                        </Button>
+                        <ButtonWrapper>
+                            <Button type="primary" htmlType="submit">
+                                {t('common:accept')}
+                            </Button>
+                        </ButtonWrapper>
                     </form>
                 )}
             </Formik>
@@ -75,10 +86,13 @@ const NewServicePage = () => {
 };
 
 const Wrapper = styled.div`
-    .my-select {
-        max-width: 100%;
-        width: 300px;
+    .vehicle-select {
+        max-width: 300px;
     }
+`;
+
+const ButtonWrapper = styled.div`
+    margin: 10px;
 `;
 
 export default NewServicePage;

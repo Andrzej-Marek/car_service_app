@@ -3,25 +3,25 @@ import { useField } from 'formik';
 import { Input } from 'antd';
 import { styled } from '@/utils';
 import { InputProps } from 'antd/lib/input';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import InputMask from 'react-input-mask';
 
 interface OwnProps {
     label?: string;
     crossIconOnClick?: () => void;
+    mask: string;
 }
 
 type Props = OwnProps & InputProps;
 
-const MyInputField: FC<Props> = ({ label, crossIconOnClick, ...props }) => {
+const MyMaskInputField: FC<Props> = ({ label, crossIconOnClick, mask, ...props }) => {
     const [field, meta] = useField(props as any);
 
     return (
-        <Wrapper className="my-field-input my-input">
-            <label>
-                {label && label}{' '}
-                {crossIconOnClick && <CloseCircleOutlined className="cross-icon" onClick={crossIconOnClick} />}
-            </label>
-            <Input {...field} {...props} />
+        <Wrapper className="my-mask-input-filed">
+            <label>{label && label}</label>
+            <InputMask mask={mask} {...field}>
+                <Input {...props} />
+            </InputMask>
             {meta.touched && meta.error && <div className="error">{meta.error}</div>}
         </Wrapper>
     );
@@ -59,4 +59,4 @@ const Wrapper = styled.div`
         color: ${({ theme }) => theme.color.red};
     }
 `;
-export default MyInputField;
+export default MyMaskInputField;

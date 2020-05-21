@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import MyInputField from '@/components/Fields/MyInputField';
 import MyDatePicker from '@/components/Fields/MyDatePicker';
 import { Row, Col } from 'antd';
 import { useTranslation } from 'react-i18next';
+import MyMaskInputField from '@/components/Fields/MyMaskInputField';
 
 interface OwnProps {
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
@@ -14,10 +14,10 @@ const ConfigPanel: FC<Props> = ({ setFieldValue }) => {
     const { t } = useTranslation(['service']);
     return (
         <Row>
-            <Col xs={12} md={6}>
-                <MyInputField name="serviceNumber" width="100" label={t('service:serviceNumber')} />
+            <Col xs={12} xl={6}>
+                <MyMaskInputField mask="99/99/9999" name="serviceNumber" label={t('service:serviceNumber')} />
             </Col>
-            <Col xs={12} md={6}>
+            <Col xs={12} xl={6}>
                 <MyDatePicker
                     name="date"
                     label={t('service:serviceDate')}
