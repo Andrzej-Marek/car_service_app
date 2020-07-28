@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmConfig } from 'typeorm.config';
+import { ormConfig } from 'orm.config';
 import { AuthModule } from './auth/auth.module';
 import {
   I18nModule,
@@ -19,7 +19,7 @@ import { UploaderModule } from './uploader/uploader.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(typeOrmConfig),
+    TypeOrmModule.forRoot(ormConfig),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       context: ({ req, res }) => ({ req, res }),

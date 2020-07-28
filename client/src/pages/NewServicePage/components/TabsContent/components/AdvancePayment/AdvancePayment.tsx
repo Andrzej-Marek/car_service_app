@@ -21,7 +21,7 @@ const AdvancePayment: FC<Props> = ({ setFieldValue }) => {
     return (
         <Row>
             <Col xs={24} sm={12} md={6} lg={4}>
-                <MyInputField name="AdvancePayment" addonAfter={selectAfter} />
+                <MyInputField type="number" name="AdvancePayment" addonAfter={selectAfter} />
             </Col>
         </Row>
     );
