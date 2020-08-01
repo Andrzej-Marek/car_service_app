@@ -9,7 +9,7 @@ import ClassicButton from '@/components/Buttons/ClassicButton';
 import AddCustomerModal from '@/components/Modals/AddCustomerModal';
 import { UserContext } from '@/context/UserContext';
 import FastRaportModal from '@/components/Modals/FastRaportModal';
-import { ModalActionType } from '@/@types';
+import { ModalActionType } from '@/types';
 import LoadingSpinner from '@/components/Loaders/LoadingSpinner';
 
 const MainDashboardPage = () => {

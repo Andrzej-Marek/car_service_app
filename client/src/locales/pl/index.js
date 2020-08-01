@@ -10,6 +10,7 @@ import vehicleTypes from './vehicleTypes.json';
 import fuelTypes from './fuelTypes.json';
 import service from './service.json';
 import info from './info.json';
+import notifications from './notifications.json';
 
 export default {
     routes,
@@ -24,4 +25,5 @@ export default {
     fuelTypes,
     service,
     info,
+    notifications,
 };

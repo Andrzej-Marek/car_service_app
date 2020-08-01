@@ -7,9 +7,10 @@ import Actions from './components/Actions';
 import { vehicleTypes, fuelTypes } from '@/constants/select';
 import OwnerCell from './components/OwnerCell';
 import moment from 'moment';
-import { FULL_DATE_FORMAT, FULL_DATE_FORMAT_WITH_TIME } from '@/constants/dateFormat';
+import { FULL_DATE_FORMAT } from '@/constants/dateFormat';
 import ExpiresDate from '@/components/TableElements/ExpiresDate';
 import ImagePreview from '@/components/TableElements/ImagePreview';
+import { DiffOutlined } from '@ant-design/icons';
 
 interface OwnProps {
     vehicles: Vehicle[];
@@ -21,6 +22,9 @@ const VehiclesTable: FC<Props> = ({ vehicles }) => {
     const { t } = useTranslation(['fields', 'vehicleTypes', 'fuelType']);
 
     const columns: ColumnProps<Vehicle>[] = [
+        {
+            render: () => <DiffOutlined onClick={() => console.log('Go to info page')} />,
+        },
         {
             title: t('fields:vehicleType'),
             dataIndex: 'vehicleType',

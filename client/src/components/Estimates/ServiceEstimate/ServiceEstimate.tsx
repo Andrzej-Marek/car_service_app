@@ -1,17 +1,17 @@
 import React, { FC, useState, useContext } from 'react';
 import { styled } from '@/utils';
 import MyInputField from '@/components/Fields/MyInputField';
-import { Tooltip, notification, Row, Col } from 'antd';
+import { Tooltip, notification } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import { SerivceEstimate } from '@/pages/NewServicePage';
+import { ServiceEstimateFields } from '@/pages/NewServicePage';
 import { UserContext } from '@/context/UserContext';
 import { maxListPositions } from '@/config/plansConfig';
 import MyCheckbox from '@/components/Fields/MyCheckbox';
 
 interface OwnProps {
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
-    estimate: SerivceEstimate[];
+    estimate: ServiceEstimateFields[];
 }
 
 type Props = OwnProps;
@@ -25,19 +25,20 @@ const ServiceEstimate: FC<Props> = ({ setFieldValue, estimate }) => {
         return estimate.map((_, index: number) => (
             <tr key={index}>
                 <td>
-                    <MyInputField name={`estimate[${index}].name`} placeholder={t('fields:product/service')} />{' '}
+                    <MyInputField name={`costs[${index}].name`} placeholder={t('fields:product/service')} />{' '}
                 </td>
                 <td>
                     <MyInputField
-                        name={`estimate[${index}].price`}
+                        name={`costs[${index}].price`}
                         type="number"
+                        min={1}
                         onChange={event => handleChange(event, 'price', index)}
                         placeholder={t('fields:price')}
                     />{' '}
                 </td>
                 <td>
                     <MyInputField
-                        name={`estimate[${index}].amount`}
+                        name={`costs[${index}].amount`}
                         type="number"
                         min={1}
                         onChange={event => handleChange(event, 'amount', index)}
@@ -46,8 +47,9 @@ const ServiceEstimate: FC<Props> = ({ setFieldValue, estimate }) => {
                 </td>
                 <td>
                     <MyInputField
-                        name={`estimate[${index}].summary`}
+                        name={`costs[${index}].summary`}
                         type="number"
+                        min={1}
                         readOnly
                         placeholder={t('fields:summary')}
                     />{' '}
@@ -66,18 +68,18 @@ const ServiceEstimate: FC<Props> = ({ setFieldValue, estimate }) => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>, inputName: string, index: number) => {
         const { value } = event.target;
 
-        setFieldValue(`estimate[${index}].${inputName}`, value);
+        setFieldValue(`costs[${index}].${inputName}`, value);
 
         const { amount, price } = estimate[index];
         let calculateValue: number;
         switch (inputName) {
             case 'price':
                 calculateValue = +value * +amount;
-                setFieldValue(`estimate[${index}].summary`, +value * calculateValue + '');
+                setFieldValue(`costs[${index}].summary`, calculateValue + '');
                 break;
             case 'amount':
                 calculateValue = +value * +price;
-                setFieldValue(`estimate[${index}].summary`, +value * calculateValue + '');
+                setFieldValue(`costs[${index}].summary`, calculateValue + '');
                 break;
             default:
                 break;

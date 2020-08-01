@@ -11,7 +11,7 @@ import MyDatePicker from '@/components/Fields/MyDatePicker';
 import { addNewVehicleSchema } from '@/validations';
 import { AddVehicle } from './types';
 import { Vehicle, UpdateVehicleInfoMutation, UpdateVehicleInfoMutationVariables } from '@/generated/graphql';
-import { ModalActionType } from '@/@types';
+import { ModalActionType } from '@/types';
 import { UPDATE_VEHICLE_INFO } from '@/graphql/vehicle/mutations';
 import { useMutation } from '@apollo/react-hooks';
 import SingleImageUploader from '@/components/Uploaders/SingleImageUploader';

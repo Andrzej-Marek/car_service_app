@@ -26,7 +26,7 @@ import SelectUser from './components/SelectUser';
 import ToggleContent from './components/ToggleContent';
 import { Error } from '@/assets/images/styles';
 import { GET_ALL_CUSTOMERS } from '@/graphql/customer/querys/getAllCustomers';
-import { ModalActionType } from '@/@types';
+import { ModalActionType } from '@/types';
 
 interface OwnProps {
     toggle?: () => void;
@@ -81,8 +81,6 @@ const AddCustomerForm: FC<Props> = ({
                     const customersData = store.readQuery<GetAllCustomersQuery>({
                         query: GET_ALL_CUSTOMERS,
                     });
-
-                    console.log(customersData);
 
                     store.writeQuery<GetAllCustomersQuery>({
                         query: GET_ALL_CUSTOMERS,

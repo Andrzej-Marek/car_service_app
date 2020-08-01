@@ -15,6 +15,30 @@ export type Scalars = {
   Upload: any;
 };
 
+export type CostObjectType = {
+   __typename?: 'CostObjectType';
+  name: Scalars['String'];
+  price: Scalars['String'];
+  amount: Scalars['String'];
+};
+
+export type VehicleService = {
+   __typename?: 'VehicleService';
+  id: Scalars['ID'];
+  date: Scalars['String'];
+  serviceNumber: Scalars['String'];
+  estimateServiceDone?: Maybe<Scalars['String']>;
+  netPrices: Scalars['Boolean'];
+  currency: Scalars['String'];
+  advancePayment: Scalars['String'];
+  costs: Array<CostObjectType>;
+  deposit: Array<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  privateDescription?: Maybe<Scalars['String']>;
+  vehicle: Vehicle;
+  vehicleId: Scalars['String'];
+};
+
 export type Vehicle = {
    __typename?: 'Vehicle';
   id: Scalars['ID'];
@@ -39,6 +63,7 @@ export type Vehicle = {
   companyId: Scalars['String'];
   customer: Customer;
   customerId: Scalars['String'];
+  services: Array<VehicleService>;
   createdAt: Scalars['DateTime'];
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -114,6 +139,7 @@ export type Query = {
   getAllCustomers: Array<Customer>;
   fastRaport: Scalars['String'];
   getAllVehicles: Array<Vehicle>;
+  getVehicleServices: Array<VehicleService>;
 };
 
 
@@ -129,6 +155,11 @@ export type QueryGetCompanyArgs = {
 
 export type QueryFastRaportArgs = {
   fastRaportInput: FastRaportInput;
+};
+
+
+export type QueryGetVehicleServicesArgs = {
+  vehicleId: Scalars['String'];
 };
 
 export type FastRaportInput = {
@@ -167,6 +198,7 @@ export type Mutation = {
   createNewVehicleWithCustomer: Vehicle;
   uploadSingleImage: Scalars['String'];
   removeSingleImage: Scalars['Boolean'];
+  createVehicleService: VehicleService;
 };
 
 
@@ -235,6 +267,11 @@ export type MutationUploadSingleImageArgs = {
 
 export type MutationRemoveSingleImageArgs = {
   imageUrl: Scalars['String'];
+};
+
+
+export type MutationCreateVehicleServiceArgs = {
+  createVehicleService: CreateVehicleServiceDto;
 };
 
 export type LoginInput = {
@@ -346,6 +383,26 @@ export type CreateNewVehicleInput = {
   nextService?: Maybe<Scalars['String']>;
   warranty?: Maybe<Scalars['String']>;
   comment?: Maybe<Scalars['String']>;
+};
+
+export type CreateVehicleServiceDto = {
+  date: Scalars['String'];
+  serviceNumber: Scalars['String'];
+  estimateServiceDone?: Maybe<Scalars['String']>;
+  netPrices: Scalars['Boolean'];
+  costs: Array<Cost>;
+  deposit: Array<Scalars['String']>;
+  currency: Scalars['String'];
+  advancePayment: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  privateDescription?: Maybe<Scalars['String']>;
+  vehicleId: Scalars['String'];
+};
+
+export type Cost = {
+  name: Scalars['String'];
+  price: Scalars['String'];
+  amount: Scalars['String'];
 };
 
 export type CustomerFragment = (
@@ -570,6 +627,41 @@ export type GetAllVehiclesQuery = (
   )> }
 );
 
+export type VehicleServiceFragment = (
+  { __typename?: 'VehicleService' }
+  & Pick<VehicleService, 'id' | 'date' | 'currency' | 'serviceNumber' | 'estimateServiceDone' | 'netPrices' | 'description' | 'privateDescription' | 'deposit'>
+  & { costs: Array<(
+    { __typename?: 'CostObjectType' }
+    & Pick<CostObjectType, 'price' | 'name' | 'amount'>
+  )> }
+);
+
+export type CreateVehicleServiceMutationVariables = {
+  createVehicleService: CreateVehicleServiceDto;
+};
+
+
+export type CreateVehicleServiceMutation = (
+  { __typename?: 'Mutation' }
+  & { createVehicleService: (
+    { __typename?: 'VehicleService' }
+    & VehicleServiceFragment
+  ) }
+);
+
+export type GetVehicleServicesQueryVariables = {
+  vehicleId: Scalars['String'];
+};
+
+
+export type GetVehicleServicesQuery = (
+  { __typename?: 'Query' }
+  & { getVehicleServices: Array<(
+    { __typename?: 'VehicleService' }
+    & VehicleServiceFragment
+  )> }
+);
+
 export const CustomerFragmentDoc = gql`
     fragment Customer on Customer {
   id
@@ -615,6 +707,24 @@ export const VehicleFragmentDoc = gql`
   }
 }
     ${CustomerFragmentDoc}`;
+export const VehicleServiceFragmentDoc = gql`
+    fragment VehicleService on VehicleService {
+  id
+  date
+  currency
+  serviceNumber
+  estimateServiceDone
+  netPrices
+  description
+  privateDescription
+  deposit
+  costs {
+    price
+    name
+    amount
+  }
+}
+    `;
 export const CreateNewCustomerDocument = gql`
     mutation CreateNewCustomer($firstname: String!, $lastname: String, $companyName: String, $vatNumber: String, $street: String, $postcode: String, $adress: String, $phone: String, $mail: String, $comment: String, $discount: Int, $mailSendAgreement: Boolean!, $smsSendAgreement: Boolean!, $marketingSendAgreement: Boolean!) {
   createNewCustomer(newCustomerInput: {firstname: $firstname, lastname: $lastname, companyName: $companyName, vatNumber: $vatNumber, street: $street, postcode: $postcode, adress: $adress, phone: $phone, mail: $mail, comment: $comment, discount: $discount, mailSendAgreement: $mailSendAgreement, smsSendAgreement: $smsSendAgreement, marketingSendAgreement: $marketingSendAgreement}) {
@@ -1109,3 +1219,68 @@ export function useGetAllVehiclesLazyQuery(baseOptions?: ApolloReactHooks.LazyQu
 export type GetAllVehiclesQueryHookResult = ReturnType<typeof useGetAllVehiclesQuery>;
 export type GetAllVehiclesLazyQueryHookResult = ReturnType<typeof useGetAllVehiclesLazyQuery>;
 export type GetAllVehiclesQueryResult = ApolloReactCommon.QueryResult<GetAllVehiclesQuery, GetAllVehiclesQueryVariables>;
+export const CreateVehicleServiceDocument = gql`
+    mutation CreateVehicleService($createVehicleService: CreateVehicleServiceDto!) {
+  createVehicleService(createVehicleService: $createVehicleService) {
+    ...VehicleService
+  }
+}
+    ${VehicleServiceFragmentDoc}`;
+export type CreateVehicleServiceMutationFn = ApolloReactCommon.MutationFunction<CreateVehicleServiceMutation, CreateVehicleServiceMutationVariables>;
+
+/**
+ * __useCreateVehicleServiceMutation__
+ *
+ * To run a mutation, you first call `useCreateVehicleServiceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateVehicleServiceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createVehicleServiceMutation, { data, loading, error }] = useCreateVehicleServiceMutation({
+ *   variables: {
+ *      createVehicleService: // value for 'createVehicleService'
+ *   },
+ * });
+ */
+export function useCreateVehicleServiceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateVehicleServiceMutation, CreateVehicleServiceMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateVehicleServiceMutation, CreateVehicleServiceMutationVariables>(CreateVehicleServiceDocument, baseOptions);
+      }
+export type CreateVehicleServiceMutationHookResult = ReturnType<typeof useCreateVehicleServiceMutation>;
+export type CreateVehicleServiceMutationResult = ApolloReactCommon.MutationResult<CreateVehicleServiceMutation>;
+export type CreateVehicleServiceMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateVehicleServiceMutation, CreateVehicleServiceMutationVariables>;
+export const GetVehicleServicesDocument = gql`
+    query getVehicleServices($vehicleId: String!) {
+  getVehicleServices(vehicleId: $vehicleId) {
+    ...VehicleService
+  }
+}
+    ${VehicleServiceFragmentDoc}`;
+
+/**
+ * __useGetVehicleServicesQuery__
+ *
+ * To run a query within a React component, call `useGetVehicleServicesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetVehicleServicesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetVehicleServicesQuery({
+ *   variables: {
+ *      vehicleId: // value for 'vehicleId'
+ *   },
+ * });
+ */
+export function useGetVehicleServicesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetVehicleServicesQuery, GetVehicleServicesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetVehicleServicesQuery, GetVehicleServicesQueryVariables>(GetVehicleServicesDocument, baseOptions);
+      }
+export function useGetVehicleServicesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetVehicleServicesQuery, GetVehicleServicesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetVehicleServicesQuery, GetVehicleServicesQueryVariables>(GetVehicleServicesDocument, baseOptions);
+        }
+export type GetVehicleServicesQueryHookResult = ReturnType<typeof useGetVehicleServicesQuery>;
+export type GetVehicleServicesLazyQueryHookResult = ReturnType<typeof useGetVehicleServicesLazyQuery>;
+export type GetVehicleServicesQueryResult = ApolloReactCommon.QueryResult<GetVehicleServicesQuery, GetVehicleServicesQueryVariables>;

@@ -1,30 +1,46 @@
 import React from 'react';
 import { styled } from '@/utils';
-import { Row, Col, Button, Input } from 'antd';
+import { Row, Col, Button, message } from 'antd';
 import { GET_ALL_VEHICLES } from '@/graphql/vehicle/querys';
 import { useQuery } from '@apollo/react-hooks';
-import { GetAllVehiclesQuery, VehicleFragment } from '@/generated/graphql';
+import { GetAllVehiclesQuery, VehicleFragment, useCreateVehicleServiceMutation } from '@/generated/graphql';
 import MySelect from '@/components/Fields/MySelect';
 import { useTranslation } from 'react-i18next';
-import { Formik } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 import ConfigPanel from './components/ConfigPanel';
 import TabsContent from './components/TabsContent';
-import { ServiceEstimateFields } from './types';
+import { CreateVehicleServiceFormFields } from './types';
 import LoadingSpinner from '@/components/Loaders/LoadingSpinner';
+import { mapCreateVehicleServiceFormFiledsToServerDto } from '@/helpers';
+import { createVehicleServiceSchema } from './validations';
+import { Currency } from '@/enums';
 
 const NewServicePage = () => {
-    const { t } = useTranslation(['fields', 'common']);
+    const { t } = useTranslation(['fields', 'common', 'errors', 'notifications']);
 
     const { data: vehicleList, loading } = useQuery<GetAllVehiclesQuery>(GET_ALL_VEHICLES);
+    const [createVehicleService] = useCreateVehicleServiceMutation();
 
     const createSelectVehicleList = (vehicleList: VehicleFragment[]) => {
         const optionFormat = vehicleList.map(({ id, brand, model, registrationNumber, customer }) => ({
             value: id,
-            label: `${brand} ${model} ${registrationNumber && registrationNumber} - ${customer.firstname} ${
-                customer.lastname
-            }`,
+            label: `${brand} ${model} ${registrationNumber || ''} - ${customer.firstname} ${customer.lastname}`,
         }));
         return optionFormat;
+    };
+
+    const submitHandler = async (
+        formData: CreateVehicleServiceFormFields,
+        { resetForm }: FormikHelpers<CreateVehicleServiceFormFields>,
+    ) => {
+        const mappedFormData = mapCreateVehicleServiceFormFiledsToServerDto(formData);
+        try {
+            createVehicleService({ variables: { createVehicleService: mappedFormData } });
+            resetForm();
+            message.success(t('notifications:successOperation'));
+        } catch (error) {
+            message.error(t('errors:generalError'));
+        }
     };
 
     if (loading) return <LoadingSpinner loading={loading} />;
@@ -33,29 +49,33 @@ const NewServicePage = () => {
     return (
         <Wrapper>
             <Formik
-                initialValues={{
-                    date: new Date(),
-                    vehicleId: '',
-                    serviceNumber: '10/05/2020',
-                    estimateServiceDone: '10:42 08-05-2020',
-                    netPrices: false,
-                    estimate: [
-                        {
-                            name: '',
-                            price: '',
-                            amount: '',
-                            summary: '',
-                        },
-                    ] as ServiceEstimateFields[],
-                    deposit: [] as string[],
-                    currency: 'zł',
-                    images: [],
-                    description: '',
-                    privateDescription: '',
-                }}
-                onSubmit={values => console.log(values)}
+                initialValues={
+                    {
+                        date: new Date() + '',
+                        vehicleId: '',
+                        serviceNumber: '01/05/2020',
+                        estimateServiceDone: '10:42 08-05-2020',
+                        netPrices: false,
+                        costs: [
+                            {
+                                name: '',
+                                price: '',
+                                amount: '',
+                                summary: '',
+                            },
+                        ],
+                        deposit: [],
+                        advancePayment: 0,
+                        currency: Currency.polish,
+                        images: [],
+                        description: '',
+                        privateDescription: '',
+                    } as CreateVehicleServiceFormFields
+                }
+                validationSchema={createVehicleServiceSchema}
+                onSubmit={submitHandler}
             >
-                {({ setFieldValue, handleSubmit, values, handleChange }) => (
+                {({ setFieldValue, handleSubmit, values }) => (
                     <form onSubmit={handleSubmit}>
                         <Row>
                             <Col xs={24} lg={12}>
@@ -71,8 +91,7 @@ const NewServicePage = () => {
                                 />
                             </Col>
                         </Row>
-                        <br />
-                        <TabsContent setFieldValue={setFieldValue} estimate={values.estimate} />
+                        <TabsContent setFieldValue={setFieldValue} estimate={values.costs} />
                         <ButtonWrapper>
                             <Button type="primary" htmlType="submit">
                                 {t('common:accept')}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createContext } from 'react';
-import { User } from '@/@types';
+import { User } from '@/types';
 
 export interface UserContextInterface {
     user: User | null;

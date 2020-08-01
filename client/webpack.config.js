@@ -66,8 +66,9 @@ module.exports = (_, env) => {
                 '@/store': srcPath('store'),
                 '@/styles': srcPath('styles'),
                 '@/assets': srcPath('assets'),
-                '@/@types': srcPath('@types'),
+                '@/types': srcPath('types'),
                 '@/static': srcPath('static'),
+                '@/generated': srcPath('generated'),
             },
         },
         module: {

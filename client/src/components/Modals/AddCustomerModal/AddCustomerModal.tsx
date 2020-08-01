@@ -3,7 +3,7 @@ import { Modal } from 'antd';
 import AddCustomerForm from '@/components/Forms/AddCustomerForm';
 import { styled, media } from '@/utils';
 import { useTranslation } from 'react-i18next';
-import { ModalActionType } from '@/@types';
+import { ModalActionType } from '@/types';
 import { AddCustomer } from '@/components/Forms/AddCustomerForm/types';
 
 interface OwnProps {

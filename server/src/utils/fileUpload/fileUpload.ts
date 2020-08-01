@@ -1,8 +1,8 @@
-import { v4 as uuidv4 } from 'uuid';
 import { FileUpload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
 import { Logger, BadRequestException } from '@nestjs/common';
 import { UploadFolders } from 'src/enums';
+import { v4 as uuidv4 } from 'uuid';
 
 export const fileUpload = async (
   file: FileUpload,

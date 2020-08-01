@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import AddVehicleForm from '@/components/Forms/AddVehicleForm';
 import { Vehicle } from '@/generated/graphql';
-import { ModalActionType } from '@/@types';
+import { ModalActionType } from '@/types';
 import { CustomFormModal } from '@/assets/images/styles';
 import { useTranslation } from 'react-i18next';
 

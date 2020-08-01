@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ormConfig } from 'orm.config';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './domain/auth/auth.module';
 import {
   I18nModule,
   I18nJsonParser,
@@ -11,11 +11,12 @@ import {
   CookieResolver,
   AcceptLanguageResolver,
 } from 'nestjs-i18n';
-import { CustomerModule } from './customer/customer.module';
-import { RaportsModule } from './raports/raports.module';
+import { CustomerModule } from './domain/customer/customer.module';
+import { RaportsModule } from './domain/raports/raports.module';
 import * as path from 'path';
-import { VehicleModule } from './vehicle/vehicle.module';
-import { UploaderModule } from './uploader/uploader.module';
+import { VehicleModule } from './domain/vehicle/vehicle.module';
+import { UploaderModule } from './domain/uploader/uploader.module';
+import { VehicleServiceModule } from './domain/vehicleService/vehicle-service.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { UploaderModule } from './uploader/uploader.module';
     RaportsModule,
     VehicleModule,
     UploaderModule,
+    VehicleServiceModule,
   ],
 })
 export class AppModule {}

@@ -4,7 +4,7 @@ import { styled } from '@/utils';
 import { Button, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import AddCustomerModal from '@/components/Modals/AddCustomerModal';
-import { ModalActionType } from '@/@types';
+import { ModalActionType } from '@/types';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 interface OwnProps {

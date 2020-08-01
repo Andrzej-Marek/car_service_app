@@ -1,11 +1,11 @@
 import React, { FunctionComponent, Fragment, useState, useMemo, useEffect } from 'react';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { routes, RoutesEnum } from './Routes';
 import LoginPage from './pages/LoginPage';
 import LayoutProvider from './components/Layout';
 import { GlobalStyle } from '@/utils';
 import { UserContext } from './context/UserContext/UserContext';
-import { User } from './@types';
+import { User } from './types';
 import { PrivateRoute } from './components/PrivateRoutes';
 import { useQuery } from '@apollo/react-hooks';
 import { ME } from './graphql/user/querys/me';

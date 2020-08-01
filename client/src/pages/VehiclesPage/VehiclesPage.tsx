@@ -7,7 +7,7 @@ import LoadingSpinner from '@/components/Loaders/LoadingSpinner';
 import VehiclesTable from './components/VehiclesTable';
 
 const VehiclesPage = () => {
-    const { data, loading, error } = useQuery<GetAllVehiclesQuery>(GET_ALL_VEHICLES);
+    const { data, loading } = useQuery<GetAllVehiclesQuery>(GET_ALL_VEHICLES);
 
     if (loading) return <LoadingSpinner loading={loading} />;
     return (

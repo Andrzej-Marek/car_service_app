@@ -3,7 +3,7 @@ import { styled } from '@/utils';
 import { Vehicle } from '@/generated/graphql';
 import { EditOutlined } from '@ant-design/icons';
 import VehicleModal from '@/components/Modals/VehicleModal';
-import { ModalActionType } from '@/@types';
+import { ModalActionType } from '@/types';
 
 interface OwnProps {
     record: Vehicle;
